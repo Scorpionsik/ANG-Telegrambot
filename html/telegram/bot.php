@@ -1,13 +1,14 @@
 <?php
 $root_dir = explode('html',__DIR__)[0] . html;
 
-require_once "givemyprecious.php";
+include "givemyprecious.php";
 require_once "${root_dir}/vendor/autoload.php";
 
 $bot = new \TelegramBot\Api\Client(${token});
 
 //команда Start
 $bot->command('start', function ($message) use ($bot) {
+	include "connection.php";
 	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 	$id = $message->getChat()->getId();
 	$query = "SELECT * FROM test_user where Id=${id};";
