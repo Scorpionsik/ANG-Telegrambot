@@ -5,10 +5,10 @@ require_once "givemyprecious.php";
 require_once "${root_dir}/vendor/autoload.php";
 
 $bot = new \TelegramBot\Api\Client(${token});
-$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 
 //команда Start
 $bot->command('start', function ($message) use ($bot) {
+	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 	$id = $message->getChat()->getId();
 	$query = "SELECT * FROM test_user where Id=${id};";
 	
@@ -23,6 +23,8 @@ $bot->command('start', function ($message) use ($bot) {
 		$bot->sendMessage($id, 'Добро пожаловать!');	
 		$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');	
 	}
+	mysqli_free_result($result);
+	mysqli_close($dblink);
 });
 
 //команда Help
