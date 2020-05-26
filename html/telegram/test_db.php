@@ -1,5 +1,5 @@
 <?php
-require_once 'givemyprecious.php'; // подключаем скрипт
+require_once "givemyprecious.php";
  
 // подключаемся к серверу
 $link = mysqli_connect($host, $dblogin, $dbpassw, $database) 
