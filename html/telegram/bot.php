@@ -1,26 +1,40 @@
 <?php
 $root_dir = explode('html',__DIR__)[0] . html;
 
-include "givemyprecious.php";
+require_once "givemyprecious.php";
 require_once "${root_dir}/vendor/autoload.php";
 
 $bot = new \TelegramBot\Api\Client(${token});
+$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 
 //команда Start
 $bot->command('start', function ($message) use ($bot) {
-    $bot->sendMessage($message->getChat()->getId(), 'start');
+	$id = $message->getChat()->getId();
+	$query = "SELECT * FROM test_user where Id=${id};";
+	
+	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+	if($result)
+	{
+		$bot->sendMessage($id, 'С возвращением!');
+	}
+	else
+	{
+		mysqli_query($dblink,"INSERT INTO test_user ('Iduser','Status') VALUES (${id},'0')") or die("Ошибка: " . mysqli_error($dblink));
+		$bot->sendMessage($id, 'Добро пожаловать!');	
+		$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');	
+	}
 });
 
 //команда Help
 $bot->command('help', function ($message) use ($bot) {
     $bot->sendMessage($message->getChat()->getId(), 'help');
 });
-
+/*
 //команда Id
 $bot->command('id', function ($message) use ($bot) {
     $id = $message->getChat()->getId();
     $bot->sendMessage($id,$id);
-});
+});*/
 
 //Обработка введенного текста
 $bot->on(function ($Update) use ($bot) {
@@ -31,3 +45,6 @@ $bot->on(function ($Update) use ($bot) {
 }, function () { return true; });
 
 $bot->run();
+
+
+?>
