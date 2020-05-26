@@ -16,13 +16,14 @@ $bot->command('start', function ($message) use ($bot) {
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	if($result)
 	{
-		$bot->sendMessage($id, 'С возвращением!');
-	}
-	else
-	{
-		mysqli_query($dblink,"INSERT INTO test_user ('Iduser','Status') VALUES (${id},'0')") or die("Ошибка: " . mysqli_error($dblink));
-		$bot->sendMessage($id, 'Добро пожаловать!');	
-		$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');	
+		$rows = mysqli_num_rows($result);
+		if($rows == 0)
+		{
+			mysqli_query($dblink,"INSERT INTO test_user ('Iduser','Status') VALUES (${id},'0')") or die("Ошибка: " . mysqli_error($dblink));
+			$bot->sendMessage($id, 'Добро пожаловать!');	
+			$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');	
+		}
+		else $bot->sendMessage($id, 'С возвращением!');
 	}
 	mysqli_free_result($result);
 	mysqli_close($dblink);
