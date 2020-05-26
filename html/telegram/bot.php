@@ -11,15 +11,16 @@ $bot->command('start', function ($message) use ($bot) {
 	include "connection.php";
 	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 	$id = $message->getChat()->getId();
-	$query = "SELECT * FROM test_user where Id=${id};";
+	$query = "SELECT * FROM test_user where Iduser=${id};";
 	
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	if($result)
 	{
 		$rows = mysqli_num_rows($result);
+		
 		if($rows == 0)
 		{
-			mysqli_query($dblink,"INSERT INTO test_user ('Iduser','Status') VALUES (${id},'0')") or die("Ошибка: " . mysqli_error($dblink));
+			mysqli_query($dblink,"INSERT INTO test_user (Iduser,Status) VALUES ($id,0);") or die("Ошибка: " . mysqli_error($dblink));
 			$bot->sendMessage($id, 'Добро пожаловать!');	
 			$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');	
 		}
