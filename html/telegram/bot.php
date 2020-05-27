@@ -26,7 +26,7 @@ $bot->command('start', function ($message) use ($bot) {
 		{
 			mysqli_query($dblink,"INSERT INTO test_user (Iduser,Status) VALUES ($id,0);") or die("Ошибка: " . mysqli_error($dblink));
 			$bot->sendMessage($id, 'Добро пожаловать!');	
-			$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');
+			$bot->sendMessage($id, 'Пожалуйста, напиши своё имя:');
 		}
 	}
 	mysqli_free_result($result);
@@ -65,14 +65,8 @@ $bot->on(function ($Update) use ($bot) {
 			{
 				mysqli_query($dblink,"UPDATE test_user SET Status=1, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 				$bot->sendMessage($id, "Приятно познакомится, ${msg_text}!");
-				$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-					[
-						[
-							['text' => 'link', 'url' => 'url']
-						]
-					]
-				);
-				$bot->sendMessage($id, "Выбери количество комнат:", null, false, null, $keyboard);
+				$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([[['text'=>'test']]]);
+                $bot->sendMessage($id, "hello", false, null, $keyboard);
 			}
 			//Логика по умолчанию
 			else
