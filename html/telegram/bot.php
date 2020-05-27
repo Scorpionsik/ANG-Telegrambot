@@ -11,7 +11,7 @@ $bot->command('start', function ($message) use ($bot) {
 	include "connection.php";
 	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 	$id_user = $message->getChat()->getId();
-	$query = "SELECT * FROM test_user where Iduser=${id};";
+	$query = "SELECT * FROM test_user where Iduser=${id_user};";
 	
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	if($result)
@@ -55,10 +55,10 @@ $bot->on(function ($Update) use ($bot) {
 	$id_user = $chat->getId();
 	
 	$id_user_message = $message->getMessageId();
-	$id_user_chat = $chat->getChatId();
+	$id_user_chat = $chat->getId();
 	$bot->deleteMessage($id_user_chat, $id_user_message);
 	
-	$query = "SELECT * FROM test_user where Iduser=${id};";
+	$query = "SELECT * FROM test_user where Iduser=${id_user};";
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 
 	if($result)
@@ -71,8 +71,8 @@ $bot->on(function ($Update) use ($bot) {
 			{
 				mysqli_query($dblink,"UPDATE test_user SET Status=1, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 				$bot->sendMessage($id_user, "Приятно познакомится, ${msg_text}!");
-				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[['text'=>'➡️ test']]]);
-                $bot->sendMessage($id_user, "hello", null, false, null, $keyboard);
+				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[['text'=>'Назад'],['text'=>'➡️ Дальше']]]);
+                $bot->sendMessage($id_user, null, null, false, null, $keyboard);
 			}
 			//Логика по умолчанию
 			else
