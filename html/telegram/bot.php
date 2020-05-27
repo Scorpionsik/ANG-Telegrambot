@@ -44,9 +44,36 @@ $bot->command('id', function ($message) use ($bot) {
 //Обработка введенного текста
 $bot->on(function ($Update) use ($bot) {
     $message = $Update->getMessage();
-    $msg_text = $message->getText();
+	
+	include "connection.php";
+	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
+	$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText());
+	$id = $message->getChat()->getId();
+	$query = "SELECT * FROM test_user where Iduser=${id};";
+	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 
-    $bot->sendMessage($message->getChat()->getId(), "Ты написал: " . $msg_text);
+	if($result)
+	{
+		$row = mysqli_fetch_row($result);
+		if($row)
+		{
+			//Получили имя
+			if($row[2] == 0)
+			{
+				mysqli_query($dblink,"UPDATE test_user SET Status=1, Username=${msg_text};") or die("Ошибка: " . mysqli_error($dblink));
+				$bot->sendMessage($id, "Приятно познакомится, ${msg_text}!");
+			}
+			//Логика по умолчанию
+			else
+			{
+				$bot->sendMessage($id, "Ты написал: ${msg_text}");
+			}
+		}
+	}
+
+	mysqli_free_result($result);
+	mysqli_close($dblink);
+    //$bot->sendMessage($id, "Ты написал: " . $msg_text);
 }, function () { return true; });
 
 $bot->run();
