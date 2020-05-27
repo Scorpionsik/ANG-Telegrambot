@@ -16,15 +16,18 @@ $bot->command('start', function ($message) use ($bot) {
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	if($result)
 	{
-		$rows = mysqli_num_rows($result);
+		$row = mysqli_fetch_row($result);
 		
-		if($rows == 0)
+		if($row)
+		{
+			$bot->sendMessage($id, 'С возвращением, ' . $row[3] . "!");
+		}
+		else
 		{
 			mysqli_query($dblink,"INSERT INTO test_user (Iduser,Status) VALUES ($id,0);") or die("Ошибка: " . mysqli_error($dblink));
 			$bot->sendMessage($id, 'Добро пожаловать!');	
-			$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');	
+			$bot->sendMessage($id, 'Пожалуйста, напишите своё имя:');
 		}
-		else $bot->sendMessage($id, 'С возвращением!');
 	}
 	mysqli_free_result($result);
 	mysqli_close($dblink);
@@ -47,7 +50,7 @@ $bot->on(function ($Update) use ($bot) {
 	
 	include "connection.php";
 	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
-	$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText());
+	$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 	$id = $message->getChat()->getId();
 	$query = "SELECT * FROM test_user where Iduser=${id};";
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
@@ -60,7 +63,7 @@ $bot->on(function ($Update) use ($bot) {
 			//Получили имя
 			if($row[2] == 0)
 			{
-				mysqli_query($dblink,"UPDATE test_user SET Status=1, Username=${msg_text};") or die("Ошибка: " . mysqli_error($dblink));
+				mysqli_query($dblink,"UPDATE test_user SET Status=1, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 				$bot->sendMessage($id, "Приятно познакомится, ${msg_text}!");
 			}
 			//Логика по умолчанию
