@@ -80,20 +80,68 @@ $bot->on(function ($Update) use ($bot) {
 						
 				$bot->sendMessage($id_user, "Try me", null, false, null, $keyboard);
 				*/
-				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[['text'=>'⬅️ Назад'],['text'=>'Дальше ➡️']]]);
-                $bot->sendMessage($id_user, null, null, false, null, $keyboard);
+				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+				[
+					[
+						['text'=>'1-комнатные'],['text'=>'2-комнатные']
+					],
+					[
+						['text'=>'3-комнатные'],['text'=>'4-комнатные']
+					],
+					[
+						['text'=>'Дальше']
+					]
+				]);
+                $bot->sendMessage($id_user, "Выберите количество комнат:", null, false, null, $keyboard);
 			}
-
-			//Логика по умолчанию
 			else
 			{
+				if($msg_text == 'Дальше')
+				{
+					$id_status++;
+					mysqli_query($dblink,"UPDATE test_user SET Status=${id_status}, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
+					if($id_status == 2)
+					{
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+						[
+							[
+								['text'=>'Алексеевка'],['text'=>'Павлово Поле']
+							],
+							[
+								['text'=>'Салтовка'],['text'=>'Холодная Гора']
+							],
+							[
+								['text'=>'Центр'],['text'=>'Сев. Салтовка']
+							],
+							[
+								['text'=>'Пр. Гагарина'],['text'=>'Новые Дома']
+							],
+							[
+								['text'=>'ХТЗ'],['text'=>'Центр. Рынок']
+							],
+							[
+								['text'=>'Одесская'],['text'=>'Жуковского']
+							],
+							[
+								['text'=>'Выбрать все']
+							],
+							[
+								['text'=>'Дальше']
+							]
+						]);
+						$bot->sendMessage($id_user, "Выберите районы:", null, false, null, $keyboard);
+					}
+				}
+				/*
 				$id_user_message = $message->getMessageId();
 				$bot->deleteMessage($id_user, $id_user_message);
 				$bot->sendMessage($id_user, "Ты написал: ${msg_text}");
+				*/
 			}
+			
 		}
 	}
-
+	$bot->deleteMessage($id_user, $message->getMessageId());
 	mysqli_free_result($result);
 	mysqli_close($dblink);
     //$bot->sendMessage($id_user, "Ты написал: " . $msg_text);
