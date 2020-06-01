@@ -62,11 +62,14 @@ $bot->on(function ($Update) use ($bot) {
 		$row = mysqli_fetch_row($result);
 		if($row)
 		{
-			//Получили имя
-			if($row[2] == 0)
+			$id_status = $row[2];
+			//Получили 
+			if($id_status == 0)
 			{
-				mysqli_query($dblink,"UPDATE test_user SET Status=1, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
+				$id_status++;
+				mysqli_query($dblink,"UPDATE test_user SET Status=${id_status}, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 				$bot->sendMessage($id_user, "Приятно познакомится, ${msg_text}!");
+				/*
 				$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 					[
 						[
@@ -76,6 +79,7 @@ $bot->on(function ($Update) use ($bot) {
 				);
 						
 				$bot->sendMessage($id_user, "Try me", null, false, null, $keyboard);
+				*/
 				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[['text'=>'⬅️ Назад'],['text'=>'Дальше ➡️']]]);
                 $bot->sendMessage($id_user, null, null, false, null, $keyboard);
 			}
