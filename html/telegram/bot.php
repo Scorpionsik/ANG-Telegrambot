@@ -92,7 +92,7 @@ $bot->on(function ($Update) use ($bot) {
 						['text'=>'Дальше']
 					]
 				]);
-                $bot->sendMessage($id_user, "Выберите количество комнат:", null, false, null, $keyboard);
+                $bot->sendMessage($id_user, "Выбери количество комнат:", null, false, null, $keyboard);
 			}
 			else
 			{
@@ -129,7 +129,32 @@ $bot->on(function ($Update) use ($bot) {
 								['text'=>'Дальше']
 							]
 						]);
-						$bot->sendMessage($id_user, "Выберите районы:", null, false, null, $keyboard);
+						$bot->sendMessage($id_user, "Выбери районы:", null, false, null, $keyboard);
+					}
+					else if($id_status == 3)
+					{
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+						[
+							[
+								['text'=>' Менее 15000$'],['text'=>'15000-30000$']
+							],
+							[
+								['text'=>'30000-60000$'],['text'=>'60000-90000$']
+							],
+							[
+								['text'=>'Более 90000$']
+							],
+							[
+								['text'=>'Дальше']
+							]
+						]);
+					}
+					else if($id_status == 4)
+					{
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+						[
+						]);
+						$bot->sendMessage($id_user, "Предложенные варианты:", null, false, null, $keyboard);
 					}
 				}
 				/*
