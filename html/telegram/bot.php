@@ -99,7 +99,7 @@ $bot->on(function ($Update) use ($bot) {
 				if($msg_text == 'Дальше')
 				{
 					$id_status++;
-					mysqli_query($dblink,"UPDATE test_user SET Status=${id_status}, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
+					mysqli_query($dblink,"UPDATE test_user SET Status=${id_status} WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 					if($id_status == 2)
 					{
 						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
