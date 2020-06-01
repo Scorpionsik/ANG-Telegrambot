@@ -148,11 +148,15 @@ $bot->on(function ($Update) use ($bot) {
 								['text'=>'Дальше']
 							]
 						]);
+						$bot->sendMessage($id_user, "Выбери бюджет:", null, false, null, $keyboard);
 					}
 					else if($id_status == 4)
 					{
 						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 						[
+							[
+								['text'=>' ы']
+							]
 						]);
 						$bot->sendMessage($id_user, "Предложенные варианты:", null, false, null, $keyboard);
 					}
