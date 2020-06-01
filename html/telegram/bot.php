@@ -155,7 +155,7 @@ $bot->on(function ($Update) use ($bot) {
 						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 						[
 							[
-								['text'=>' ы']
+								['text'=>' ']
 							]
 						]);
 						$bot->sendMessage($id_user, "Предложенные варианты:", null, false, null, $keyboard);
