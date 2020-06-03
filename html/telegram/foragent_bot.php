@@ -9,8 +9,8 @@ $bot = new \TelegramBot\Api\Client(${token});
 //команда Help
 $bot->command('help', function ($message) use ($bot) {
 	$id_user = $message->getChat()->getId();
-	$bot->deleteMessage($id_user, $message->getMessageId());
-    $bot->sendMessage($id_user, 'Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.\n\nХорошего дня и отличного настроения, будьте здоровы!');
+	
+    $bot->sendMessage($id_user, 'Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.\n\nХорошего дня и отличного настроения, будьте здоровы!',null,false,null);
 	$bot->sendContact('@alex_coreman','+380951473711','Саша');
 });
 
