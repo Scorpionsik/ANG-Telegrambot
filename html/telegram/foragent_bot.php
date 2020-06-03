@@ -46,7 +46,7 @@ $bot->on(function ($Update) use ($bot) {
 						['text'=>'Отправить номер с телеграма','request_contact'=>true]
 					]
 				]);
-                $bot->sendMessage($id_user, "Выбери количество комнат:", null, false, null, $keyboard);
+                $bot->sendMessage($id_user, "Здравствуйте!\n\nДля подтверждения входа, введите свой рабочий номер телефона, пожалуйста!", null, false, null, $keyboard);
 		}
 	}
 	
