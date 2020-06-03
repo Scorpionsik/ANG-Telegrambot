@@ -26,8 +26,7 @@ $bot->on(function ($Update) use ($bot) {
 	if($msg_text == "/start")
 	{
 		$query = "INSERT INTO telegram_users (Id_telegram_user) values (${id_user});";
-		$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-		mysqli_free_result($result);
+		mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	}
 	
 	$query = "SELECT * FROM telegram_users where Id_telegram_user=${id_user};";
