@@ -23,10 +23,9 @@ $bot->on(function ($Update) use ($bot) {
 	$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 	$id_user = $message->getChat()->getId();
 	$lock = true;
-	$result = null;
 	if($msg_text == "/start")
 	{
-		$query = "INSERT INTO telegram_users (Id_telegram_user) values (${id_user});"
+		$query = "INSERT INTO telegram_users (Id_telegram_user) values (${id_user});";
 		$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	}
 	else
