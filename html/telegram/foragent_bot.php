@@ -49,7 +49,7 @@ $bot->on(function ($Update) use ($bot) {
 						
 						$clear_phone = preg_replace("/\D/i","",$msg_text);
 						$bot->sendMessage($id_user, $clear_phone);
-						$clear_phone = preg_replace("/^[380]{0,3}/i",""$clear_phone);
+						$clear_phone = preg_replace("/^[380]{0,3}/i","",$clear_phone);
 						$bot->sendMessage($id_user, $clear_phone);
 					}
 					else
