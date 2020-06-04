@@ -8,6 +8,7 @@ $bot = new \TelegramBot\Api\Client(${token});
 
 $bot->on(function ($Update) use ($bot) {
 	include "connection.php";
+	$lock=true;
     $message = $Update->getMessage();
 	if($message)
 	{
@@ -70,7 +71,8 @@ $bot->on(function ($Update) use ($bot) {
 									{
 										$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_db[0] . " where Id_telegram_user=" . $row[0] . ";";
 										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-										$bot->sendMessage($id_user, "Успех!");
+										$bot->sendMessage($id_user, "Добро пожаловать, " . row_from_db[2] . "!");
+										$lock=false;
 									}
 								}
 								else
@@ -95,12 +97,32 @@ $bot->on(function ($Update) use ($bot) {
 							]
 						]);*/
 						//$bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!", null, false, null, $keyboard);
-						$bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
+						if($lock) $bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
+						else
+						{
+							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!");
+						}
 					}
 					else
 					{
 						//код получения информации из белого списка
-						//код выдачи данных
+						$query = "SELECT * FROM white_list where Id_whitelist_user=" . $row[1] . ";";
+						$result_from_db = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+						if($result_from_db)
+						{
+							$row_from_db = mysqli_fetch_row($result_from_db);
+							if($row_from_db)
+							{
+								$bot->sendMessage($id_user, "Добро пожаловать, " . row_from_db[2] . "!");
+								$lock=false;
+							}
+						}
+						
+						if($lock == false)
+						{
+							//код выдачи данных
+							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!");
+						}
 					}
 				}
 			}
