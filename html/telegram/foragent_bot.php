@@ -121,7 +121,7 @@ $bot->on(function ($Update) use ($bot) {
 									['text'=>'Обновить']
 								]
 							]);
-							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null);
+							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 						}
 					}
 					else
@@ -149,7 +149,7 @@ $bot->on(function ($Update) use ($bot) {
 									['text'=>'Обновить']
 								]
 							]);
-							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null);
+							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 						}
 					}
 				}
