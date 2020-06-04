@@ -7,6 +7,8 @@ require_once "${root_dir}/vendor/autoload.php";
 $bot = new \TelegramBot\Api\Client(${token});
 
 $bot->on(function ($Update) use ($bot) {
+	include "connection.php";
+	
     $message = $Update->getMessage();
 	
 	$id_user = $message->getChat()->getId();
@@ -21,7 +23,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	else
 	{
-		include "connection.php";
+		
 	
 		
 		if($msg_text == "/start")
