@@ -51,7 +51,7 @@ $bot->on(function ($Update) use ($bot) {
 					else
 					{
 						if($msg_text == "/start")$bot->sendMessage($id_user, "Здравствуйте!");
-						else )
+						else 
 						{
 							$bot->sendMessage($id_user, "Введён некорректный номер!");
 							$bot->sendMessage($id_user, $msg_text);
