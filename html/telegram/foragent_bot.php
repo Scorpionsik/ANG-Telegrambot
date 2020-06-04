@@ -9,7 +9,6 @@ $bot = new \TelegramBot\Api\Client(${token});
 $bot->on(function ($Update) use ($bot) {
     $message = $Update->getMessage();
 	
-	$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 	$id_user = $message->getChat()->getId();
 	$bot->deleteMessage($id_user, $message->getMessageId());
 	
@@ -22,6 +21,7 @@ $bot->on(function ($Update) use ($bot) {
 	{
 		include "connection.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
+		$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 		
 		if($msg_text == "/start")
 		{
