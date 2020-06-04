@@ -66,6 +66,8 @@ $bot->on(function ($Update) use ($bot) {
 								$row_from_whitelist = mysqli_num_rows($result_from_whitelist);
 								if($row_from_whitelist == 1)
 								{
+									$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
+									
 									$query = "SELECT * FROM telegram_users where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
 									$result_from_telegram_users =  mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 									if($result_from_telegram_users)
@@ -77,7 +79,7 @@ $bot->on(function ($Update) use ($bot) {
 										}
 										else
 										{
-											$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
+											
 											if($row_from_whitelist)
 											{
 												$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_whitelist[0] . " where Id_telegram_user=" . $row[0] . ";";
