@@ -10,6 +10,8 @@ $bot->on(function ($Update) use ($bot) {
     $message = $Update->getMessage();
 	
 	$id_user = $message->getChat()->getId();
+	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
+	$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 	$bot->deleteMessage($id_user, $message->getMessageId());
 	
 	if($msg_text == "/help")
@@ -20,8 +22,7 @@ $bot->on(function ($Update) use ($bot) {
 	else
 	{
 		include "connection.php";
-		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
-		$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
+	
 		
 		if($msg_text == "/start")
 		{
