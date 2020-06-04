@@ -60,19 +60,32 @@ $bot->on(function ($Update) use ($bot) {
 							$clear_phone = preg_replace("/^[380]{0,3}/i","",$clear_phone);
 							//$bot->sendMessage($id_user, $clear_phone);
 							$query = "SELECT * FROM white_list where Phonenumber=${clear_phone};";
-							$result_from_db = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-							if($result_from_db)
+							$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+							if($result_from_whitelist)
 							{
-								$row_from_db = mysqli_num_rows($result_from_db);
-								if($row_from_db == 1)
+								$row_from_whitelist = mysqli_num_rows($result_from_whitelist);
+								if($row_from_whitelist == 1)
 								{
-									$row_from_db = mysqli_fetch_row($result_from_db);
-									if($row_from_db)
+									$query = "SELECT * FROM telegram_users where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+									$result_from_telegram_users =  mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									if($result_from_telegram_users)
 									{
-										$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_db[0] . " where Id_telegram_user=" . $row[0] . ";";
-										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-										$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_db[2] . "!");
-										$lock=false;
+										$row_from_telegram_users = mysqli_num_rows($result_from_telegram_users);
+										if($row_from_telegram_users == 1)
+										{
+											$bot->sendMessage($id_user, "Введён некорректный номер!");
+										}
+										else
+										{
+											$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
+											if($row_from_whitelist)
+											{
+												$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_whitelist[0] . " where Id_telegram_user=" . $row[0] . ";";
+												mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+												$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!");
+												$lock=false;
+											}
+										}
 									}
 								}
 								else
@@ -100,20 +113,26 @@ $bot->on(function ($Update) use ($bot) {
 						if($lock) $bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
 						else
 						{
-							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!");
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+							[
+								[
+									['text'=>'Обновить']
+								]
+							]);
+							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null);
 						}
 					}
 					else
 					{
 						//код получения информации из белого списка
 						$query = "SELECT * FROM white_list where Id_whitelist_user=" . $row[1] . ";";
-						$result_from_db = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-						if($result_from_db)
+						$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+						if($result_from_whitelist)
 						{
-							$row_from_db = mysqli_fetch_row($result_from_db);
-							if($row_from_db)
+							$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
+							if($row_from_whitelist)
 							{
-								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_db[2] . "!");
+								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!");
 								$lock=false;
 							}
 						}
@@ -121,7 +140,14 @@ $bot->on(function ($Update) use ($bot) {
 						if($lock == false)
 						{
 							//код выдачи данных
-							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!");
+							
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+							[
+								[
+									['text'=>'Обновить']
+								]
+							]);
+							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null);
 						}
 					}
 				}
