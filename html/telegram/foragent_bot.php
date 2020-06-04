@@ -121,7 +121,8 @@ $bot->on(function ($Update) use ($bot) {
 									['text'=>'Обновить']
 								]
 							]);
-							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+							if($row_from_whitelist[0] != 11)$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+							else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
 						}
 					}
 					else
@@ -137,19 +138,21 @@ $bot->on(function ($Update) use ($bot) {
 								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!");
 								$lock=false;
 							}
-						}
 						
-						if($lock == false)
-						{
-							//код выдачи данных
-							
-							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-							[
+						
+							if($lock == false)
+							{
+								//код выдачи данных
+								
+								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 								[
-									['text'=>'Обновить']
-								]
-							]);
-							$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+									[
+										['text'=>'Обновить']
+									]
+								]);
+								if($row_from_whitelist[0] != 11)$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+								else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
+							}
 						}
 					}
 				}
