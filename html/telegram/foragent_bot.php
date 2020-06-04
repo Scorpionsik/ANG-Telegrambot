@@ -71,7 +71,7 @@ $bot->on(function ($Update) use ($bot) {
 									{
 										$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_db[0] . " where Id_telegram_user=" . $row[0] . ";";
 										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-										$bot->sendMessage($id_user, "Добро пожаловать, " . row_from_db[2] . "!");
+										$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_db[2] . "!");
 										$lock=false;
 									}
 								}
@@ -113,7 +113,7 @@ $bot->on(function ($Update) use ($bot) {
 							$row_from_db = mysqli_fetch_row($result_from_db);
 							if($row_from_db)
 							{
-								$bot->sendMessage($id_user, "Добро пожаловать, " . row_from_db[2] . "!");
+								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_db[2] . "!");
 								$lock=false;
 							}
 						}
