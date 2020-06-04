@@ -19,6 +19,7 @@ $bot->on(function ($Update) use ($bot) {
 	if($msg_text == "/help")
 	{
 		$bot->sendMessage($id_user, 'Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.\n\nХорошего дня и отличного настроения, будьте здоровы!');
+		$bot->sendMessage($id_user, 'Хорошего дня и отличного настроения, будьте здоровы!');
 		$bot->sendContact($id_user,'+380951473711','Саша');
 	}
 	else
@@ -40,16 +41,35 @@ $bot->on(function ($Update) use ($bot) {
 			$row = mysqli_fetch_row($result);
 			if($row)
 			{
-				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+				if($row[1] == null)
+				{
+					if(preg_match("^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$",$msg_text))
+					{
+						//код проверки по белому листу
+						$bot->sendMessage($id_user, "Корректный номер!");
+					}
+					else
+					{
+						if($msg_text == "/start")$bot->sendMessage($id_user, "Здравствуйте!");
+						else )
+						{
+							$bot->sendMessage($id_user, "Введён некорректный номер!");
+							$bot->sendMessage($id_user, $msg_text);
+						}
+					}
+					$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 					[
-						[
-							['text'=>'Ввести номер']
-						],
 						[
 							['text'=>'Отправить номер с телеграма','request_contact'=>true]
 						]
 					]);
-					$bot->sendMessage($id_user, "Здравствуйте!\n\nДля подтверждения входа, введите свой рабочий номер телефона, пожалуйста!", null, false, null, $keyboard);
+					$bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!", null, false, null, $keyboard);
+				}
+				else
+				{
+					//код получения информации из белого списка
+					//код выдачи данных
+				}
 			}
 		}
 		
