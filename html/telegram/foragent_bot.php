@@ -43,7 +43,7 @@ $bot->on(function ($Update) use ($bot) {
 			{
 				if($row[1] == null)
 				{
-					if(preg_match("^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$",$msg_text))
+					if(preg_match("/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/i",$msg_text))
 					{
 						//код проверки по белому листу
 						$bot->sendMessage($id_user, "Корректный номер!");
