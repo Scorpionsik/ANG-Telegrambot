@@ -69,6 +69,7 @@ $bot->on(function ($Update) use ($bot) {
 									if($row_from_db)
 									{
 										$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_db[0] . " where Id_telegram_user=" . $row[0] . ";";
+										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										$bot->sendMessage($id_user, "Успех!");
 									}
 								}
