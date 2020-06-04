@@ -26,8 +26,18 @@ $bot->on(function ($Update) use ($bot) {
 		{
 			if($msg_text == "/start")
 			{
-				$query = "INSERT INTO telegram_users (Id_telegram_user) values (${id_user});";
-				mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+				$query = "SELECT * FROM telegram_users where Id_telegram_user=${id_user};";
+				$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+				if($result)
+				{
+					$row_check = mysqli_num_rows($result);
+					if($row_check == 0)
+					{
+						$query = "INSERT INTO telegram_users (Id_telegram_user) values (${id_user});";
+						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+					}
+				}
+				mysqli_free_result($result);
 			}
 			
 			$query = "SELECT * FROM telegram_users where Id_telegram_user=${id_user};";
@@ -45,9 +55,28 @@ $bot->on(function ($Update) use ($bot) {
 							//код проверки по белому листу
 							
 							$clear_phone = preg_replace("/\D/i","",$msg_text);
-							$bot->sendMessage($id_user, $clear_phone);
+							//$bot->sendMessage($id_user, $clear_phone);
 							$clear_phone = preg_replace("/^[380]{0,3}/i","",$clear_phone);
-							$bot->sendMessage($id_user, $clear_phone);
+							//$bot->sendMessage($id_user, $clear_phone);
+							$query = "SELECT * FROM white_list where Phonenumber=${clear_phone};";
+							$result_from_db = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+							if($result_from_db)
+							{
+								$row_from_db = mysqli_num_rows($result_from_db);
+								if($row_from_db == 1)
+								{
+									$row_from_db = mysqli_fetch_row($result_from_db);
+									if($row_from_db)
+									{
+										$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_db[0] . " where Id_telegram_user=" . $row[0] . ";";
+										$bot->sendMessage($id_user, "Успех!");
+									}
+								}
+								else
+								{
+									$bot->sendMessage($id_user, "Введён некорректный номер!");
+								}
+							}
 						}
 						else
 						{
@@ -55,7 +84,6 @@ $bot->on(function ($Update) use ($bot) {
 							else 
 							{
 								$bot->sendMessage($id_user, "Введён некорректный номер!");
-								$bot->sendMessage($id_user, $msg_text);
 							}
 						}
 						/*
