@@ -8,10 +8,10 @@ $bot = new \TelegramBot\Api\Client(${token});
 
 //команда Start
 $bot->command('start', function ($message) use ($bot) {
-	include "connection.php";
+	include "connection_custom.php";
 	$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 	$id_user = $message->getChat()->getId();
-	$query = "SELECT * FROM test_user where Iduser=${id_user};";
+	$query = "SELECT * FROM custom_users where Iduser=${id_user};";
 	
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	if($result)
@@ -24,7 +24,7 @@ $bot->command('start', function ($message) use ($bot) {
 		}
 		else
 		{
-			mysqli_query($dblink,"INSERT INTO test_user (Iduser,Status) VALUES ($id_user,0);") or die("Ошибка: " . mysqli_error($dblink));
+			mysqli_query($dblink,"INSERT INTO custom_users (Iduser,Status) VALUES ($id_user,0);") or die("Ошибка: " . mysqli_error($dblink));
 			$bot->sendMessage($id_user, 'Добро пожаловать!');	
 			$bot->sendMessage($id_user, 'Пожалуйста, напиши своё имя:');
 		}
@@ -54,7 +54,7 @@ $bot->on(function ($Update) use ($bot) {
 
 	$id_user = $message->getChat()->getId();
 	
-	$query = "SELECT * FROM test_user where Iduser=${id_user};";
+	$query = "SELECT * FROM custom_users where Iduser=${id_user};";
 	$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 
 	if($result)
@@ -67,7 +67,7 @@ $bot->on(function ($Update) use ($bot) {
 			if($id_status == 0)
 			{
 				$id_status++;
-				mysqli_query($dblink,"UPDATE test_user SET Status=${id_status}, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
+				mysqli_query($dblink,"UPDATE custom_users SET Status=${id_status}, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 				$bot->sendMessage($id_user, "Приятно познакомится, ${msg_text}!");
 				/*
 				$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
@@ -99,7 +99,7 @@ $bot->on(function ($Update) use ($bot) {
 				if($msg_text == 'Дальше')
 				{
 					$id_status++;
-					mysqli_query($dblink,"UPDATE test_user SET Status=${id_status} WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
+					mysqli_query($dblink,"UPDATE custom_users SET Status=${id_status} WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 					if($id_status == 2)
 					{
 						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(

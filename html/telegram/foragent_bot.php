@@ -7,7 +7,7 @@ require_once "${root_dir}/vendor/autoload.php";
 $bot = new \TelegramBot\Api\Client(${token});
 
 $bot->on(function ($Update) use ($bot) {
-	include "connection.php";
+	include "connection_agent.php";
 	$lock=true;
     $message = $Update->getMessage();
 	if($message)
