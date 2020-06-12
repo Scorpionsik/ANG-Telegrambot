@@ -121,7 +121,9 @@ $bot->on(function ($Update) use ($bot) {
 									['text'=>'Обновить']
 								]
 							]);
-							if($row_from_whitelist[0] != 11)$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+							if($row_from_whitelist[0] != 11)
+								//$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+							$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
 							else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
 						}
 					}
@@ -150,7 +152,9 @@ $bot->on(function ($Update) use ($bot) {
 										['text'=>'Обновить']
 									]
 								]);
-								if($row_from_whitelist[0] != 11)$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+								if($row_from_whitelist[0] != 11)
+									//$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+								$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
 								else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
 							}
 						}
