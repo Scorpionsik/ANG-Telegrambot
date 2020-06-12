@@ -5,7 +5,8 @@ include "givemyprecious.php";
 require_once "${root_dir}/vendor/autoload.php";
 
 $bot = new \TelegramBot\Api\Client(${token});
-
+$bot->sendMessage(425486413, 'Test');
+/*
 //команда Start
 $bot->command('start', function ($message) use ($bot) {
 	include "connection_custom.php";
@@ -37,12 +38,6 @@ $bot->command('start', function ($message) use ($bot) {
 $bot->command('help', function ($message) use ($bot) {
     $bot->sendMessage($message->getChat()->getId(), 'help');
 });
-/*
-//команда Id
-$bot->command('id', function ($message) use ($bot) {
-    $id_user = $message->getChat()->getId();
-    $bot->sendMessage($id_user,$id_user);
-});*/
 
 //Обработка введенного текста
 $bot->on(function ($Update) use ($bot) {
@@ -69,17 +64,7 @@ $bot->on(function ($Update) use ($bot) {
 				$id_status++;
 				mysqli_query($dblink,"UPDATE custom_users SET Status=${id_status}, Username='${msg_text}' WHERE Id=" . $row[0] . ";") or die("Ошибка: " . mysqli_error($dblink));
 				$bot->sendMessage($id_user, "Приятно познакомится, ${msg_text}!");
-				/*
-				$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-					[
-						[
-							['text' => 'link', 'url' => 'https://core.telegram.org']
-						]
-					]
-				);
-						
-				$bot->sendMessage($id_user, "Try me", null, false, null, $keyboard);
-				*/
+
 				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 				[
 					[
@@ -161,11 +146,7 @@ $bot->on(function ($Update) use ($bot) {
 						$bot->sendMessage($id_user, "Предложенные варианты:", null, false, null, $keyboard);
 					}
 				}
-				/*
-				$id_user_message = $message->getMessageId();
-				$bot->deleteMessage($id_user, $id_user_message);
-				$bot->sendMessage($id_user, "Ты написал: ${msg_text}");
-				*/
+								
 			}
 			
 		}
@@ -175,8 +156,8 @@ $bot->on(function ($Update) use ($bot) {
 	mysqli_close($dblink);
     //$bot->sendMessage($id_user, "Ты написал: " . $msg_text);
 }, function () { return true; });
-
-$bot->run();
+*/
+//$bot->run();
 
 
 ?>
