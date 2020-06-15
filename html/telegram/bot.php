@@ -2,10 +2,27 @@
 $root_dir = explode('html',__DIR__)[0] . html;
 
 include "givemyprecious.php";
+include "connection_agent.php";
 require_once "${root_dir}/vendor/autoload.php";
 
+$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 $bot = new \TelegramBot\Api\Client(${token});
-$bot->sendMessage(425486413, 'Test');
+//$bot->sendMessage(425486413, 'Test');
+
+$query = "select telegram_users.Id_telegram_user as 'Telegram' from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user != 11";
+$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+if($result)
+{
+	$count = mysqli_num_rows($result);
+	for($i = 0; $i < $count; $i++)
+	{
+		$row = mysqli_fetch_row($result);
+		if($row)
+		{
+			$bot->sendMessage($row[0], 'Добрый день! Прошу вас проверить, приходит ли информация по вашему району из бота. Если нет, сообщите в Вайбер по номеру 095 147 37 11. Заранее вам спасибо!');
+		}
+	}
+}
 /*
 //команда Start
 $bot->command('start', function ($message) use ($bot) {
