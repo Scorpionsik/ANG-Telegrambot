@@ -126,6 +126,7 @@ $bot->on(function ($Update) use ($bot) {
 								if($row_from_whitelist[3] == false)
 								{
 									//show results code
+									$bot->sendMessage($id_user, $row_from_whitelist[3], null, false, null, $keyboard);
 									$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 									$bot->sendMessage($id_user, "Если информация по вашему району за последние 3 дня в базе есть, и Вы получили сообщение о её отсутствии, напишите об этом в Вайбер по номеру: 095 147 37 11, что бы я был в курсе, что с вашим районом всё ещё наблюдаются проблемы. Заранее вам огромное спасибо за помощь!", null, false, null, $keyboard);
 								}
