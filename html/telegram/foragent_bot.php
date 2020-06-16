@@ -173,7 +173,7 @@ $bot->on(function ($Update) use ($bot) {
 									if($row_from_whitelist[3] == false)
 									{
 										//show results code
-										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, offers.Locality, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type and offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type and offers.Id_district=bind_whitelist_distr_flats.Id_district and offers.Room_counts=bind_whitelist_distr_flats.Room_counts inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=18;"; //. $row_from_whitelist[0] . ";";
+										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, offers.Locality, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type and offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type and offers.Id_district=bind_whitelist_distr_flats.Id_district and offers.Room_counts=bind_whitelist_distr_flats.Room_counts inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user="; . $row_from_whitelist[0] . ";";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
@@ -195,7 +195,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 													
 												}
-												
+												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов за последние 3 дня.");
 											}
 											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
