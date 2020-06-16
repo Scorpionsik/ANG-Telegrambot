@@ -177,21 +177,39 @@ $bot->on(function ($Update) use ($bot) {
 										$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 										$bot->sendMessage($id_user, "Если информация по вашему району за последние 3 дня в базе есть, и Вы получили сообщение о её отсутствии, напишите об этом в Вайбер по номеру: 095 147 37 11, что бы я был в курсе, что с вашим районом всё ещё наблюдаются проблемы. Заранее вам огромное спасибо за помощь!", null, false, null, $keyboard);
 										*/
-										$query = "SELECT * FROM bind_whitelist_distr_flats where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										$query = "select offers.Internal_id as 'Id', types.Type_name, flat_types.Typename, offers.Locality, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type and offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type and offers.Id_district=bind_whitelist_distr_flats.Id_district and offers.Room_counts=bind_whitelist_distr_flats.Room_countsinner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type inner join districts on offers.Id_district=districts.Id_district
+where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . ";";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
-											$row_bind = mysqli_num_rows($result_bind);
-											if($row_bind > 0)
+											//--get info code--//
+											$row_bind_count = mysqli_num_rows($result_bind);
+											if($row_bind_count > 0)
 											{
-												$bot->sendMessage($id_user, "Информации по вашему району на данный момент есть!", null, false, null, $keyboard);
+												for($i = 0; $i < $row_bind_count; $i++)
+												{
+													$row_bind = mysqli_fetch_row($result_bind);
+													if($row_bind)
+													{
+														$offer_message = $row_bind[0] . "\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . "\n" . $row_bind[3] + ", " . $row_bind[4];
+														
+														if($row_bind[5] != null)
+															$offer_message = $offer_message . ", " . $row_bind[5];
+														$offer_message = $offer_message . "\n" . $row_bind[8] . "/" . $row_bind[9] . "\n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . "\n\nЦена: " . $row_bind[14];
+														$bot->sendMessage($id_user, $offer_message);
+														
+													}
+												}
+												
 											}
 											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+											//--end get info code--//
 										}
 										else
 										{
 											$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
-										}											
+										}	
+										mysqli_free_result($result_bind);
 									}
 									else
 									{
