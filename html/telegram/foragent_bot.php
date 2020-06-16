@@ -185,7 +185,9 @@ $bot->on(function ($Update) use ($bot) {
 												{
 													$row_bind = mysqli_fetch_row($result_bind);
 													$offer_message = $row_bind[0];
-													
+													$bot->sendMessage($id_user, $row_bind[0]);
+													$bot->sendMessage($id_user, $row_bind[1]);
+													$bot->sendMessage($id_user, $row_bind[2]);
 													$offer_message = $offer_message . "\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . "\n" . $row_bind[3] + ", " . $row_bind[4];
 													
 													if($row_bind[5] != null)
