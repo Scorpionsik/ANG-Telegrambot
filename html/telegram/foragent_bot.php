@@ -123,6 +123,7 @@ $bot->on(function ($Update) use ($bot) {
 							]);
 							if($row_from_whitelist[0] != 11)
 							{
+								/*
 								if($row_from_whitelist[3] == false)
 								{
 									//show results code
@@ -136,7 +137,8 @@ $bot->on(function ($Update) use ($bot) {
 									//$bot->sendMessage($id_user, "Ведутся технические работы, попробуйте позже!", null, false, null, $keyboard);
 									$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
 								}
-								
+								*/
+								$bot->sendMessage($id_user, "Ваша личность подтверждена! Нажмите кнопку Обновить, чтобы начать получать объявления.", null, false, null, $keyboard);
 							}
 							else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
 						}
@@ -171,9 +173,20 @@ $bot->on(function ($Update) use ($bot) {
 									if($row_from_whitelist[3] == false)
 									{
 										//show results code
-										
+										/*
 										$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 										$bot->sendMessage($id_user, "Если информация по вашему району за последние 3 дня в базе есть, и Вы получили сообщение о её отсутствии, напишите об этом в Вайбер по номеру: 095 147 37 11, что бы я был в курсе, что с вашим районом всё ещё наблюдаются проблемы. Заранее вам огромное спасибо за помощь!", null, false, null, $keyboard);
+										*/
+										$query = "SELECT * FROM bind_whitelist_distr_flats where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+										if($result_bind)
+										{
+											$bot->sendMessage($id_user, "Информации по вашему району на данный момент есть!", null, false, null, $keyboard);
+										}
+										else
+										{
+											$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
+										}											
 									}
 									else
 									{
@@ -182,7 +195,6 @@ $bot->on(function ($Update) use ($bot) {
 										$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
 									}
 								}
-								//$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
 								else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
 							}
 						}
