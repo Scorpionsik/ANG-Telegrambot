@@ -181,7 +181,12 @@ $bot->on(function ($Update) use ($bot) {
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
-											$bot->sendMessage($id_user, "Информации по вашему району на данный момент есть!", null, false, null, $keyboard);
+											$row_bind = mysqli_num_rows($result_bind);
+											if($row_bind > 0)
+											{
+												$bot->sendMessage($id_user, "Информации по вашему району на данный момент есть!", null, false, null, $keyboard);
+											}
+											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 										}
 										else
 										{
