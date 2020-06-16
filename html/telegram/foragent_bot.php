@@ -173,7 +173,7 @@ $bot->on(function ($Update) use ($bot) {
 									if($row_from_whitelist[3] == false)
 									{
 										//show results code
-										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, offers.Locality, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type and offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type and offers.Id_district=bind_whitelist_distr_flats.Id_district and offers.Room_counts=bind_whitelist_distr_flats.Room_counts inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, offers.Locality, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type and offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type and offers.Id_district=bind_whitelist_distr_flats.Id_district and offers.Room_counts=bind_whitelist_distr_flats.Room_counts inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=18;"; //. $row_from_whitelist[0] . ";";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
@@ -185,12 +185,14 @@ $bot->on(function ($Update) use ($bot) {
 												{
 													$row_bind = mysqli_fetch_row($result_bind);
 													$offer_message = $row_bind[0];
+													$bot->sendMessage($id_user, $offer_message);
 													$offer_message = $offer_message . " \r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3] + ", " . $row_bind[4];
-													
+													$bot->sendMessage($id_user, $offer_message);
 													if($row_bind[5] != null)
 													{
 														$offer_message = $offer_message . ", " . $row_bind[5];
 													}
+													$bot->sendMessage($id_user, $offer_message);
 													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14];
 													$bot->sendMessage($id_user, $offer_message);
 													
