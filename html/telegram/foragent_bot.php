@@ -184,15 +184,12 @@ $bot->on(function ($Update) use ($bot) {
 												for($i = 0; $i < $row_bind_count; $i++)
 												{
 													$row_bind = mysqli_fetch_row($result_bind);
-													$offer_message = $row_bind[0] . "   \n";
-													$bot->sendMessage($id_user, $offer_message);
-													$offer_message = $offer_message . " \r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3] + ", " . $row_bind[4];
-													$bot->sendMessage($id_user, $offer_message);
+													$offer_message = $row_bind[0];
+													$offer_message = $offer_message . "\r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3] . ", " . $row_bind[4];
 													if($row_bind[5] != null)
 													{
 														$offer_message = $offer_message . ", " . $row_bind[5];
 													}
-													$bot->sendMessage($id_user, $offer_message);
 													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14];
 													$bot->sendMessage($id_user, $offer_message);
 													
