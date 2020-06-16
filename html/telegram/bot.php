@@ -19,6 +19,7 @@ if($result)
 		$row = mysqli_fetch_row($result);
 		if($row)
 		{
+			$id_user = $row[1];
 			//show results code
 										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, offers.Locality, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type and offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type and offers.Id_district=bind_whitelist_distr_flats.Id_district and offers.Room_counts=bind_whitelist_distr_flats.Room_counts inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row[0] . ";";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
@@ -62,7 +63,7 @@ if($result)
 										}	
 										mysqli_free_result($result_bind);
 			
-			//$bot->sendMessage($row[1], 'Добрый день! Прошу вас проверить, приходит ли информация по вашему району из бота. Если нет, сообщите в Вайбер по номеру 095 147 37 11. Заранее вам спасибо!');
+			//$bot->sendMessage($id_user, 'Добрый день! Прошу вас проверить, приходит ли информация по вашему району из бота. Если нет, сообщите в Вайбер по номеру 095 147 37 11. Заранее вам спасибо!');
 		}
 	}
 	mysqli_free_result($result);
