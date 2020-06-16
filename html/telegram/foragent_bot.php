@@ -123,7 +123,7 @@ $bot->on(function ($Update) use ($bot) {
 							]);
 							if($row_from_whitelist[0] != 11)
 							{
-								if($row_from_whitelist[3] == 0)
+								if($row_from_whitelist[3] == false)
 								{
 									//show results code
 									$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
