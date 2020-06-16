@@ -199,7 +199,7 @@ $bot->on(function ($Update) use ($bot) {
 													{
 														$offer_message = $offer_message . ", " . $row_bind[5];
 													}
-													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14];
+													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14] . "\n\n" . $row_bind[6];
 													$bot->sendMessage($id_user, $offer_message, null, false, null, $keyboard_inline);
 													
 													
