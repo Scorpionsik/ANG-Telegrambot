@@ -185,16 +185,13 @@ $bot->on(function ($Update) use ($bot) {
 												{
 													$row_bind = mysqli_fetch_row($result_bind);
 													$offer_message = $row_bind[0];
-													$bot->sendMessage($id_user, $row_bind[0]);
-													$bot->sendMessage($id_user, $row_bind[1]);
-													$bot->sendMessage($id_user, $row_bind[7]);
-													//$offer_message = $offer_message . " \n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \n" . $row_bind[3] + ", " . $row_bind[4];
+													$offer_message = $offer_message . " \r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3] + ", " . $row_bind[4];
 													
 													if($row_bind[5] != null)
 													{
 														$offer_message = $offer_message . ", " . $row_bind[5];
 													}
-													$offer_message = $offer_message . " \n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \n \nЦена: " . $row_bind[14];
+													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14];
 													$bot->sendMessage($id_user, $offer_message);
 													
 													
