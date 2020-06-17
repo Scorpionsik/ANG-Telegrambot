@@ -67,7 +67,7 @@ if($result)
 														['text'=>'Обновить']
 													]
 												]);
-												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, "Всего ${row_bind_count} объект/а/ов).", null, false, null, $keyboard);
 											}
 											//else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
