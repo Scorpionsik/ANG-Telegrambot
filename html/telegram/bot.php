@@ -52,7 +52,13 @@ if($result)
 													
 													
 												}
-												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов за последние 3 дня.");
+												$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+												[
+													[
+														['text'=>'Обновить']
+													]
+												]);
+												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов за последние 3 дня.", null, false, null, $keyboard);
 											}
 											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
