@@ -44,13 +44,13 @@ if($result)
 													$offer_message = $row_bind[0];
 													
 													if($row_bind[15]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
-													else if($row_bind[16]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";;
+													else if($row_bind[16]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 													
 													$offer_message = $offer_message . "\r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3];
 													
 													if($row_bind[4] != 1)
 													{
-														$offer_message = $offer_message . ", " . $row_bind[4]
+														$offer_message = $offer_message . ", " . $row_bind[4];
 													}
 													if($row_bind[5] != null)
 													{
@@ -67,7 +67,7 @@ if($result)
 														['text'=>'Обновить']
 													]
 												]);
-												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов за последние 3 дня.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов.", null, false, null, $keyboard);
 											}
 											//else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
