@@ -198,7 +198,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 													if($row_bind[4] != 1)
 													{
-														$offer_message = $offer_message . ", " . $row_bind[4]
+														$offer_message = $offer_message . ", " . $row_bind[4];
 													}
 													
 													if($row_bind[5] != null)
