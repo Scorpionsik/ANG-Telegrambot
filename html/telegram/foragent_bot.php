@@ -172,6 +172,27 @@ $bot->on(function ($Update) use ($bot) {
 								{
 									if($row_from_whitelist[3] == false)
 									{
+										/*
+										0	offers.Internal_id
+										1	types.Type_name
+										2	flat_types.Typename
+										3	localities.Locality_name
+										4	districts.District_name
+										5	offers.Address
+										6	offers.Description
+										7	offers.Room_counts
+										8	offers.Floor
+										9	offers.Floors_total
+										10	offers.Area
+										11	offers.Lot_area
+										12	offers.Living_space
+											13	offers.Kitchen_space
+										14	offers.Price
+										15	offers.Image_url
+										16	offers.IsNew
+										17	offers.IsEdit	
+										*/
+										
 										//show results code
 										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . ";";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
@@ -195,8 +216,8 @@ $bot->on(function ($Update) use ($bot) {
 													
 													$offer_message = $row_bind[0];
 													
-													if($row_bind[15]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
-													else if($row_bind[16]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
+													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
+													else if($row_bind[17]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 													
 													$offer_message = $offer_message . "\r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3];
 													

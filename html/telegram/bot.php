@@ -43,8 +43,8 @@ if($result)
 													
 													$offer_message = $row_bind[0];
 													
-													if($row_bind[15]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
-													else if($row_bind[16]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
+													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
+													else if($row_bind[17]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 													
 													$offer_message = $offer_message . "\r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3];
 													
