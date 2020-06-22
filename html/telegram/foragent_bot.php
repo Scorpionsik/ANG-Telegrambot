@@ -1,10 +1,10 @@
 <?php
-$root_dir = explode('html',__DIR__)[0] . html;
+$root_dir = explode('html',__DIR__)[0] . 'html';
 
 include "givemyprecious.php";
-require_once "${root_dir}/vendor/autoload.php";
+require_once $root_dir . "/vendor/autoload.php";
 
-$bot = new \TelegramBot\Api\Client(${token});
+$bot = new \TelegramBot\Api\Client($token);
 
 $bot->on(function ($Update) use ($bot) {
 	include "connection_agent.php";
