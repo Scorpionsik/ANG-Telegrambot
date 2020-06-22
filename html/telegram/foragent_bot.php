@@ -82,7 +82,7 @@ $bot->on(function ($Update) use ($bot) {
 											
 											if($row_from_whitelist)
 											{
-												$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_whitelist[0] . " where Id_telegram_user=" . $row[0] . ";";
+												$query = "UPDATE telegram_users SET Id_whitelist_user=" . $row_from_whitelist[0] . ", Register_date=" . time() . " where Id_telegram_user=" . $row[0] . ";";
 												mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 												$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!");
 												$lock=false;
