@@ -285,12 +285,52 @@ $bot->on(function ($Update) use ($bot) {
 
 $bot->on(function ($Update) use ($bot) {
 	
+	
 	$callback = $Update->getCallbackQuery();
-	$data = $callback->getData();
-	
-	 $bot->sendMessage(425486413, $data);
+	$internal_id = $callback->getData();
+	$message = $Update->getMessage();
+	if($message)
+	{
+		$text_message = $message->getText() . "\r\n\r\n";
+		include "connection_agent.php";
+		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
+		
+		$query = "SELECT flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber FROM offers JOIN flat_owners USING (User_entity_id) JOIN owner_phones USING (User_entity_id) WHERE offers.Internal_id='" . $internal_id . "';";
+		$result_user_entity_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+		if($result_user_entity_id)
+		{
+			$num_user_entity_id = mysqli_num_rows($result_user_entity_id);
+			if($num_user_entity_id > 0)
+			{
+				for($i=0; $i<$num_user_entity_id; $i++)
+				{
+					$row_user_entity_id = mysqli_fetch_row($result_user_entity_id);
+					if($i==0)
+					{
+						if($row_user_entity_id[0] != null && $row_user_entity_id[0] != "") $text_message = $text_message . $row_user_entity_id[0] . "\r\n";
+						else $text_message = $text_message . "Имя не указано\r\n";
+						
+						if($row_user_entity_id[1] != null && $row_user_entity_id[1] != "") $text_message = $text_message . "Агенство " . $row_user_entity_id[1] . "\r\n";
+					}
+					$text_message = $text_message . $row_user_entity_id[2] . "\r\n";
+				}
+			}
+		}
+		
+		$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+			[
+				[
+					['text' => 'Ссылка на сайт', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id]
+				]
+			]
+		);
+		
+		$id_user = $message->getChat()->getId();
+		
+		$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
+		$bot->sendMessage($id_user, $internal_id);
 
-	
+	}
 	
 	}, function ($Update)
 { 
