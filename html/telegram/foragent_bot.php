@@ -279,7 +279,7 @@ $bot->on(function ($Update) use ($bot) {
 }, function ($Update)
 { 
 	$callback = $Update->getCallbackQuery();
-	if (is_null($callback) || !strlen($callback->getData())) return true;
+	if (is_null($callback)) return true;
 	else return false;
 });
 
@@ -295,7 +295,7 @@ $bot->on(function ($Update) use ($bot) {
 	}, function ($Update)
 { 
 	$callback = $Update->getCallbackQuery();
-	if (is_null($callback) || !strlen($callback->getData())) return false;
+	if (is_null($callback)) return false;
 	else return true;
 });
 
