@@ -200,25 +200,26 @@ $bot->on(function ($Update) use ($bot) {
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
+											$bot->sendMessage($id_user, "check bind!");
 											//--get info code--//
 											$row_bind_count = mysqli_num_rows($result_bind);
 											if($row_bind_count > 0)
 											{
 												for($i = 0; $i < $row_bind_count; $i++)
 												{
+													$bot->sendMessage($id_user, "check object " . $i . "!");
 													$row_bind = mysqli_fetch_row($result_bind);
 													
 													$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 														[
 															[
 																['text' => 'Ссылка на сайт', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
-															],
-															[
+															],[
 																['text' => 'Посмотреть номера', 'callback_data' => $row_bind[0]]
 															]
 														]
 													);
-													
+													$bot->sendMessage($id_user, "check keyboard!");
 													$offer_message = $row_bind[0];
 													
 													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
