@@ -215,8 +215,7 @@ $bot->on(function ($Update) use ($bot) {
 													$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 														[
 															[
-																['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]],
-																['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $row_bind[19]]
+																['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $row_bind[19]]
 															],[
 																['text' => '☎️ Телефоны', 'callback_data' => $row_bind[0]]
 															]
@@ -325,8 +324,7 @@ $bot->on(function ($Update) use ($bot) {
 		$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 			[
 				[
-					['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],
-					['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
+					['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
 				]
 			]
 		);
