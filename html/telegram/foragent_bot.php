@@ -161,7 +161,7 @@ $bot->on(function ($Update) use ($bot) {
 							if($lock == false)
 							{
 								//код выдачи данных
-								
+								$bot->sendMessage($id_user, "check lock!");
 								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 								[
 									[
@@ -170,8 +170,10 @@ $bot->on(function ($Update) use ($bot) {
 								]);
 								if($row_from_whitelist[0] != 11)
 								{
+									$bot->sendMessage($id_user, "check love!");
 									if($row_from_whitelist[3] == false)
 									{
+										$bot->sendMessage($id_user, "check ban!");
 										/*
 										0	offers.Internal_id
 										1	types.Type_name
@@ -288,7 +290,7 @@ $bot->on(function ($Update) use ($bot) {
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
-		$bot->sendMessage($id_user, $data);
+		//$bot->sendMessage($id_user, $data);
 	}
 	
 	
