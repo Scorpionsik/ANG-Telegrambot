@@ -311,7 +311,7 @@ $bot->on(function ($Update) use ($bot) {
 					$row_user_entity_id = mysqli_fetch_row($result_user_entity_id);
 					if($i==0)
 					{
-						$entity_id=$row_user_entity_id[3]
+						$entity_id=$row_user_entity_id[3];
 						if($row_user_entity_id[0] != null && $row_user_entity_id[0] != "") $text_message = $text_message . $row_user_entity_id[0] . "\r\n";
 						else $text_message = $text_message . "Имя не указано\r\n";
 						
