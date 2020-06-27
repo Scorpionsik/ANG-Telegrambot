@@ -161,7 +161,7 @@ $bot->on(function ($Update) use ($bot) {
 							if($lock == false)
 							{
 								//код выдачи данных
-								$bot->sendMessage($id_user, "check lock!");
+								//$bot->sendMessage($id_user, "check lock!");
 								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 								[
 									[
@@ -170,10 +170,10 @@ $bot->on(function ($Update) use ($bot) {
 								]);
 								if($row_from_whitelist[0] != 11)
 								{
-									$bot->sendMessage($id_user, "check love!");
+									//$bot->sendMessage($id_user, "check love!");
 									if($row_from_whitelist[3] == false)
 									{
-										$bot->sendMessage($id_user, "check ban!");
+										//$bot->sendMessage($id_user, "check ban!");
 										/*
 										0	offers.Internal_id
 										1	types.Type_name
@@ -196,18 +196,18 @@ $bot->on(function ($Update) use ($bot) {
 										*/
 										
 										//show results code
-										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . " and offers.IsArchive=0;";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
-											$bot->sendMessage($id_user, "check bind!");
+											//$bot->sendMessage($id_user, "check bind!");
 											//--get info code--//
 											$row_bind_count = mysqli_num_rows($result_bind);
 											if($row_bind_count > 0)
 											{
 												for($i = 0; $i < $row_bind_count; $i++)
 												{
-													$bot->sendMessage($id_user, "check object " . $i . "!");
+													//$bot->sendMessage($id_user, "check object " . $i . "!");
 													$row_bind = mysqli_fetch_row($result_bind);
 													
 													$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
@@ -219,7 +219,7 @@ $bot->on(function ($Update) use ($bot) {
 															]
 														]
 													);
-													$bot->sendMessage($id_user, "check keyboard!");
+													//$bot->sendMessage($id_user, "check keyboard!");
 													$offer_message = $row_bind[0];
 													
 													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
@@ -291,7 +291,7 @@ $bot->on(function ($Update) use ($bot) {
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
-		//$bot->sendMessage($id_user, $data);
+		$bot->sendMessage($id_user, $data);
 	}
 	
 	
