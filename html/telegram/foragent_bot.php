@@ -193,10 +193,12 @@ $bot->on(function ($Update) use ($bot) {
 										15	offers.Image_url
 										16	offers.IsNew
 										17	offers.IsEdit	
+										18	offers.Orient
+										19	offers.Entity_id
 										*/
 										
 										//show results code
-										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . " and offers.IsArchive=0;";
+										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . " and offers.IsArchive=0;";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
@@ -213,9 +215,10 @@ $bot->on(function ($Update) use ($bot) {
 													$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 														[
 															[
-																['text' => 'Ссылка на сайт', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
+																['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]],
+																['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $row_bind[19]]
 															],[
-																['text' => 'Посмотреть номера', 'callback_data' => $row_bind[0]]
+																['text' => '☎️ Телефоны', 'callback_data' => $row_bind[0]]
 															]
 														]
 													);
@@ -291,6 +294,7 @@ $bot->on(function ($Update) use ($bot) {
 	$message = $callback->getMessage();
 	if($message)
 	{
+		$entity_id=0;
 		$text_message = $message->getText() . "\r\n\r\n";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
@@ -307,6 +311,7 @@ $bot->on(function ($Update) use ($bot) {
 					$row_user_entity_id = mysqli_fetch_row($result_user_entity_id);
 					if($i==0)
 					{
+						$entity_id=$row_user_entity_id[3]
 						if($row_user_entity_id[0] != null && $row_user_entity_id[0] != "") $text_message = $text_message . $row_user_entity_id[0] . "\r\n";
 						else $text_message = $text_message . "Имя не указано\r\n";
 						
@@ -320,7 +325,8 @@ $bot->on(function ($Update) use ($bot) {
 		$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 			[
 				[
-					['text' => 'Ссылка на сайт', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id]
+					['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],
+					['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
 				]
 			]
 		);
