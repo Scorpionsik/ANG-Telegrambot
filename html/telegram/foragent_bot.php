@@ -293,6 +293,7 @@ $bot->on(function ($Update) use ($bot) {
 	$message = $callback->getMessage();
 	if($message)
 	{
+		$id_user = $message->getChat()->getId();
 		$entity_id=0;
 		$text_message = $message->getText() . "\r\n\r\n";
 		include "connection_agent.php";
@@ -319,6 +320,18 @@ $bot->on(function ($Update) use ($bot) {
 					$text_message = $text_message . $row_user_entity_id[2] . "\r\n";
 				}
 			}
+			
+			$query = "select Id_whitelist_user from telegram_users where Id_telegram_user=" . $id_user . ";";
+			$result_whitelist_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+			if($result_whitelist_id)
+			{
+				$row_whitelist_id = mysqli_fetch_row($result_whitelist_id);
+				if($row_whitelist_id)
+				{
+					$query = "insert into agent_phone_press values (" . $row_whitelist_id[0] . ", '" . $internal_id . "', " . time() . ");";
+					mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+				}
+			}
 		}
 		
 		$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
@@ -330,7 +343,7 @@ $bot->on(function ($Update) use ($bot) {
 			]
 		);
 		
-		$id_user = $message->getChat()->getId();
+		
 		
 		$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
 		//$bot->sendMessage($id_user, $internal_id);
