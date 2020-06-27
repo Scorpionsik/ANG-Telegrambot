@@ -288,7 +288,7 @@ $bot->on(function ($Update) use ($bot) {
 	
 	$callback = $Update->getCallbackQuery();
 	$internal_id = $callback->getData();
-	$message = $Update->getMessage();
+	$message = $callback->getMessage();
 	if($message)
 	{
 		$text_message = $message->getText() . "\r\n\r\n";
