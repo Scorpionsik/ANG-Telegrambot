@@ -287,12 +287,9 @@ $bot->on(function ($Update) use ($bot) {
 	
 	$callback = $Update->getCallbackQuery();
 	$data = $callback->getData();
-	 $message = $Update->getMessage();
-	if($message)
-	{
-		$id_user = $message->getChat()->getId();
-		$bot->sendMessage($id_user, $data);
-	}
+	
+	 $bot->sendMessage(425486413, $data);
+
 	
 	
 	}, function ($Update)
