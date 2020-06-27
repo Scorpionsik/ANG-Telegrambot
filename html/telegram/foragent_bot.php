@@ -194,7 +194,7 @@ $bot->on(function ($Update) use ($bot) {
 										*/
 										
 										//show results code
-										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . " where offers.IsArchive=0;";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
@@ -210,6 +210,9 @@ $bot->on(function ($Update) use ($bot) {
 														[
 															[
 																['text' => 'Ссылка на сайт', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
+															],
+															[
+																['text' => 'Посмотреть номера', 'callback_data' => $row_bind[0]]
 															]
 														]
 													);
@@ -229,6 +232,10 @@ $bot->on(function ($Update) use ($bot) {
 													if($row_bind[5] != null)
 													{
 														$offer_message = $offer_message . ", " . $row_bind[5];
+													}
+													if($row_bind[18] != null and $row_bind[18] != "")
+													{
+														$offer_message = $offer_message . ", ориентир: " . $row_bind[18];
 													}
 													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14] . "\n\n" . $row_bind[6];
 													$bot->sendMessage($id_user, $offer_message, null, false, null, $keyboard_inline);
@@ -266,7 +273,31 @@ $bot->on(function ($Update) use ($bot) {
 		}
 	}
     //$bot->sendMessage($id_user, "Ты написал: " . $msg_text);
-}, function () { return true; });
+}, function ($Update)
+{ 
+	$callback = $Update->getCallbackQuery();
+	if (is_null($callback) || !strlen($callback->getData())) return true;
+	else return false;
+});
+
+$bot->on(function ($Update) use ($bot) {
+	
+	$callback = $Update->getCallbackQuery();
+	$data = $callback->getData();
+	 $message = $Update->getMessage();
+	if($message)
+	{
+		$id_user = $message->getChat()->getId();
+		$bot->sendMessage($id_user, $data);
+	}
+	
+	
+	}, function ($Update)
+{ 
+	$callback = $Update->getCallbackQuery();
+	if (is_null($callback) || !strlen($callback->getData())) return false;
+	else return true;
+});
 
 $bot->run();
 
