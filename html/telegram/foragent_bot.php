@@ -328,7 +328,7 @@ $bot->on(function ($Update) use ($bot) {
 		$id_user = $message->getChat()->getId();
 		
 		$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
-		$bot->sendMessage($id_user, $internal_id);
+		//$bot->sendMessage($id_user, $internal_id);
 
 	}
 	
