@@ -198,7 +198,8 @@ $bot->on(function ($Update) use ($bot) {
 										*/
 										
 										//show results code
-										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . " and offers.IsArchive=0;";
+										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district" . 
+										" where bind_whitelist_distr_flats.Id_whitelist_user=" . $row_from_whitelist[0] . " and offers.IsArchive=0;";
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
@@ -222,12 +223,12 @@ $bot->on(function ($Update) use ($bot) {
 														]
 													);
 													//$bot->sendMessage($id_user, "check keyboard!");
-													$offer_message = $row_bind[0];
+													$offer_message = "#️⃣  " . $row_bind[0];
 													
 													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
 													else if($row_bind[17]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 													
-													$offer_message = $offer_message . "\r\n" . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n" . $row_bind[3];
+													$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . " " . $row_bind[7] . "-комнатная, " . $row_bind[1] . " \r\n📍 " . $row_bind[3];
 													
 													if($row_bind[4] != 1)
 													{
@@ -242,7 +243,7 @@ $bot->on(function ($Update) use ($bot) {
 													{
 														$offer_message = $offer_message . ", ориентир: " . $row_bind[18];
 													}
-													$offer_message = $offer_message . " \r\n" . $row_bind[8] . "/" . $row_bind[9] . " \n" . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \nЦена: " . $row_bind[14] . "\n\n" . $row_bind[6];
+													$offer_message = $offer_message . " \r\n🏢 " . $row_bind[8] . "/" . $row_bind[9] . " \n📐 " . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \n💰 Цена: " . $row_bind[14] . "\n\n" . $row_bind[6];
 													$bot->sendMessage($id_user, $offer_message, null, false, null, $keyboard_inline);
 													
 													
@@ -295,7 +296,7 @@ $bot->on(function ($Update) use ($bot) {
 	{
 		$id_user = $message->getChat()->getId();
 		$entity_id=0;
-		$text_message = $message->getText() . "\r\n\r\n";
+		$text_message = $message->getText() . "\r\n\r\n💁‍♂️ ";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
@@ -315,7 +316,7 @@ $bot->on(function ($Update) use ($bot) {
 						if($row_user_entity_id[0] != null && $row_user_entity_id[0] != "") $text_message = $text_message . $row_user_entity_id[0] . "\r\n";
 						else $text_message = $text_message . "Имя не указано\r\n";
 						
-						if($row_user_entity_id[1] != null && $row_user_entity_id[1] != "") $text_message = $text_message . "Агенство " . $row_user_entity_id[1] . "\r\n";
+						if($row_user_entity_id[1] != null && $row_user_entity_id[1] != "") $text_message = $text_message . "📎 Агенство " . $row_user_entity_id[1] . "\r\n";
 					}
 					$text_message = $text_message . $row_user_entity_id[2] . "\r\n";
 				}
