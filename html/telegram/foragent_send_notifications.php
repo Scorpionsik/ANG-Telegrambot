@@ -13,6 +13,14 @@ $query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_tel
 $result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 if($result)
 {
+									//код выдачи данных
+								//$bot->sendMessage($id_user, "check lock!");
+								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+								[
+									[
+										['text'=>'Обновить']
+									]
+								]);
 	$count = mysqli_num_rows($result);
 	for($i = 0; $i < $count; $i++)
 	{
