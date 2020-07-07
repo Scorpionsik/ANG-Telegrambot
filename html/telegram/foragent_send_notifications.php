@@ -258,5 +258,5 @@ $bot->on(function ($Update) use ($bot) {
 */
 //$bot->run();
 
-echo time();
+echo date('l jS \of F Y h:i:s A');
 ?>
