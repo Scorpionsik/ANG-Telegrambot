@@ -258,5 +258,5 @@ $bot->on(function ($Update) use ($bot) {
 */
 //$bot->run();
 
-
+echo time();
 ?>
