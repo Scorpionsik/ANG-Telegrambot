@@ -101,6 +101,7 @@ if($result)
 										mysqli_free_result($result_bind);
 			}
 			else{
+				$bot->sendMessage($id_user, "test");
 				$bot->sendMessage($id_user, date('l jS \of F Y h:i:s A'));
 			}
 			
