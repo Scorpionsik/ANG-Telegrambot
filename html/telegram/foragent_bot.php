@@ -183,7 +183,7 @@ $bot->on(function ($Update) use ($bot) {
 									if($row_from_whitelist[3] == false)
 									{
 										$turn_page = $row_from_whitelist[4];
-										
+										$bot->sendMessage($id_user, strpos($message, 'Включить'));
 										if(strpos($message, 'Включить') != false){
 											$turn_page=1;
 										}
