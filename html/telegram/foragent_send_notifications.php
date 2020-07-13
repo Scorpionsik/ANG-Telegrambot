@@ -20,7 +20,9 @@ if($result)
 									[
 										['text'=>'Обновить']
 									]
-								]);
+								],
+								false,
+								true);
 	$count = mysqli_num_rows($result);
 	for($i = 0; $i < $count; $i++)
 	{

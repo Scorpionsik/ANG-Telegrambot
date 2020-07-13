@@ -120,7 +120,9 @@ $bot->on(function ($Update) use ($bot) {
 								[
 									['text'=>'Обновить']
 								]
-							]);
+							],
+							false,
+							true);
 							if($row_from_whitelist[0] != 11)
 							{
 								/*
@@ -167,7 +169,9 @@ $bot->on(function ($Update) use ($bot) {
 									[
 										['text'=>'Обновить']
 									]
-								]);
+								],
+								false,
+								true);
 								if($row_from_whitelist[0] != 11)
 								{
 									//$bot->sendMessage($id_user, "check love!");
