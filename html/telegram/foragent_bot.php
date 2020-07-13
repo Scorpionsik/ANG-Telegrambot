@@ -143,7 +143,18 @@ $bot->on(function ($Update) use ($bot) {
 								$bot->sendMessage($id_user, "Ваша личность подтверждена! Вы автоматически подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
 								$bot->sendMessage($id_user, "Чтобы получить всю информацию по вашему району за последние 3 дня, нажмите кнопку ниже.", null, false, null, $keyboard);
 							}
-							else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
+							else 
+							{
+								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'Цём 💋']
+										]
+									],
+									false,
+									true);
+								$bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
+							}
 						}
 					}
 					else
@@ -165,19 +176,51 @@ $bot->on(function ($Update) use ($bot) {
 							{
 								//код выдачи данных
 								//$bot->sendMessage($id_user, "check lock!");
-								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-								[
-									[
-										['text'=>'Получить всё за последние 3 дня']
-									]
-								],
-								false,
-								true);
+								
 								if($row_from_whitelist[0] != 11)
 								{
 									//$bot->sendMessage($id_user, "check love!");
 									if($row_from_whitelist[3] == false)
 									{
+										$turn_page = $row_from_whitelist[4];
+										
+										if(strpos($message, 'Включить')){
+											$turn_page=1;
+										}
+										else if(strpos($message, 'Выключить')){
+											$turn_page=0;
+										}
+										
+										
+										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+										[
+											[
+												['text'=>'📥 Получить всё за последние 3 дня']
+											],
+											[
+												['text'=>'📖 Включить постраничный режим']
+											]
+										],
+										false,
+										true);
+										
+										if($turn_page > 0)
+										{
+											$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+											[
+												[
+													['text'=>'📥 Получить всё за последние 3 дня']
+												],
+												[
+													['text'=>'🧾 Выключить постраничный режим']
+												]
+											],
+											false,
+											true);
+										}
+										
+										
+										
 										//$bot->sendMessage($id_user, "check ban!");
 										/*
 										0	offers.Internal_id
@@ -263,6 +306,9 @@ $bot->on(function ($Update) use ($bot) {
 											$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 										}	
 										mysqli_free_result($result_bind);
+										
+										$query = "update white_list set Turn_page=${turn_page} where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 									}
 									else
 									{
@@ -272,7 +318,18 @@ $bot->on(function ($Update) use ($bot) {
 										$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
 									}
 								}
-								else $bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
+								else 
+								{
+									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'Цём 💋']
+										]
+									],
+									false,
+									true);
+									$bot->sendMessage($id_user, "Люблю тебя, радость моя!", null, false, null, $keyboard);
+								}
 							}
 						}
 					}
