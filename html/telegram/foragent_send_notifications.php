@@ -88,7 +88,7 @@ if($result)
 													
 												}
 												try{
-												$bot->sendMessage($id_user, "${row_bind_count} объектов пришло за последние пару минут.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, "${row_bind_count} объект/а/ов пришло за последние пару минут.", null, false, null, $keyboard);
 												}
 													catch (Exception $e) {}
 											}

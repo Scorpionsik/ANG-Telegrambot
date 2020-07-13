@@ -182,9 +182,9 @@ $bot->on(function ($Update) use ($bot) {
 									//$bot->sendMessage($id_user, "check love!");
 									if($row_from_whitelist[3] == false)
 									{
-										$turn_page = $row_from_whitelist[4];
+										//$turn_page = $row_from_whitelist[4];
 										//$bot->sendMessage($id_user, strpos($message, 'Включить'));
-										
+										/*
 										if(preg_match("/Включить/", $message) == 1)
 										{
 											$turn_page=1;
@@ -192,7 +192,7 @@ $bot->on(function ($Update) use ($bot) {
 										else if(preg_match("/Выключить/", $message) == 1)
 										{
 											$turn_page=0;
-										}
+										}*/
 										
 										/*
 										if(strpos($message, 'Включить') !== false)
@@ -225,7 +225,7 @@ $bot->on(function ($Update) use ($bot) {
 										],
 										false,
 										true);
-										
+										/*
 										if($turn_page > 0)
 										{
 											$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
@@ -239,7 +239,7 @@ $bot->on(function ($Update) use ($bot) {
 											],
 											false,
 											true);
-										}
+										}*/
 										
 										
 										
@@ -318,7 +318,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 													
 												}
-												$bot->sendMessage($id_user, "Всего ${row_bind_count} объектов за последние 3 дня.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, "Всего ${row_bind_count} объект/а/ов за последние 3 дня.", null, false, null, $keyboard);
 											}
 											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
@@ -329,8 +329,8 @@ $bot->on(function ($Update) use ($bot) {
 										}	
 										mysqli_free_result($result_bind);
 										
-										$query = "update white_list set Turn_page=${turn_page} where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
-										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+										/*$query = "update white_list set Turn_page=${turn_page} where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));*/
 									}
 									else
 									{
