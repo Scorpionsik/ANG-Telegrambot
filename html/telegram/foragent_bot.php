@@ -185,7 +185,13 @@ $bot->on(function ($Update) use ($bot) {
 										$turn_page = $row_from_whitelist[4];
 										//$bot->sendMessage($id_user, strpos($message, 'Включить'));
 										
-										
+										if(preg_match("/Включить/", $message))
+										{
+											$turn_page=1;
+										}
+										else if(preg_match("/Выключить/", $message)){
+											$turn_page=0;
+										}
 										
 										/*
 										if(strpos($message, 'Включить') !== false)
