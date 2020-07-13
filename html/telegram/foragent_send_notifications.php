@@ -18,7 +18,7 @@ if($result)
 								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 								[
 									[
-										['text'=>'Обновить']
+										['text'=>'Получить всё за последние 3 дня']
 									]
 								],
 								false,
