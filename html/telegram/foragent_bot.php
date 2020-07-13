@@ -223,7 +223,7 @@ $bot->on(function ($Update) use ($bot) {
 														]
 													);
 													//$bot->sendMessage($id_user, "check keyboard!");
-													$offer_message = "#️⃣  " . $row_bind[0];
+													$offer_message = "🔍 " . $row_bind[0];
 													
 													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
 													else if($row_bind[17]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
