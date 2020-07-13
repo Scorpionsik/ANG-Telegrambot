@@ -184,13 +184,19 @@ $bot->on(function ($Update) use ($bot) {
 									{
 										$turn_page = $row_from_whitelist[4];
 										//$bot->sendMessage($id_user, strpos($message, 'Включить'));
-										if(strpos($message, 'Включить') !== false){
+										
+										
+										
+										/*
+										if(strpos($message, 'Включить') !== false)
+										{
 											$turn_page=1;
 										}
-										if(strpos($message, 'Выключить') !== false){
+										else if(strpos($message, 'Выключить') !== false)
+										{
 											$turn_page=0;
 										}
-										
+										*/
 										
 										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 										[
