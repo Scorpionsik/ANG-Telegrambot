@@ -187,7 +187,7 @@ $bot->on(function ($Update) use ($bot) {
 										if(strpos($message, 'Включить') !== false){
 											$turn_page=1;
 										}
-										else if(strpos($message, 'Выключить') !== false){
+										if(strpos($message, 'Выключить') !== false){
 											$turn_page=0;
 										}
 										
