@@ -185,11 +185,11 @@ $bot->on(function ($Update) use ($bot) {
 										$turn_page = $row_from_whitelist[4];
 										//$bot->sendMessage($id_user, strpos($message, 'Включить'));
 										
-										if(preg_match("/Включить/", $message))
+										if(preg_match("/Включить/", $message) == 1)
 										{
 											$turn_page=1;
 										}
-										else if(preg_match("/Выключить/", $message))
+										else if(preg_match("/Выключить/", $message) == 1)
 										{
 											$turn_page=0;
 										}
@@ -204,7 +204,7 @@ $bot->on(function ($Update) use ($bot) {
 											$turn_page=0;
 										}
 										*/
-										
+										/*
 										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 										[
 											[
@@ -212,6 +212,15 @@ $bot->on(function ($Update) use ($bot) {
 											],
 											[
 												['text'=>'📖 Включить постраничный режим']
+											]
+										],
+										false,
+										true);*/
+										
+										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+										[
+											[
+												['text'=>'📥 Получить всё за последние 3 дня']
 											]
 										],
 										false,
