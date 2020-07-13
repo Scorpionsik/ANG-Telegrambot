@@ -184,10 +184,10 @@ $bot->on(function ($Update) use ($bot) {
 									{
 										$turn_page = $row_from_whitelist[4];
 										
-										if(strpos($message, 'Включить')){
+										if(strpos($message, 'Включить') != false){
 											$turn_page=1;
 										}
-										else if(strpos($message, 'Выключить')){
+										else if(strpos($message, 'Выключить') != false){
 											$turn_page=0;
 										}
 										
