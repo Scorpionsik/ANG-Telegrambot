@@ -189,7 +189,8 @@ $bot->on(function ($Update) use ($bot) {
 										{
 											$turn_page=1;
 										}
-										else if(preg_match("/Выключить/", $message)){
+										else if(preg_match("/Выключить/", $message))
+										{
 											$turn_page=0;
 										}
 										
