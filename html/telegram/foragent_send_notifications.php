@@ -45,10 +45,12 @@ if($result)
 											{
 												$query = $query . " or ";
 											}
+											echo "done";
 										}
 										if(row[4] == 1) 
 										{
 											$query = $query . "offers.IsEdit=1";
+											echo "done";
 										}
 										$query = $query . ");";
 										
