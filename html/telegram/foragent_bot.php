@@ -384,7 +384,7 @@ $bot->on(function ($Update) use ($bot) {
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
-		$query = "SELECT flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber FROM offers JOIN flat_owners USING (User_entity_id) JOIN owner_phones USING (User_entity_id) WHERE offers.Internal_id='" . $internal_id . "';";
+		$query = "SELECT flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id FROM offers JOIN flat_owners USING (User_entity_id) JOIN owner_phones USING (User_entity_id) WHERE offers.Internal_id='" . $internal_id . "';";
 		$result_user_entity_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 		if($result_user_entity_id)
 		{
