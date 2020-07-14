@@ -337,7 +337,7 @@ $bot->on(function ($Update) use ($bot) {
 				}
 			}
 			
-			$query = "select Id_whitelist_user from telegram_users where Id_telegram_user=" . $id_user . ";";
+			$query = "select Id_whitelist_user, Is_accept_base_button from telegram_users where Id_telegram_user=" . $id_user . ";";
 			$result_whitelist_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 			if($result_whitelist_id)
 			{
@@ -346,23 +346,38 @@ $bot->on(function ($Update) use ($bot) {
 				{
 					$query = "insert into agent_phone_press values (" . $row_whitelist_id[0] . ", '" . $internal_id . "', " . time() . ");";
 					mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+					
+					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+						[
+							[
+								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],
+								['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
+							]
+						]
+					);
+					//проверка доступа к кнопке "Объект в базе"
+					if($row_whitelist_id[1] == 0)
+					{
+						$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+						[
+							[
+								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
+							],[
+								['text' => '☎️ Телефоны', 'callback_data' => $row_bind[0]]
+							]
+						]
+					);
+					}
+					//---//
+					
+					
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
+					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
 		}
 		
-		$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-			[
-				[
-					['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],
-					['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
-				]
-			]
-		);
 		
-		
-		
-		$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
-		//$bot->sendMessage($id_user, $internal_id);
 
 	}
 	
