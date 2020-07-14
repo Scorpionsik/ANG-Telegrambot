@@ -34,7 +34,7 @@ if($result)
 			$is_accept_base_button = $row[2];
 			$is_new = $row[3];
 			$is_edit = $row[4];
-			if($is_new == 1 && $is_edit == 1)
+			if($is_new == 1 || $is_edit == 1)
 			{
 			$id_user = $row[1];
 			
