@@ -43,12 +43,12 @@ if($result)
 											$query = $query . "offers.IsNew=1 OR offers.IsEdit=1);";
 											echo "first<br>";
 										}
-										else if(row[3]==1 && row[4]==0) 
+										if(row[3]==1 && row[4]==0) 
 										{
 											$query = $query . "offers.IsNew=1);";
 											echo "second<br>";
 										}
-										else if(row[4]==1 && row[3]==0) 
+										if(row[4]==1 && row[3]==0) 
 										{
 											$query = $query . "offers.IsEdit=1);";
 											echo "third<br>";
