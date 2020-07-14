@@ -361,11 +361,10 @@ $bot->on(function ($Update) use ($bot) {
 						$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 						[
 							[
-								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
-							],[
-								['text' => '☎️ Телефоны', 'callback_data' => $row_bind[0]]
+								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id]
 							]
 						]
+					);
 					);
 					}
 					//---//
