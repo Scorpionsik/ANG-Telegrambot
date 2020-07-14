@@ -41,6 +41,7 @@ if($result)
 										else if(row[3]==1 && row[4]==0) $query = $query . "offers.IsNew=1);";
 										else if(row[4]==1 && row[3]==0) $query = $query . "offers.IsEdit=1);";
 										
+										$bot->sendMessage($id_user, row[3] . " " . row[4]);
 										$bot->sendMessage($id_user, $query);
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
