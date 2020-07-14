@@ -30,7 +30,7 @@ if($result)
 		if($row && ($row[3]==true || $row[4]==true))
 		{
 			$id_user = $row[1];
-
+			
 			//if($id_user != 11) $bot->sendMessage($id_user, 'На данный момент ведутся работы по добавлению возможности просматривать хозяйские телефоны по объектам, поэтому пока ничего не приходит. Сохраняйте спокойствие, скоро всё снова будет приходить! Хорошего вам дня и отличного настроения!😊 Будьте здоровы!');
 			//show results code
 			
@@ -40,7 +40,7 @@ if($result)
 										if(row[3]==true && row[4]==true) $query = $query . "offers.IsNew=1 OR offers.IsEdit=1);";
 										else if(row[3]==true && row[4]==false) $query = $query . "offers.IsNew=1);";
 										else if(row[4]==true && row[3]==false) $query = $query . "offers.IsEdit=1);";
-										
+										$bot->sendMessage($id_user, $query);
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{

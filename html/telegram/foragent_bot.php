@@ -337,7 +337,7 @@ $bot->on(function ($Update) use ($bot) {
 				}
 			}
 			
-			$query = "select Id_whitelist_user, Is_accept_base_button from telegram_users where Id_telegram_user=" . $id_user . ";";
+			$query = "select Id_whitelist_user, Is_accept_base_button from telegram_users join white_list using (Id_whitelist_user) where Id_telegram_user=" . $id_user . ";";
 			$result_whitelist_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 			if($result_whitelist_id)
 			{
