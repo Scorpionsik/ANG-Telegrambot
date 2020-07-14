@@ -311,7 +311,7 @@ $bot->on(function ($Update) use ($bot) {
 	{
 		$id_user = $message->getChat()->getId();
 		$entity_id=0;
-		$text_message = $message->getText() . "\r\n\r\n💁‍♂️ ";
+		$text_message = $message->getText() . "\r\n\r\n";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
@@ -328,8 +328,14 @@ $bot->on(function ($Update) use ($bot) {
 					if($i==0)
 					{
 						$entity_id=$row_user_entity_id[3];
-						if($row_user_entity_id[0] != null && $row_user_entity_id[0] != "") $text_message = $text_message . $row_user_entity_id[0] . "\r\n";
-						else $text_message = $text_message . "Имя не указано\r\n";
+						if($row_user_entity_id[0] != null && $row_user_entity_id[0] != "") 
+						{
+							foreach(preg_split("/;/",$row_user_entity_id[0]) as $newname)
+							{
+								$text_message = $text_message . "💁‍♂️ " . $newname . "\r\n";
+							}
+						}
+						else $text_message = $text_message . "🤷 Имя не указано\r\n";
 						
 						if($row_user_entity_id[1] != null && $row_user_entity_id[1] != "") $text_message = $text_message . "📎 Агенство " . $row_user_entity_id[1] . "\r\n";
 					}
