@@ -50,13 +50,11 @@ if($result)
 											{
 												$query = $query . " or ";
 											}
-											echo "done";
 										}
 										if($is_edit == 1) 
 										{
 											$query = $query . "offers.IsEdit=1";
-											echo "done";
-										}*/
+										}
 										$query = $query . ");";
 										
 										//$bot->sendMessage($id_user, $query);
