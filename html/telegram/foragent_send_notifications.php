@@ -31,6 +31,7 @@ if($result)
 		
 		if($row)
 		{
+			$is_accept_base_button = $row[2];
 			$is_new = $row[3];
 			$is_edit = $row[4];
 			if($is_new == 1 && $is_edit == 1)
@@ -82,7 +83,7 @@ if($result)
 													);
 													
 													//проверка доступа к кнопке "Объект в базе"
-													if(row[2] == 0)
+													if($is_accept_base_button == 0)
 													{
 														$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 														[
