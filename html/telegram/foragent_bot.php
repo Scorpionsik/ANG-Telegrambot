@@ -15,16 +15,16 @@ $bot->on(function ($Update) use ($bot) {
 		$id_user = $message->getChat()->getId();
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
-		//$bot->deleteMessage($id_user, $message->getMessageId());
-		
+		//команда help
 		if($msg_text == "/help")
 		{
 			$bot->sendMessage($id_user, 'Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.');
 			$bot->sendMessage($id_user, 'Хорошего дня и отличного настроения, будьте здоровы!');
 			$bot->sendContact($id_user,'+380951473711','Саша');
-		}
-		else
+		}//---//
+		else //остальной ввод
 		{
+			//команда start
 			if($msg_text == "/start")
 			{
 				$query = "SELECT * FROM telegram_users where Id_telegram_user=${id_user};";
@@ -40,7 +40,7 @@ $bot->on(function ($Update) use ($bot) {
 				}
 				mysqli_free_result($result);
 			}
-			
+			//---//
 			$query = "SELECT * FROM telegram_users where Id_telegram_user=${id_user};";
 			$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 				
@@ -54,11 +54,8 @@ $bot->on(function ($Update) use ($bot) {
 						if(preg_match("/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/i",$msg_text))
 						{
 							//код проверки по белому листу
-							
 							$clear_phone = preg_replace("/\D/i","",$msg_text);
-							//$bot->sendMessage($id_user, $clear_phone);
 							$clear_phone = preg_replace("/^[380]{0,3}/i","",$clear_phone);
-							//$bot->sendMessage($id_user, $clear_phone);
 							$query = "SELECT * FROM white_list where Phonenumber=${clear_phone};";
 							$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 							if($result_from_whitelist)
@@ -104,14 +101,7 @@ $bot->on(function ($Update) use ($bot) {
 								$bot->sendMessage($id_user, "Введён некорректный номер!");
 							}
 						}
-						/*
-						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-						[
-							[
-								['text'=>'Отправить номер с телеграма','request_contact'=>true]
-							]
-						]);*/
-						//$bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!", null, false, null, $keyboard);
+
 						if($lock) $bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
 						else
 						{
@@ -125,21 +115,7 @@ $bot->on(function ($Update) use ($bot) {
 							true);
 							if($row_from_whitelist[0] != 11)
 							{
-								/*
-								if($row_from_whitelist[3] == false)
-								{
-									//show results code
-									
-									$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
-									$bot->sendMessage($id_user, "Если информация по вашему району за последние 3 дня в базе есть, и Вы получили сообщение о её отсутствии, напишите об этом в Вайбер по номеру: 095 147 37 11, что бы я был в курсе, что с вашим районом всё ещё наблюдаются проблемы. Заранее вам огромное спасибо за помощь!", null, false, null, $keyboard);
-								}
-								else
-								{
-									//banned
-									//$bot->sendMessage($id_user, "Ведутся технические работы, попробуйте позже!", null, false, null, $keyboard);
-									$bot->sendMessage($id_user, "На данный момент проблема с получением информации наблюдается по всем районам, причина выявлена и пока что я её решаю. После того, как смогу убедиться, что всё должно работать как следует, я оповещу вас в вайбер или сообщением в этом диалоге. Спасибо, что уведомляете меня о проблемах по вашим районам!", null, false, null, $keyboard);
-								}
-								*/
+								//успешно зарегался
 								$bot->sendMessage($id_user, "Ваша личность подтверждена! Вы автоматически подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
 								$bot->sendMessage($id_user, "Чтобы получить всю информацию по вашему району за последние 3 дня, нажмите кнопку ниже.", null, false, null, $keyboard);
 							}
@@ -174,49 +150,11 @@ $bot->on(function ($Update) use ($bot) {
 						
 							if($lock == false)
 							{
-								//код выдачи данных
-								//$bot->sendMessage($id_user, "check lock!");
-								
+								//код выдачи данных							
 								if($row_from_whitelist[0] != 11)
 								{
-									//$bot->sendMessage($id_user, "check love!");
 									if($row_from_whitelist[3] == false)
-									{
-										//$turn_page = $row_from_whitelist[4];
-										//$bot->sendMessage($id_user, strpos($message, 'Включить'));
-										/*
-										if(preg_match("/Включить/", $message) == 1)
-										{
-											$turn_page=1;
-										}
-										else if(preg_match("/Выключить/", $message) == 1)
-										{
-											$turn_page=0;
-										}*/
-										
-										/*
-										if(strpos($message, 'Включить') !== false)
-										{
-											$turn_page=1;
-										}
-										else if(strpos($message, 'Выключить') !== false)
-										{
-											$turn_page=0;
-										}
-										*/
-										/*
-										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-										[
-											[
-												['text'=>'📥 Получить всё за последние 3 дня']
-											],
-											[
-												['text'=>'📖 Включить постраничный режим']
-											]
-										],
-										false,
-										true);*/
-										
+									{										
 										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 										[
 											[
@@ -225,23 +163,6 @@ $bot->on(function ($Update) use ($bot) {
 										],
 										false,
 										true);
-										/*
-										if($turn_page > 0)
-										{
-											$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-											[
-												[
-													['text'=>'📥 Получить всё за последние 3 дня']
-												],
-												[
-													['text'=>'🧾 Выключить постраничный режим']
-												]
-											],
-											false,
-											true);
-										}*/
-										
-										
 										
 										//$bot->sendMessage($id_user, "check ban!");
 										/*
@@ -273,14 +194,12 @@ $bot->on(function ($Update) use ($bot) {
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
-											//$bot->sendMessage($id_user, "check bind!");
 											//--get info code--//
 											$row_bind_count = mysqli_num_rows($result_bind);
 											if($row_bind_count > 0)
 											{
 												for($i = 0; $i < $row_bind_count; $i++)
 												{
-													//$bot->sendMessage($id_user, "check object " . $i . "!");
 													$row_bind = mysqli_fetch_row($result_bind);
 													
 													$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
@@ -292,7 +211,22 @@ $bot->on(function ($Update) use ($bot) {
 															]
 														]
 													);
-													//$bot->sendMessage($id_user, "check keyboard!");
+													
+													//проверка доступа к кнопке "Объект в базе"
+													if($row_from_whitelist[4] == 0)
+													{
+														$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+														[
+															[
+																['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
+															],[
+																['text' => '☎️ Телефоны', 'callback_data' => $row_bind[0]]
+															]
+														]
+													);
+													}
+													//---//
+													
 													$offer_message = "🔍 " . $row_bind[0];
 													
 													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
@@ -328,9 +262,6 @@ $bot->on(function ($Update) use ($bot) {
 											$bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 										}	
 										mysqli_free_result($result_bind);
-										
-										/*$query = "update white_list set Turn_page=${turn_page} where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
-										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));*/
 									}
 									else
 									{

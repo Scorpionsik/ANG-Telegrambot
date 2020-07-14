@@ -9,7 +9,7 @@ $dblink = new mysqli($host, $dblogin, $dbpassw, $database);
 $bot = new \TelegramBot\Api\Client(${token});
 //$bot->sendMessage(425486413, 'Test');
 
-$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram' from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user != 11 && white_list.Is_Banned != 1;";
+$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user != 11 && white_list.Is_Banned != 1;";
 $result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 if($result)
 {
@@ -27,7 +27,7 @@ if($result)
 	for($i = 0; $i < $count; $i++)
 	{
 		$row = mysqli_fetch_row($result);
-		if($row)
+		if($row && ($row[3]>0 || $row[4]>0))
 		{
 			$id_user = $row[1];
 
@@ -35,7 +35,12 @@ if($result)
 			//show results code
 			
 										$query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id from offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district " . 
-										"where bind_whitelist_distr_flats.Id_whitelist_user=" . $row[0] . " AND (offers.IsNew=1 OR offers.IsEdit=1);";
+										"where bind_whitelist_distr_flats.Id_whitelist_user=" . $row[0] . " AND (";
+										
+										if(row[3]>0 && row[4]>0) $query = $query . "offers.IsNew=1 OR offers.IsEdit=1);";
+										else if(row[3]>0 && row[4]==0) $query = $query . "offers.IsNew=1);";
+										else if(row[4]>0 && row[3]==0) $query = $query . "offers.IsEdit=1);";
+										
 										$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 										if($result_bind)
 										{
@@ -58,7 +63,22 @@ if($result)
 															]
 														]
 													);
-													//$bot->sendMessage($id_user, "check keyboard!");
+													
+													//проверка доступа к кнопке "Объект в базе"
+													if(row[2] == 0)
+													{
+														$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+														[
+															[
+																['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $row_bind[0]]
+															],[
+																['text' => '☎️ Телефоны', 'callback_data' => $row_bind[0]]
+															]
+														]
+													);
+													}
+													//---//
+													
 													$offer_message = "🔍 " . $row_bind[0];
 													
 													if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
