@@ -79,7 +79,7 @@ if($result)
 													{
 														$offer_message = $offer_message . ", ориентир: " . $row_bind[18];
 													}
-													$offer_message = $offer_message . " \r\n🏢 " . $row_bind[8] . "/" . $row_bind[9] . " \n📐 " . $row_bind[10] . "/" . $row_bind[12] . "/" . $row_bind[13] . " \r\n \n💰 Цена: " . $row_bind[14] . "\n\n" . $row_bind[6];
+													$offer_message = $offer_message . " \r\n🏢 " . $row_bind[8] . " / " . $row_bind[9] . " \n📐 " . $row_bind[10] . " / " . $row_bind[12] . " / " . $row_bind[13] . " \r\n \n💰 Цена: " . $row_bind[14] . "\n\n" . $row_bind[6];
 													try{
 													$bot->sendMessage($id_user, $offer_message, null, false, null, $keyboard_inline);
 													}
