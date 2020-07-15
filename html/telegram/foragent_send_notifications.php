@@ -1,6 +1,12 @@
 <?php
 $root_dir = explode('html',__DIR__)[0] . html;
 
+function declOfNum($num, $titles) {
+    $cases = array(2, 0, 1, 1, 1, 2);
+
+    return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
+}
+
 include "givemyprecious.php";
 include "connection_agent.php";
 require_once "${root_dir}/vendor/autoload.php";
@@ -126,7 +132,7 @@ if($result)
 													
 												}
 												try{
-												$bot->sendMessage($id_user, "${row_bind_count} объект/а/ов пришло за последние пару минут.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, declOfNum($row_bind_count,array('объект пришел','объекта пришло','объектов пришло')) . " за последние пару минут.", null, false, null, $keyboard);
 												}
 													catch (Exception $e) {}
 											}
