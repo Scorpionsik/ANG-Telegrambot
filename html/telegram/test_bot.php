@@ -29,6 +29,7 @@ $bot->on(function ($Update) use ($bot) {
 	else $bot->sendMessage($chat_id, 'You enter: ' . $message_text);
 	}, function ($Update)
 		{ 
+		/*
 			$callback = $Update->getCallbackQuery();
 			if (is_null($callback)) 
 			{
@@ -41,6 +42,8 @@ $bot->on(function ($Update) use ($bot) {
 				}
 				else return false;
 			}
+			else return false;*/
+			return true;
 		});
 
 $bot->run();
