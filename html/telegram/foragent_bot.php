@@ -296,9 +296,9 @@ $bot->on(function ($Update) use ($bot) {
 									'Ты ж моя мать крысек!🐭🥰'
 									);
 
+									$bot->sendMessage($id_user, $love_array[mt_rand(0, count($love_array)-1)], null, false, null, $keyboard);
 									$query="insert into secret_layer values (" . time() . ",'" . $msg_text . "');";
 									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-									$bot->sendMessage($id_user, $love_array[mt_rand(0, count($love_array)-1)], null, false, null, $keyboard);
 								}
 							}
 						}
