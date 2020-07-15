@@ -215,7 +215,7 @@ $bot->on(function ($Update) use ($bot) {
 										}
 										//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-										$bot->sendMessage($id_user, $offer->getMessage()], null, false, null, $keyboard_inline);
+										$bot->sendMessage($id_user, $offer->getMessage(), null, false, null, $keyboard_inline);
 										}
 										
 										$bot->sendMessage($id_user, "Всего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
