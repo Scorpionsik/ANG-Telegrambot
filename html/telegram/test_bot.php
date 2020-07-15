@@ -3,9 +3,8 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 include "givemyprecious.php";
 require_once $root_dir . "/vendor/autoload.php";
 
-function logicMethod($bot)
+function logicMethod($bot, $message)
 {
-	$message = $Update->getMessage();
 	$chat_id = $message->getChat()->getId();
 	$message_text = htmlentities($message->getText());
 	if($message_text == "/start")
@@ -21,7 +20,7 @@ $bot = new \TelegramBot\Api\Client($token_test);
 $bot->command('start', function ($message) use ($bot) {
 		$chat_id = $message->getChat()->getId();
         $bot->sendMessage($chat_id, 'Start!');
-		logicMethod($bot);
+		logicMethod($bot, $message);
     });
 	
 //command /help
@@ -32,7 +31,7 @@ $bot->command('help', function ($message) use ($bot) {
 
 //event on after /start or other input except other commands
 $bot->on(function ($Update) use ($bot) {
-	logicMethod($bot);
+	logicMethod($bot, $Update->getMessage());
 	}, function ($Update)
 		{ 
 		
