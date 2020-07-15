@@ -94,6 +94,8 @@ if($result)
 						}	
 						catch (Exception $e) {}
 					}
+					
+					//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 					try{
 					$bot->sendMessage($id_user, declOfNum($count_offer_array,array('объект пришел','объекта пришло','объектов пришло')) . " за последние пару минут.", null, false, null, $keyboard);
 					}	
