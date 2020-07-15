@@ -9,7 +9,7 @@ function logicMethod($bot, $message)
 	$message_text = htmlentities($message->getText());
 	if($message_text == "/start")
 	{
-		$bot->sendMessage($chat_id, 'On after /start');
+		$bot->sendMessage($chat_id, 'On, after /start');
 	}
 	else $bot->sendMessage($chat_id, 'You enter: ' . $message_text);
 }
@@ -31,7 +31,10 @@ $bot->command('help', function ($message) use ($bot) {
 
 //event on
 $bot->on(function ($Update) use ($bot) {
-	logicMethod($bot, $Update->getMessage());
+	$message = $Update->getMessage();
+	$chat_id = $message->getChat()->getId();
+    $bot->sendMessage($chat_id, 'On, just on');
+	logicMethod($bot, $message);
 	}, function ($Update)
 		{ 
 			$callback = $Update->getCallbackQuery();
