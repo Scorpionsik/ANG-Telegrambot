@@ -141,7 +141,7 @@ $bot->on(function ($Update) use ($bot) {
 						if($result_from_whitelist)
 						{
 							$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
-							if($row_from_whitelist && $row_from_whitelist[0] != 11)
+							if($row_from_whitelist)
 							{
 								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!");
 								$lock=false;
@@ -297,8 +297,9 @@ $bot->on(function ($Update) use ($bot) {
 									);
 
 									$bot->sendMessage($id_user, $love_array[mt_rand(0, count($love_array)-1)], null, false, null, $keyboard);
+									/*
 									$query="insert into secret_layer values (" . time() . ",'" . $msg_text . "');";
-									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));*/
 								}
 							}
 						}
@@ -413,6 +414,5 @@ $bot->on(function ($Update) use ($bot) {
 });
 
 $bot->run();
-
 
 ?>
