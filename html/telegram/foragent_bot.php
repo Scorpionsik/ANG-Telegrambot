@@ -115,7 +115,7 @@ $bot->on(function ($Update) use ($bot) {
 						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 						[
 							[
-								['text'=>'Получить всё за последние 3 дня']
+								['text'=>'📥 Получить всё за последние 3 дня']
 							]
 						],
 						false,
