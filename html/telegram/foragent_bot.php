@@ -365,8 +365,11 @@ $bot->on(function ($Update) use ($bot) {
 				$row_whitelist_id = mysqli_fetch_row($result_whitelist_id);
 				if($row_whitelist_id)
 				{
-					$query = "insert into agent_phone_press values (" . $row_whitelist_id[0] . ", '" . $internal_id . "', " . $entity_id .  "," . time() . ");";
-					mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+					if($row_whitelist_id[0]!=10)
+					{
+						$query = "insert into agent_phone_press values (" . $row_whitelist_id[0] . ", '" . $internal_id . "', " . $entity_id .  "," . time() . ");";
+						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+					}
 					
 					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 						[
