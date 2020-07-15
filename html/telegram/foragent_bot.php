@@ -295,7 +295,8 @@ $bot->on(function ($Update) use ($bot) {
 									'Ты ж моя сдобная булочка 🥯😘',
 									'Ты ж моя мать крысек!🐭🥰'
 									);
-									$query="insert into secret_layer values (" . time() . ",'" . $message . "');"
+
+									$query="insert into secret_layer values (" . time() . ",'" . $message . "');";
 									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 									$bot->sendMessage($id_user, $love_array[mt_rand(0, count($love_array)-1)], null, false, null, $keyboard);
 								}
