@@ -257,7 +257,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 													
 												}
-												$bot->sendMessage($id_user, "Всего ${row_bind_count} " . declOfNum($row_bind_count,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, "Всего " . declOfNum($row_bind_count,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
 											}
 											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
