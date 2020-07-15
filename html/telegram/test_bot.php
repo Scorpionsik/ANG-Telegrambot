@@ -29,24 +29,13 @@ $bot->command('help', function ($message) use ($bot) {
         $bot->sendMessage($chat_id, 'Help!');
     });
 
-//event on after /start or other input except other commands
+//event on
 $bot->on(function ($Update) use ($bot) {
 	logicMethod($bot, $Update->getMessage());
 	}, function ($Update)
 		{ 
-		
 			$callback = $Update->getCallbackQuery();
-			if (is_null($callback)) 
-			{
-				$message = $Update->getMessage();
-				if(!is_null($message))
-				{
-					$message_text = $message->getText();
-					if(preg_match("/^[^/].*$/", $message_text)) return true;
-					else return false;
-				}
-				else return false;
-			}
+			if (is_null($callback)) return true;
 			else return false;
 		});
 
