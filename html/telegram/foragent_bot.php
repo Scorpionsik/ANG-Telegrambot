@@ -1,6 +1,12 @@
 <?php
 $root_dir = explode('html',__DIR__)[0] . 'html';
 
+function declOfNum($num, $titles) {
+    $cases = array(2, 0, 1, 1, 1, 2);
+
+    return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
+}
+
 include "givemyprecious.php";
 require_once $root_dir . "/vendor/autoload.php";
 
@@ -251,7 +257,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 													
 												}
-												$bot->sendMessage($id_user, "Всего ${row_bind_count} объект/а/ов за последние 3 дня.", null, false, null, $keyboard);
+												$bot->sendMessage($id_user, "Всего ${row_bind_count} " . declOfNum($row_bind_count,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
 											}
 											else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 											//--end get info code--//
