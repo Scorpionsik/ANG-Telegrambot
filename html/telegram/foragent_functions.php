@@ -5,24 +5,24 @@ class Offer{
 	private $internal_id;
 	private $entity_id;
 	
-	function __constructor($message, $internal_id, $entity_id)
+	public function __construct($message, $internal_id, $entity_id)
 	{
 		this->$message = $message;
 		this->$internal_id = $internal_id;
 		this->$entity_id = $entity_id;
 	}
 	
-	function getMessage()
+	public function getMessage()
 	{
 		return this->$message;
 	}
 	
-	function getInternalId()
+	public function getInternalId()
 	{
 		return this->$internal_id;
 	}
 	
-	function getEntityId()
+	public function getEntityId()
 	{
 		return this->$entity_id;
 	}
