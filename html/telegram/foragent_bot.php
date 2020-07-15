@@ -141,7 +141,7 @@ $bot->on(function ($Update) use ($bot) {
 						if($result_from_whitelist)
 						{
 							$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
-							if($row_from_whitelist)
+							if($row_from_whitelist && $row_from_whitelist[0] != 11)
 							{
 								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!");
 								$lock=false;
