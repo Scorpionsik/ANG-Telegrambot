@@ -77,7 +77,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 			{
 				$room_declension = "комнатная";
 				if($row_bind[2] == "Дом") $room_declension = "комнатный";
-				else if($row_bind[2] == "Подселение") $room_declension = "комнатное";
+				if($row_bind[2] == "Подселение") $room_declension = "комнатное";
 				
 				$row_bind = mysqli_fetch_row($result_bind);
 				//код базы			
