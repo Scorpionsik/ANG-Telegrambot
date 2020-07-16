@@ -74,11 +74,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 		if($row_bind_count > 0)
 		{
 			for($i = 0; $i < $row_bind_count; $i++)
-			{
-				$room_declension = "комнатная";
-				if($row_bind[2] == "Дом") $room_declension = "комнатный";
-				if($row_bind[2] == "Подселение") $room_declension = "комнатное";
-				
+			{				
 				$row_bind = mysqli_fetch_row($result_bind);
 				//код базы			
 				$offer_message = "🔍 " . $row_bind[0];
@@ -88,7 +84,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 				else if($row_bind[17]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 				
 				//кол-во комнат, тип объекта, тип сделки, состояние объекта
-				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . " " . $row_bind[7] . "-" .  $room_declension . ", " . $row_bind[1] . "\r\n🛠 Cостояние: " . $row_bind[20] . "\r\n";
+				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . ", комнат: " . $row_bind[7] . ", " . $row_bind[1] . "\r\n🛠 Cостояние: " . $row_bind[20] . "\r\n";
 				
 				//---адрес---//
 				//город
