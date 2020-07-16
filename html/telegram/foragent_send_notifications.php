@@ -100,7 +100,7 @@ if($result)
 						
 						//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 						try{
-							$bot->sendMessage($id_user, $offer->getMessage(), null, false, null, $keyboard_inline);
+							$bot->sendMessage($id_user, $offer->getMessage(), null, false, null, $keyboard_inline, true);
 						}	
 						catch (Exception $e)
 						{
