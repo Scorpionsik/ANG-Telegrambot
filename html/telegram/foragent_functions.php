@@ -83,12 +83,9 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
 				else if($row_bind[17]==1)$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 				
-				//кол-во комнат, тип объекта, тип сделки, состояние объекта
-				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . ", комнат: " . $row_bind[7] . ", " . $row_bind[1] . "\r\n🛠 Cостояние: " . $row_bind[20] . "\r\n";
-				
 				//---адрес---//
 				//город
-				$offer_message = $offer_message . "📍 " . $row_bind[3];
+				$offer_message = $offer_message . "\r\n📍 " . $row_bind[3];
 				
 				//район
 				if($row_bind[4] != 1)
@@ -109,6 +106,9 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 				}
 				//---конец адрес---//
 				
+				//кол-во комнат, тип объекта, тип сделки, состояние объекта
+				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . ", " . $row_bind[1] . "\r\n🏘 " . declOfNum($row_bind[7],array('комната','комнаты','комнат')) . "\r\n🛠 Cостояние: " . $row_bind[20];
+								
 				//этаж-этажность, площадь, цена, описание
 				$offer_message = $offer_message . " \r\n🏢 " . $row_bind[8] . " / " . $row_bind[9] . " \n📐 " . $row_bind[10] . " / " . $row_bind[12] . " / " . $row_bind[13] . " \r\n \n💰 Цена: " . $row_bind[14] . "\n\n" . $row_bind[6];
 				
