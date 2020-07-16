@@ -121,7 +121,6 @@ if($result)
 						$query = "update telegram_users set IsExist=0 where telegram_users.Id_whitelist_user=" . $id_whitelist . ";";
 						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					}
-					echo $is_exist . "<br>";
 				}
 			}
 		}
