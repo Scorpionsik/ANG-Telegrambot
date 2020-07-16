@@ -150,7 +150,7 @@ $bot->on(function ($Update) use ($bot) {
 						$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
 						if($row_from_whitelist) //если агент есть в таблице, приветствуем и разблокируем основные функции бота
 						{
-							$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, false, null, null, true);
+							$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
 							$lock=false;
 						}
 					
@@ -209,7 +209,7 @@ $bot->on(function ($Update) use ($bot) {
 										}
 										//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-										$bot->sendMessage($id_user, $offer->getMessage(), null, false, null, $keyboard_inline, true);
+										$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
 										}
 										
 										$bot->sendMessage($id_user, "Всего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
