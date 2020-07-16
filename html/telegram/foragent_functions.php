@@ -109,8 +109,12 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 				//кол-во комнат, тип объекта, тип сделки, состояние объекта
 				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . ", " . $row_bind[1] . "\r\n🏘 " . declOfNum($row_bind[7],array('комната','комнаты','комнат')) . "\r\n🛠 Cостояние: " . $row_bind[20];
 								
-				//этаж-этажность, площадь, цена, описание
-				$offer_message = $offer_message . " \r\n🏢 " . $row_bind[8] . " / " . $row_bind[9] . " \n📐 " . $row_bind[10] . " / " . $row_bind[12] . " / " . $row_bind[13] . " \r\n \n💰 Цена: " . $row_bind[14] . "\n\n" . $row_bind[6];
+				//этаж-этажность, площадь
+				$offer_message = $offer_message . " \r\n🏢 " . $row_bind[8] . " / " . $row_bind[9] . " \n📐 " . $row_bind[10] . " / " . $row_bind[12] . " / " . $row_bind[13];
+				if($row_bind[11] != null && $row_bind[11] > 0) $offer_message = $offer_message . ", участок " .  declOfNum($row_bind[11],array('сотка','сотки','соток'));
+				
+				//цена, описание
+				$offer_message = $offer_message . "\r\n \n💰 Цена: " . $row_bind[14] . "\n\n" . $row_bind[6];
 				
 				//сохраняем готовый объект
 				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19]);
