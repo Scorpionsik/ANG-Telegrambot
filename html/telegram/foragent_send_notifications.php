@@ -3,10 +3,10 @@ $root_dir = explode('html',__DIR__)[0] . html;
 
 include "givemyprecious.php";
 include "connection_agent.php";
-require_once "${root_dir}/vendor/autoload.php";
+require_once $root_dir . "/vendor/autoload.php";
 
 $dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
-$bot = new \TelegramBot\Api\Client(${token});
+$bot = new \TelegramBot\Api\Client($token);
 
 /*
 0	telegram_users.Id_whitelist_user 	int
