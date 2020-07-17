@@ -106,13 +106,16 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 				}
 				//---конец адрес---//
 				
-				//тип объекта, тип сделки
-				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2] . ", " . $row_bind[1];
+				//тип объекта
+				$offer_message = $offer_message . "\r\n🔑 " . $row_bind[2];
 				
 				//вторичка-новострой
 				if($row_bind[21] == 0) $offer_message = $offer_message . ", вторичка";
 				else $offer_message = $offer_message . ", новострой";
 				
+				//тип сделки
+				$offer_message = $offer_message . ", " . $row_bind[1];
+
 				//кол-во комнат
 				$offer_message = $offer_message . "\r\n🏘 " . declOfNum($row_bind[7],array('комната','комнаты','комнат'));
 				
