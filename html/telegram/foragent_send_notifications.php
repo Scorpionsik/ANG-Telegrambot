@@ -1,5 +1,5 @@
 <?php
-$root_dir = explode('html',__DIR__)[0] . html;
+$root_dir = explode('html',__DIR__)[0] . 'html';
 
 include "givemyprecious.php";
 include "connection_agent.php";
