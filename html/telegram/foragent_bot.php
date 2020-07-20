@@ -185,7 +185,7 @@ $bot->on(function ($Update) use ($bot) {
 								for($i=0; $i<$row_from_whitelist; $i++)
 								{
 									$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
-									$bot->sendMessage(425486413, $row[0] . " - " . $row[1]);
+									$bot->sendMessage(425486413, $row_from_whitelist[0] . " - " . $row_from_whitelist[1]);
 								}
 								$bot->sendMessage($id_user, "Похоже, что номер (${clear_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Вайбер/Телеграм):");
 								$bot->sendContact($id_user,'+380951473711','Саша');
