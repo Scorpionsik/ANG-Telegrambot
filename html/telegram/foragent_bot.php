@@ -13,6 +13,19 @@ $bot->command('help', function ($message) use ($bot) {
 		$bot->sendMessage($id_user, 'Хорошего дня и отличного настроения, будьте здоровы!');
 		$bot->sendContact($id_user,'+380951473711','Саша');
     });
+	
+	//command /send_string_news
+$bot->command('send_string_news', function ($message) use ($bot) {
+		$id_user = $message->getChat()->getId();
+		if($id_user == 425486413)
+		{
+			$message_text = htmlentities($message->getText());
+			
+			$news_text = preg_replace("/^\/[^ ]+[ ]+/","",$message_text);
+			
+			$bot->sendMessage($chat_id, $news_text);
+		}
+    });
 
 
 $bot->on(function ($Update) use ($bot) {
