@@ -177,10 +177,10 @@ $bot->on(function ($Update) use ($bot) {
 									true);
 							}
 							
-							if(preg_match('/уведомлен/',$msg_text))
+							if(preg_match('/уведомл/',$msg_text))
 							{
 								$lock=true;
-								if(preg_match('/Не присылать/', $msg_text))
+								if(preg_match('/Присылать только/', $msg_text))
 								{
 									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 									[
