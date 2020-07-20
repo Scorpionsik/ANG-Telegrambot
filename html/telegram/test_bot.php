@@ -22,7 +22,7 @@ function logicMethod($bot, $message)
 			false,
 			true);
 	$text = 'Text On: ';
-	if(preg_match('/Включить/'))
+	if(preg_match('/Включить/', $message_text))
 	{
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 			[
@@ -34,7 +34,7 @@ function logicMethod($bot, $message)
 			true);
 		$text = $text . 'включил';
 	}
-	else if(preg_match('/Выключить/'))
+	else if(preg_match('/Выключить/', $message_text))
 	{
 		$text = $text . 'выключил';
 	}
