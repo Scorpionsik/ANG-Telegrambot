@@ -145,8 +145,8 @@ $bot->on(function ($Update) use ($bot) {
 					{
 						//код проверки по белому листу
 						$clear_phone = preg_replace("/\D/i","",$msg_text);
-						$clear_phone = preg_replace("/^[380]{0,3}/i","",$clear_phone);
-						$query = "SELECT * FROM white_list where Phonenumber=${clear_phone};";
+						$clear_phone = preg_replace("/^[38]{0,2}/i","",$clear_phone);
+						$query = "SELECT * FROM white_list where Phonenumber like ('%${clear_phone}%');";
 						$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 						
 						if($result_from_whitelist)
@@ -178,6 +178,17 @@ $bot->on(function ($Update) use ($bot) {
 										}
 									}
 								}
+							}
+							else if($row_from_whitelist>1)
+							{
+								$bot->sendMessage(425486413, "Внимание, есть повторный номер (${clear_phone}) у:");
+								for($i=0; $i<$row_from_whitelist; $i++)
+								{
+									$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
+									$bot->sendMessage(425486413, $row[0] . " - " . $row[1]);
+								}
+								$bot->sendMessage($id_user, "Похоже, что номер (${clear_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Вайбер/Телеграм):");
+								$bot->sendContact($id_user,'+380951473711','Саша');
 							}
 							else //если номера в white_list нету
 							{
