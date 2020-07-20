@@ -17,6 +17,8 @@ function logicMethod($bot, $message)
 			[
 				[
 					['text'=>'📥 Включить']
+				],[
+					['text'=>'Test']
 				]
 			],
 			false,
@@ -28,7 +30,10 @@ function logicMethod($bot, $message)
 			[
 				[
 					['text'=>'📥 Выключить']
+				],[
+					['text'=>'Test']
 				]
+				
 			],
 			false,
 			true);
@@ -65,6 +70,8 @@ $bot->command('key', function ($message) use ($bot) {
 			[
 				[
 					['text'=>'📥 Включить']
+				],[
+					['text'=>'Test']
 				]
 			],
 			false,
