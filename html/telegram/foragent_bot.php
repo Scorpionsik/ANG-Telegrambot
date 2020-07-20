@@ -193,7 +193,7 @@ $bot->on(function ($Update) use ($bot) {
 									false,
 									true);
 									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
-									$query = "update whitelist set Is_get_edit_offers=0 where Id_whitelist_user=" . $row[1] . ";";
+									$query = "update white_list set Is_get_edit_offers=0 where Id_whitelist_user=" . $row[1] . ";";
 									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 								}
 								else if(preg_match('/Получать/', $msg_text))
@@ -209,7 +209,7 @@ $bot->on(function ($Update) use ($bot) {
 									false,
 									true);
 									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
-									$query = "update whitelist set Is_get_edit_offers=1 where Id_whitelist_user=" . $row[1] . ";";
+									$query = "update white_list set Is_get_edit_offers=1 where Id_whitelist_user=" . $row[1] . ";";
 									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 								}
 								else
