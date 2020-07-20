@@ -87,7 +87,7 @@ $bot->command('send_news', function ($message) use ($bot) {
 		
 		$news_text = preg_replace("/^\/[^ ]+[ ]+/","",$message_text);
 		
-        $bot->sendMessage($chat_id, $news_text);
+        $bot->sendMessage($chat_id, $news_text, "HTML");
     });
 
 //event on

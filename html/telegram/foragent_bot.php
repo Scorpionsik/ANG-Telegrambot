@@ -26,7 +26,47 @@ $bot->command('send_string_news', function ($message) use ($bot) {
 			
 			if(!preg_match('/send_string_news/', $news_text))
 			{
-				$bot->sendMessage($id_user, $news_text);
+				$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
+				
+				$query = 'SELECT telegram_users.Id_telegram_user, white_list.Is_get_edit_offers from telegram_users join white_list on telegram_users.Id_whitelist_user=white_list.Id_whitelist_user where telegram_users.Id_whitelist_user != 11 AND  white_list.Is_banned=0;';
+				$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+				
+				if($result)
+				{
+					$count = mysqli_num_rows($result);
+					if($count > 0)
+					{
+						$row = mysqli_fetch_row($result);
+						for($i=0; $i < $count; $i++)
+						{
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+								[
+									[
+										['text'=>'📥 Получить всё за последние 3 дня']
+									],[
+										['text'=>'❕ Присылать только новые объекты в уведомлениях']
+									]
+								],
+								false,
+								true);
+							if($row[1] == 0)
+							{
+								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'📥 Получить всё за последние 3 дня']
+										],[
+											['text'=>'✅ Получать все объекты в уведомлениях']
+										]
+									],
+									false,
+									true);
+							}
+							$bot->sendMessage($id_user, $news_text, null, false, null, $keyboard);
+						}
+					}
+					mysqli_free_result($result);
+				}
 			}			
 		}
     });
@@ -56,8 +96,9 @@ $bot->on(function ($Update) use ($bot) {
 					$query = "INSERT INTO telegram_users (Id_telegram_user) values (${id_user});";
 					mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 				}
+				mysqli_free_result($result);
 			}
-			mysqli_free_result($result);
+			
 		}
 		//---конец команда start---//
 		$query = "SELECT * FROM telegram_users where Id_telegram_user=${id_user};";
