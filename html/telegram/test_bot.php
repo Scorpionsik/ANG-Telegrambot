@@ -47,6 +47,8 @@ function logicMethod($bot, $message)
 	$bot->sendMessage($chat_id, $text, null, false, null, $keyboard);
 }
 
+try{
+
 $bot = new \TelegramBot\Api\Client($token_test);
 
 //command /start
@@ -130,6 +132,11 @@ $bot->on(function ($Update) use ($bot) {
 		});
 
 $bot->run();
+
+}
+catch (\TelegramBot\Api\Exception $e) {
+    echo $e->getMessage();
+}
 
 /*
 //команда Start
