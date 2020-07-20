@@ -177,7 +177,7 @@ $bot->on(function ($Update) use ($bot) {
 									true);
 							}
 							
-							if(preg_match('/уведомлен/'),$msg_text)
+							if(preg_match('/уведомлен/',$msg_text))
 							{
 								$lock=true;
 								if(preg_match('/Не присылать/', $msg_text))
@@ -196,7 +196,7 @@ $bot->on(function ($Update) use ($bot) {
 									$query = "update whitelist set Is_get_edit_offers=0 where Id_whitelist_user=" . $row[1] . ";";
 									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 								}
-								else if('/Получать/', $msg_text))
+								else if(preg_match('/Получать/', $msg_text))
 								{
 									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 									[
