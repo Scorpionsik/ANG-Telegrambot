@@ -70,10 +70,24 @@ $bot->command('send_news', function ($message) use ($bot) {
 							
 							for(;$index < $count_array; $index++)
 							{
-								$bot->sendMessage($row[0], $array[$index], "HTML");
+								try
+								{
+									$bot->sendMessage($row[0], $array[$index], "HTML");
+								}
+								catch(Exception $e)
+								{
+									break;
+								}
 							}
-							
-							$bot->sendMessage($row[0], $array[$index], "HTML", false, null, $keyboard);
+							try
+							{
+								$bot->sendMessage($row[0], $array[$index], "HTML", false, null, $keyboard);
+							}
+							catch(Exception $e)
+							{
+								$query='update telegram_users set IsExist=0 where telegram_users.Id_telegram_user=' . $row[0] . ";";
+								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+							}
 							
 							//$bot->sendMessage($id_user, $news_text, "HTML", false, null, $keyboard);
 						}
@@ -198,6 +212,7 @@ $bot->on(function ($Update) use ($bot) {
 						{
 							//успешно зарегался
 							$bot->sendMessage($id_user, "Ваша личность подтверждена! Вы подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
+							$bot->sendMessage($id_user, "Если в уведомлениях вам нужны <b>только новые объявления</b>, нажмите на кнопку ниже - <b>❕ Присылать только новые объекты в уведомлениях</b>.");
 							$bot->sendMessage($id_user, "Чтобы получить всю информацию по вашему району за последние 3 дня, нажмите кнопку ниже.", null, false, null, $keyboard);
 						}
 						else 
