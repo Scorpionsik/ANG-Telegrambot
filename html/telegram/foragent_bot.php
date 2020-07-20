@@ -21,7 +21,7 @@ $bot->command('send_string_news', function ($message) use ($bot) {
 		{
 			$message_text = htmlentities($message->getText());
 			
-			$news_text = preg_replace("/^\/[^ ]+[ ]+/","",$message_text);
+			$news_text = preg_replace("/^\/[^ ]+[ ]([ ]+|$)/","",$message_text);
 			
 			$bot->sendMessage($id_user, $news_text);
 		}
