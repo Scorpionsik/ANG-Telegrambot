@@ -79,6 +79,13 @@ $bot->command('key', function ($message) use ($bot) {
 		
         $bot->sendMessage($chat_id, 'Send keyboard', null, false, null, $keyboard);
     });
+	
+	//command /send_news
+$bot->command('send_news', function ($message) use ($bot) {
+		$chat_id = $message->getChat()->getId();
+		$message_text = htmlentities($message->getText());
+        $bot->sendMessage($chat_id, $message_text);
+    });
 
 //event on
 $bot->on(function ($Update) use ($bot) {
