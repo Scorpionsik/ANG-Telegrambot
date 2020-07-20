@@ -26,6 +26,7 @@ $bot->command('send_news', function ($message) use ($bot) {
 			
 			if(!preg_match('/send_news/', $news_text))
 			{
+				include "connection_agent.php";
 				$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 				
 				$query = 'SELECT telegram_users.Id_telegram_user, white_list.Is_get_edit_offers from telegram_users join white_list on telegram_users.Id_whitelist_user=white_list.Id_whitelist_user where telegram_users.Id_whitelist_user != 11 AND  white_list.Is_banned=0;';
