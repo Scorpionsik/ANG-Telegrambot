@@ -97,7 +97,7 @@ $bot->command('send_news', function ($message) use ($bot) {
 			false,
 			true);
 			
-		$array = preg_split('/\n/',$news_text);
+		$array = preg_split('/\\n/',$news_text);
 		$count = count($array) - 1;
 		$index = 0;
 		
