@@ -116,6 +116,8 @@ $bot->on(function ($Update) use ($bot) {
 						[
 							[
 								['text'=>'📥 Получить всё за последние 3 дня']
+							],[
+								['text'=>'❕ Присылать только новые объекты в уведомлениях']
 							]
 						],
 						false,
@@ -147,11 +149,80 @@ $bot->on(function ($Update) use ($bot) {
 					$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					if($result_from_whitelist)
 					{
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'📥 Получить всё за последние 3 дня']
+										],[
+											['text'=>'❕ Присылать только новые объекты в уведомлениях']
+										]
+									],
+									false,
+									true);
+															
 						$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
 						if($row_from_whitelist) //если агент есть в таблице, приветствуем и разблокируем основные функции бота
 						{
-							$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
-							$lock=false;
+							if($row_from_whitelist[6] == 0)
+							{
+								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'📥 Получить всё за последние 3 дня']
+										],[
+											['text'=>'✅ Получать все объекты в уведомлениях']
+										]
+									],
+									false,
+									true);
+							}
+							
+							if(preg_match('/уведомлен/'),$msg_text)
+							{
+								$lock=true;
+								if(preg_match('/Не присылать/', $msg_text))
+								{
+									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'📥 Получить всё за последние 3 дня']
+										],[
+											['text'=>'✅ Получать все объекты в уведомлениях']
+										]
+									],
+									false,
+									true);
+									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
+									$query = "update whitelist set Is_get_edit_offers=0 where Id_whitelist_user=" . $row[1] . ";";
+									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+								}
+								else if('/Получать/', $msg_text))
+								{
+									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+									[
+										[
+											['text'=>'📥 Получить всё за последние 3 дня']
+										],[
+											['text'=>'❕ Присылать только новые объекты в уведомлениях']
+										]
+									],
+									false,
+									true);
+									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
+									$query = "update whitelist set Is_get_edit_offers=1 where Id_whitelist_user=" . $row[1] . ";";
+									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+								}
+								else
+								{
+									$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
+									$lock=false;
+								}
+							}
+							else
+							{
+								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
+								$lock=false;
+							}
 						}
 					
 						//если функции бота разблокированы
@@ -164,14 +235,6 @@ $bot->on(function ($Update) use ($bot) {
 								if($row_from_whitelist[3] == false)
 								{					
 									include "foragent_functions.php";
-									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-									[
-										[
-											['text'=>'📥 Получить всё за последние 3 дня']
-										]
-									],
-									false,
-									true);
 									
 									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
