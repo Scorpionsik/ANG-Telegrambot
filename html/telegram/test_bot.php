@@ -95,9 +95,12 @@ $bot->on(function ($Update) use ($bot) {
 	try
 	{
 		$message = $Update->getMessage();
-		$chat_id = $message->getChat()->getId();
-		$bot->sendMessage($chat_id, 'On, just on');
-		logicMethod($bot, $message);
+		if($message)
+		{
+			$chat_id = $message->getChat()->getId();
+			$bot->sendMessage($chat_id, 'On, just on');
+			logicMethod($bot, $message);
+		}
 	}
 	catch (Exception $e) {}
 	}, function ($Update)
