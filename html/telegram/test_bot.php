@@ -84,7 +84,10 @@ $bot->command('key', function ($message) use ($bot) {
 $bot->command('send_news', function ($message) use ($bot) {
 		$chat_id = $message->getChat()->getId();
 		$message_text = htmlentities($message->getText());
-        $bot->sendMessage($chat_id, $message_text);
+		
+		$news_text = preg_replace("/^\/[^ ]+[ ]+/","",$message_text);
+		
+        $bot->sendMessage($chat_id, $news_text);
     });
 
 //event on
