@@ -11,7 +11,35 @@ function logicMethod($bot, $message)
 	{
 		$bot->sendMessage($chat_id, 'On, after /start');
 	}
-	else $bot->sendMessage($chat_id, 'You enter: ' . $message_text);
+	//else $bot->sendMessage($chat_id, 'You enter: ' . $message_text);
+	
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					['text'=>'📥 Включить']
+				]
+			],
+			false,
+			true);
+	$text = 'Text On: ';
+	if(preg_match('/Включить/'))
+	{
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					['text'=>'📥 Выключить']
+				]
+			],
+			false,
+			true);
+		$text = $text . 'включил';
+	}
+	else if(preg_match('/Выключить/'))
+	{
+		$text = $text . 'выключил';
+	}
+	
+	$bot->sendMessage($chat_id, $text, null, false, null, $keyboard);
 }
 
 $bot = new \TelegramBot\Api\Client($token_test);
@@ -26,6 +54,22 @@ $bot->command('start', function ($message) use ($bot) {
 //command /help
 $bot->command('help', function ($message) use ($bot) {
 		$chat_id = $message->getChat()->getId();
+        $bot->sendMessage($chat_id, 'Help!');
+    });
+	
+	//command /key
+$bot->command('key', function ($message) use ($bot) {
+		$chat_id = $message->getChat()->getId();
+		
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					['text'=>'📥 Включить']
+				]
+			],
+			false,
+			true);
+		
         $bot->sendMessage($chat_id, 'Help!');
     });
 
