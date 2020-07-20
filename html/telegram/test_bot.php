@@ -92,10 +92,14 @@ $bot->command('send_news', function ($message) use ($bot) {
 
 //event on
 $bot->on(function ($Update) use ($bot) {
-	$message = $Update->getMessage();
-	$chat_id = $message->getChat()->getId();
-    $bot->sendMessage($chat_id, 'On, just on');
-	logicMethod($bot, $message);
+	try
+	{
+		$message = $Update->getMessage();
+		$chat_id = $message->getChat()->getId();
+		$bot->sendMessage($chat_id, 'On, just on');
+		logicMethod($bot, $message);
+	}
+	catch (Exception $e) {}
 	}, function ($Update)
 		{ 
 			$callback = $Update->getCallbackQuery();
