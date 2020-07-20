@@ -86,8 +86,27 @@ $bot->command('send_news', function ($message) use ($bot) {
 		$message_text = $message->getText();
 		
 		$news_text = preg_replace("/^\/[^ ]+[ ]+/","",$message_text);
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					['text'=>'📥 Включить']
+				],[
+					['text'=>'Test']
+				]
+			],
+			false,
+			true);
+			
+		$array = preg_split('/\n/',$news_text);
+		$count = count($array) - 1;
+		$index = 0;
 		
-        $bot->sendMessage($chat_id, $news_text, "HTML");
+		for(;$index < $count; $index++)
+		{
+			$bot->sendMessage($chat_id, $array[$index], "HTML");
+		}
+		
+        $bot->sendMessage($chat_id, $array[$index], "HTML", false, null, $keyboard);
     });
 
 //event on
