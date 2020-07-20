@@ -70,7 +70,7 @@ $bot->command('key', function ($message) use ($bot) {
 			false,
 			true);
 		
-        $bot->sendMessage($chat_id, 'Help!');
+        $bot->sendMessage($chat_id, 'Send keyboard', null, false, null, $keyboard));
     });
 
 //event on
