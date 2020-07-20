@@ -29,7 +29,7 @@ $bot->command('send_news', function ($message) use ($bot) {
 				include "connection_agent.php";
 				$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 				
-				$query = 'SELECT telegram_users.Id_telegram_user, white_list.Is_get_edit_offers from telegram_users join white_list on telegram_users.Id_whitelist_user=white_list.Id_whitelist_user where telegram_users.Id_whitelist_user != 11 AND  white_list.Is_banned=0;';
+				$query = 'SELECT telegram_users.Id_telegram_user, white_list.Is_get_edit_offers from telegram_users join white_list on telegram_users.Id_whitelist_user=white_list.Id_whitelist_user where telegram_users.Id_whitelist_user != 11 AND white_list.Is_banned=0;';
 				$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 				
 				if($result)
@@ -65,10 +65,10 @@ $bot->command('send_news', function ($message) use ($bot) {
 							}
 							
 							$array = preg_split('/=/',$news_text);
-							$count = count($array) - 1;
+							$count_array = count($array) - 1;
 							$index = 0;
 							
-							for(;$index < $count; $index++)
+							for(;$index < $count_array; $index++)
 							{
 								$bot->sendMessage($row[0], $array[$index], "HTML");
 							}
