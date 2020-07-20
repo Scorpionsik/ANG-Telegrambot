@@ -19,7 +19,7 @@ $bot->command('send_string_news', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
 		if($id_user == 425486413)
 		{
-			$message_text = htmlentities($message->getText());
+			$message_text = $message->getText();
 			
 			$news_text = preg_replace('/^\/[^ ]+[ ]+/',"",$message_text);
 			
@@ -36,9 +36,9 @@ $bot->command('send_string_news', function ($message) use ($bot) {
 					$count = mysqli_num_rows($result);
 					if($count > 0)
 					{
-						$row = mysqli_fetch_row($result);
 						for($i=0; $i < $count; $i++)
 						{
+							$row = mysqli_fetch_row($result);
 							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 								[
 									[
@@ -62,11 +62,24 @@ $bot->command('send_string_news', function ($message) use ($bot) {
 									false,
 									true);
 							}
-							$bot->sendMessage($id_user, $news_text, null, false, null, $keyboard);
+							
+							$array = preg_split('/=/',$news_text);
+							$count = count($array) - 1;
+							$index = 0;
+							
+							for(;$index < $count; $index++)
+							{
+								$bot->sendMessage($row[0], $array[$index], "HTML");
+							}
+							
+							$bot->sendMessage($row[0], $array[$index], "HTML", false, null, $keyboard);
+							
+							//$bot->sendMessage($id_user, $news_text, "HTML", false, null, $keyboard);
 						}
 					}
 					mysqli_free_result($result);
 				}
+				mysqli_close($dblink);
 			}			
 		}
     });
