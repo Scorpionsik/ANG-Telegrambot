@@ -14,8 +14,8 @@ $bot->command('help', function ($message) use ($bot) {
 		$bot->sendContact($id_user,'+380951473711','Саша');
     });
 	
-	//command /send_string_news
-$bot->command('send_string_news', function ($message) use ($bot) {
+	//command /send_news
+$bot->command('send_news', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
 		if($id_user == 425486413)
 		{
@@ -24,7 +24,7 @@ $bot->command('send_string_news', function ($message) use ($bot) {
 			$news_text = preg_replace('/^\/[^ ]+[ ]+/',"",$message_text);
 			
 			
-			if(!preg_match('/send_string_news/', $news_text))
+			if(!preg_match('/send_news/', $news_text))
 			{
 				$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 				
