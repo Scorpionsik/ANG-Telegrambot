@@ -4,6 +4,8 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 include "givemyprecious.php";
 require_once $root_dir . "/vendor/autoload.php";
 
+try
+{
 $bot = new \TelegramBot\Api\Client($token);
 
 //command /help
@@ -527,5 +529,10 @@ $bot->on(function ($Update) use ($bot) {
 		//---конец Обработка инлайн запросов---//
 
 $bot->run();
-
+}
+catch (\TelegramBot\Api\Exception $e) {
+	$bot = new \TelegramBot\Api\Client($token);
+	$bot->sendMessage(425486413, "<b><u>ERROR</u></b>", "HTML");
+	$bot->sendMessage(425486413, $e->getMessage());
+}
 ?>
