@@ -64,7 +64,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 	if(!is_null($clause) && $clause!=""){
 		$query = $query . " AND (" . $clause . ")";
 	}
-	$query = $query . ";";
+	$query = $query . " limit 40;";
 	$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	
 	if($result_bind)
