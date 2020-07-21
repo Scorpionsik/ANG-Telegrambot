@@ -33,7 +33,7 @@ function declOfNum($num, $titles) {
     return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
 }
 
-function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
+function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
 	/*
 	0	offers.Internal_id			string
 	1	types.Type_name				string
@@ -64,7 +64,8 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null){
 	if(!is_null($clause) && $clause!=""){
 		$query = $query . " AND (" . $clause . ")";
 	}
-	$query = $query . " limit 40;";
+	if($limit > 0) $query = $query . " limit ${limit}";
+	$query = $query . ";";
 	$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 	
 	if($result_bind)

@@ -339,7 +339,7 @@ $bot->on(function ($Update) use ($bot) {
 								{					
 									include "foragent_functions.php";
 									
-									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
+									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0], null, 40);
 									$count_offer_array = count($offer_array);
 									
 									//если для агента есть информация
