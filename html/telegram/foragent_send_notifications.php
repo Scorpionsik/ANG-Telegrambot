@@ -1,8 +1,8 @@
 <?php
 $root_dir = explode('html',__DIR__)[0] . 'html';
 
-include "givemyprecious.php";
-include "connection_agent.php";
+include $root_dir . "/telegram/givemyprecious.php";
+include $root_dir . "/telegram/connection_agent.php";
 require_once $root_dir . "/vendor/autoload.php";
 
 $dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
