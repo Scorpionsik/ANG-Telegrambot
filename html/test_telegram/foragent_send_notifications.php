@@ -16,7 +16,7 @@ $bot = new \TelegramBot\Api\Client($token_test);
 4	white_list.Is_get_edit_offers		boolean
 5	telegram_users.IsExist				boolean
 */
-$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers, telegram_users.IsExist from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user != 11 && white_list.Is_Banned != 1;";
+$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers, telegram_users.IsExist from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user=10;";
 $result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 if($result)
 {
