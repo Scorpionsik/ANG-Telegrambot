@@ -1,12 +1,12 @@
 <?php
 $root_dir = explode('html',__DIR__)[0] . 'html';
 
-include $root_dir . "/telegram/givemyprecious.php";
-include $root_dir . "/telegram/connection_agent.php";
+include "givemyprecious.php";
+include "connection_agent.php";
 require_once $root_dir . "/vendor/autoload.php";
 
 $dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
-$bot = new \TelegramBot\Api\Client($token);
+$bot = new \TelegramBot\Api\Client($token_test);
 
 /*
 0	telegram_users.Id_whitelist_user 	int
