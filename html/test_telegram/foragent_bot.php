@@ -351,7 +351,11 @@ $bot->on(function ($Update) use ($bot) {
 										
 										$turn_page = $row_from_whitelist[7];
 										if($turn_page>$pages)$turn_page=1;
-										//$bot->sendMessage($id_user, $pages . " " . $count_offer_array);
+										
+										$start_index = ($offer_show * ($turn_page - 1));
+										$end_index = $start_index + $offer_show;
+										if($end_index > $count_offer_array) $end_index = $count_offer_array;
+
 										/*
 										foreach($offer_array as $offer)
 										{
@@ -390,7 +394,7 @@ $bot->on(function ($Update) use ($bot) {
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
 										
 										if($pages == 1) $end_text = "В" . $end_text;
-										else $end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($offer_show, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
+										else $end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
 										
 										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
 										
