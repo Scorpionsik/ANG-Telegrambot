@@ -377,8 +377,8 @@ $bot->on(function ($Update) use ($bot) {
 										else if($turn_page < 1) $turn_page=1;
 										
 										$start_index = ($offer_show * ($turn_page - 1));
-										$end_index = $start_index + $offer_show;
-										if($end_index > $count_offer_array) $end_index = $count_offer_array;
+										$end_index = min($start_index + $offer_show, $count_offer_array);
+										//if($end_index > $count_offer_array) $end_index = $count_offer_array;
 
 										$bot->sendMessage($id_user, "Начало страницы ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
 										
