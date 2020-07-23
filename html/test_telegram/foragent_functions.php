@@ -64,6 +64,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 	if(!is_null($clause) && $clause!=""){
 		$query = $query . " AND (" . $clause . ")";
 	}
+	$query = $query . " ORDER BY offers.Update_timestamp desc";
 	if($limit > 0) $query = $query . " limit ${limit}";
 	$query = $query . ";";
 	$result_bind = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
