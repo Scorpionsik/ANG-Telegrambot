@@ -427,7 +427,12 @@ $bot->on(function ($Update) use ($bot) {
 											$start_page_step=$turn_page-2;
 											if($turn_page <= 3)$start_page_step = 1;
 											else if($turn_page >= $pages-2) $start_page_step = $pages-4;
-											for($i_page_step=$start_page_step; $i_page_step < $start_page_step+5; $i_page_step++)
+											
+											$end_page_step = 0;
+											if($pages < 5) $end_page_step = $pages;
+											else $end_page_step = 5;
+											
+											for($i_page_step=$start_page_step; $i_page_step < $start_page_step+$end_page_step; $i_page_step++)
 											{
 												$text_button = $i_page_step;
 												if($i_page_step == $turn_page) $text_button = $text_button . "👀";
