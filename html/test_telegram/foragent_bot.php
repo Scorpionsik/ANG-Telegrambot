@@ -360,7 +360,7 @@ $bot->on(function ($Update) use ($bot) {
 								{					
 									include "foragent_functions.php";
 									
-									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0], null, 20);
+									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
 									
 									//если для агента есть информация
@@ -371,13 +371,14 @@ $bot->on(function ($Update) use ($bot) {
 										if($count_offer_array > $offer_show) $pages = ceil($count_offer_array / $offer_show);
 										
 										$turn_page = $row_from_whitelist[7];
-										if($turn_page>$pages)$turn_page=1;
+										if($turn_page > $pages) $turn_page=$pages;
+										else if($turn_page < 1) $turn_page=1;
 										
 										$start_index = ($offer_show * ($turn_page - 1));
 										$end_index = $start_index + $offer_show;
 										if($end_index > $count_offer_array) $end_index = $count_offer_array;
 
-										
+										/*
 										foreach($offer_array as $offer)
 										{
 											$tmp_internal_id = $offer->getInternalId();
@@ -411,11 +412,14 @@ $bot->on(function ($Update) use ($bot) {
 										$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
 										}
 										
-										
+										*/
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
 										
 										if($pages == 1) $end_text = "В" . $end_text;
-										else $end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
+										else 
+										{
+											$end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
+										}
 										
 										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
 										
@@ -581,7 +585,7 @@ $bot->on(function ($Update) use ($bot) {
 $bot->run();
 }
 catch (\TelegramBot\Api\Exception $e) {
-	$bot = new \TelegramBot\Api\Client($token);
+	$bot = new \TelegramBot\Api\Client($token_test);
 	$bot->sendMessage(425486413, "<b><u>ERROR</u></b>", "HTML");
 	$bot->sendMessage(425486413, $e->getMessage());
 }
