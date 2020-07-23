@@ -162,9 +162,9 @@ $bot->on(function ($Update) use ($bot) {
 						$clear_phone = preg_replace("/^[38]{0,2}/i","",$clear_phone);
 						
 						//---Назначает для пользователя введенную страницу---//
-						if(preg_match('/^\d+$/', $message_text))
+						if(preg_match('/^\d+$/', $msg_text))
 						{
-							$query = "update white_list set Turn_page=${message_text} where Phonenumber like ('%${clear_phone}%');";
+							$query = "update white_list set Turn_page=${msg_text} where Phonenumber like ('%${clear_phone}%');";
 							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 						}
 						//---конец Назначает для пользователя введенную страницу---//
