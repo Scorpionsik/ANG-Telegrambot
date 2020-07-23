@@ -345,6 +345,11 @@ $bot->on(function ($Update) use ($bot) {
 									//если для агента есть информация
 									if($count_offer_array > 0)
 									{
+										$pages = 1;
+										
+										if($count_offer_array > 15) $pages = ceil($count_offer_array / 15);
+										$bot->sendMessage($id_user, $pages);
+										
 										foreach($offer_array as $offer)
 										{
 											$tmp_internal_id = $offer->getInternalId();
