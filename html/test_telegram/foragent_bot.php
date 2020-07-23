@@ -410,41 +410,7 @@ $bot->on(function ($Update) use ($bot) {
 										
 											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), null, true, null, $keyboard_inline, true);
 										}
-										/*
-										foreach($offer_array as $offer)
-										{
-											$tmp_internal_id = $offer->getInternalId();
-											//полная инлайн клавиатура
-											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-												[
-													[
-														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $offer->getEntityId()]
-													],[
-														['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
-													]
-												]
-											);
-											
-										//---проверка доступа к кнопке "Объект в базе"---//
-										if($row_from_whitelist[4] == 0)
-										{
-											//инлайн клавиатура без кнопки "Объект в базе"
-											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-												[
-													[
-														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id]
-													],[
-														['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
-													]
-												]
-											);
-										}
-										//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-										$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
-										}
-										
-										*/
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
 										
 										if($pages == 1) $end_text = "В" . $end_text;
@@ -455,6 +421,27 @@ $bot->on(function ($Update) use ($bot) {
 										
 										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
 										
+										if($pages > 1)
+										{
+											$inline_array = new array(new array());
+											$start_page_step=$turn_page-2;
+											if($turn_page <= 3)$start_page_step = 1;
+											else if($turn_page >= $pages-2) $start_page_step = $pages-4;
+											for($i_page_step=$start_page_step; $i_page_step < $start_page_step+5; $i_page_step++)
+											{
+												$text_button = $i_page_step;
+												if($i_page_step == $turn_page) $text_button = $text_button . "👀";
+												$inline_array[0][] = new array('text' => $text_button, 'callback_data' => $i_page_step);
+											}
+											
+											if($pages > 5)
+											{
+												if($turn_page > 3) array_unshift($inline_array[0], new array('text' => "1 ⏮", 'callback_data' => "1"));
+												if($turn_page < $pages-2) $inline_array[0][] = new array('text' => "⏩ ${pages}", 'callback_data' => $pages);
+											}
+											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
+											$bot->sendMessage($id_user, "Отправьте номер страницы или выберите нужную ниже", null, true, null, $keyboard_inline, true);
+										}
 									}
 									else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 								}
