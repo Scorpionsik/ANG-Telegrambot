@@ -423,8 +423,7 @@ $bot->on(function ($Update) use ($bot) {
 										
 										if($pages > 1)
 										{
-											$inline_array = new array();
-											$inline_array[] = new array();
+											$inline_array = array(array());
 											$start_page_step=$turn_page-2;
 											if($turn_page <= 3)$start_page_step = 1;
 											else if($turn_page >= $pages-2) $start_page_step = $pages-4;
@@ -432,13 +431,13 @@ $bot->on(function ($Update) use ($bot) {
 											{
 												$text_button = $i_page_step;
 												if($i_page_step == $turn_page) $text_button = $text_button . "👀";
-												$inline_array[0][] = new array('text' => $text_button, 'callback_data' => $i_page_step);
+												$inline_array[0][] = array('text' => $text_button, 'callback_data' => $i_page_step);
 											}
 											
 											if($pages > 5)
 											{
-												if($turn_page > 3) array_unshift($inline_array[0], new array('text' => "1 ⏮", 'callback_data' => "1"));
-												if($turn_page < $pages-2) $inline_array[0][] = new array('text' => "⏩ ${pages}", 'callback_data' => $pages);
+												if($turn_page > 3) array_unshift($inline_array[0], array('text' => "1 ⏮", 'callback_data' => "1"));
+												if($turn_page < $pages-2) $inline_array[0][] = array('text' => "⏩ ${pages}", 'callback_data' => $pages);
 											}
 											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 											$bot->sendMessage($id_user, "Отправьте номер страницы или выберите нужную ниже", null, true, null, $keyboard_inline, true);
