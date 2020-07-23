@@ -363,7 +363,7 @@ $bot->on(function ($Update) use ($bot) {
 										$end_index = $start_index + $offer_show;
 										if($end_index > $count_offer_array) $end_index = $count_offer_array;
 
-										/*
+										
 										foreach($offer_array as $offer)
 										{
 											$tmp_internal_id = $offer->getInternalId();
@@ -396,7 +396,7 @@ $bot->on(function ($Update) use ($bot) {
 										
 										$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
 										}
-										*/
+										
 										
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
 										
