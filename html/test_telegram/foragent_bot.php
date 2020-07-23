@@ -436,8 +436,9 @@ $bot->on(function ($Update) use ($bot) {
 											
 											if($pages > 5)
 											{
-												if($turn_page > 3) array_unshift($inline_array[0], array('text' => "1 ⏮", 'callback_data' => "1"));
-												if($turn_page < $pages-2) $inline_array[0][] = array('text' => "⏩ ${pages}", 'callback_data' => $pages);
+												$inline_array[] = array();
+												if($turn_page > 3) $inline_array[1][] = array('text' => "1 ⏮", 'callback_data' => "1"));
+												if($turn_page < $pages-2) $inline_array[1][] = array('text' => "⏩ ${pages}", 'callback_data' => $pages);
 											}
 											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 											$bot->sendMessage($id_user, "Отправьте номер страницы или выберите нужную ниже", null, true, null, $keyboard_inline, true);
