@@ -84,6 +84,8 @@ $bot->command('send_news', function ($message) use ($bot) {
 							try
 							{
 								$bot->sendMessage($row[0], $array[$index], "HTML", false, null, $keyboard);
+								$query='update telegram_users set IsExist=1 where telegram_users.Id_telegram_user=' . $row[0] . ";";
+								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 							}
 							catch(Exception $e)
 							{
