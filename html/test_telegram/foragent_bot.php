@@ -345,10 +345,13 @@ $bot->on(function ($Update) use ($bot) {
 									//если для агента есть информация
 									if($count_offer_array > 0)
 									{
+										$offer_show = 15;
 										$pages = 1;
+										if($count_offer_array > $offer_show) $pages = ceil($count_offer_array / $offer_show);
 										
-										if($count_offer_array > 15) $pages = ceil($count_offer_array / 15);
-										$bot->sendMessage($id_user, $pages . " " . $count_offer_array);
+										$turn_page = $row_from_whitelist[7];
+										if($turn_page>$pages)$turn_page=1;
+										//$bot->sendMessage($id_user, $pages . " " . $count_offer_array);
 										/*
 										foreach($offer_array as $offer)
 										{
@@ -382,9 +385,15 @@ $bot->on(function ($Update) use ($bot) {
 										
 										$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
 										}
-										
-										$bot->sendMessage($id_user, "Всего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
 										*/
+										
+										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
+										
+										if($pages == 1) $end_text = "В" . $end_text;
+										else $end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($offer_show, array('объект','объекта','объектов')) . ", в" . $end_text;
+										
+										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
+										
 									}
 									else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 								}
