@@ -161,13 +161,7 @@ $bot->on(function ($Update) use ($bot) {
 						$clear_phone = preg_replace("/\D/i","",$msg_text);
 						$clear_phone = preg_replace("/^[38]{0,2}/i","",$clear_phone);
 						
-						//---Назначает для пользователя введенную страницу---//
-						if(preg_match('/^\d+$/', $msg_text))
-						{
-							$query = "update white_list set Turn_page=${msg_text} where Phonenumber like ('%${clear_phone}%');";
-							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-						}
-						//---конец Назначает для пользователя введенную страницу---//
+						
 						$query = "SELECT * FROM white_list where Phonenumber like ('%${clear_phone}%');";
 						$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 						
@@ -266,6 +260,13 @@ $bot->on(function ($Update) use ($bot) {
 				else //если id чата был в таблице
 				{
 					//код получения информации из белого списка
+					//---Назначает для пользователя введенную страницу---//
+						if(preg_match('/^\d+$/', $msg_text))
+						{
+							$query = "update white_list set Turn_page=${msg_text} where Id_whitelist_user=" . $row[1] . ";";
+							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+						}
+						//---конец Назначает для пользователя введенную страницу---//
 					$query = "SELECT * FROM white_list where Id_whitelist_user=" . $row[1] . ";";
 					$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					if($result_from_whitelist)
