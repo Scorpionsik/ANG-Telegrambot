@@ -378,7 +378,8 @@ $bot->on(function ($Update) use ($bot) {
 										$end_index = $start_index + $offer_show;
 										if($end_index > $count_offer_array) $end_index = $count_offer_array;
 
-
+										$bot->sendMessage($id_user, "Начало страницы ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
+										
 										for($i_offer=$start_index; $i_offer < $end_index; $i_offer++)
 										{
 											$tmp_internal_id = $offer_array[$i_offer]->getInternalId();
@@ -416,7 +417,7 @@ $bot->on(function ($Update) use ($bot) {
 										if($pages == 1) $end_text = "В" . $end_text;
 										else 
 										{
-											$end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
+											$end_text = "Конец страницы ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
 										}
 										
 										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
