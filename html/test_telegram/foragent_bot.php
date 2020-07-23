@@ -437,7 +437,7 @@ $bot->on(function ($Update) use ($bot) {
 											if($pages > 5)
 											{
 												$inline_array[] = array();
-												if($turn_page > 3) $inline_array[1][] = array('text' => "1 ⏮", 'callback_data' => "1"));
+												if($turn_page > 3) $inline_array[1][] = array('text' => "1 ⏮", 'callback_data' => "1");
 												if($turn_page < $pages-2) $inline_array[1][] = array('text' => "⏩ ${pages}", 'callback_data' => $pages);
 											}
 											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
