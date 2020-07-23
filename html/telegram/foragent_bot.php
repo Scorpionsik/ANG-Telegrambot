@@ -107,11 +107,23 @@ $bot->on(function ($Update) use ($bot) {
 
 	$lock=true;
     $message = $Update->getMessage();
+	$callback_data = "";
+	if(is_null($message))
+	{
+		$callback = $Update->getCallbackQuery();
+		if(!is_null($callback)) 
+		{
+			$callback_data = $callback->getData();
+			$message = $callback->getMessage();
+		}
+	}
+	
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
-		$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
+		if(is_null($callback_data) || $callback_data == "")$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
+		else $msg_text = $callback_data;
 
 		//---команда start---//
 		if($msg_text == "/start")
@@ -148,6 +160,8 @@ $bot->on(function ($Update) use ($bot) {
 						//код проверки по белому листу
 						$clear_phone = preg_replace("/\D/i","",$msg_text);
 						$clear_phone = preg_replace("/^[38]{0,2}/i","",$clear_phone);
+						
+						
 						$query = "SELECT * FROM white_list where Phonenumber like ('%${clear_phone}%');";
 						$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 						
@@ -246,6 +260,13 @@ $bot->on(function ($Update) use ($bot) {
 				else //если id чата был в таблице
 				{
 					//код получения информации из белого списка
+					//---Назначает для пользователя введенную страницу---//
+						if(preg_match('/^\d+$/', $msg_text))
+						{
+							$query = "update white_list set Turn_page=${msg_text} where Id_whitelist_user=" . $row[1] . ";";
+							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+						}
+						//---конец Назначает для пользователя введенную страницу---//
 					$query = "SELECT * FROM white_list where Id_whitelist_user=" . $row[1] . ";";
 					$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					if($result_from_whitelist)
@@ -339,46 +360,89 @@ $bot->on(function ($Update) use ($bot) {
 								{					
 									include "foragent_functions.php";
 									
-									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0], null, 40);
+									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
 									
 									//если для агента есть информация
 									if($count_offer_array > 0)
 									{
-										foreach($offer_array as $offer)
+										$offer_show = 10;
+										$pages = 1;
+										if($count_offer_array > $offer_show) $pages = ceil($count_offer_array / $offer_show);
+										
+										$turn_page = $row_from_whitelist[7];
+										if($turn_page > $pages) $turn_page=$pages;
+										else if($turn_page < 1) $turn_page=1;
+										
+										$start_index = ($offer_show * ($turn_page - 1));
+										$end_index = $start_index + $offer_show;
+										if($end_index > $count_offer_array) $end_index = $count_offer_array;
+
+
+										for($i_offer=$start_index; $i_offer < $end_index; $i_offer++)
 										{
-											$tmp_internal_id = $offer->getInternalId();
+											$tmp_internal_id = $offer_array[$i_offer]->getInternalId();
 											//полная инлайн клавиатура
 											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 												[
 													[
-														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $offer->getEntityId()]
+														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $offer_array[$i_offer]->getEntityId()]
 													],[
 														['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
 													]
 												]
 											);
-											
-										//---проверка доступа к кнопке "Объект в базе"---//
-										if($row_from_whitelist[4] == 0)
-										{
-											//инлайн клавиатура без кнопки "Объект в базе"
-											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-												[
+											//---проверка доступа к кнопке "Объект в базе"---//
+											if($row_from_whitelist[4] == 0)
+											{
+												//инлайн клавиатура без кнопки "Объект в базе"
+												$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 													[
-														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id]
-													],[
-														['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
+														[
+															['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id]
+														],[
+															['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
+														]
 													]
-												]
-											);
-										}
-										//---конец проверка доступа к кнопке "Объект в базе"---//
+												);
+											}
+											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-										$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), null, true, null, $keyboard_inline, true);
 										}
 										
-										$bot->sendMessage($id_user, "Всего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
+										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
+										
+										if($pages == 1) $end_text = "В" . $end_text;
+										else 
+										{
+											$end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
+										}
+										
+										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
+										
+										if($pages > 1)
+										{
+											$inline_array = array(array());
+											$start_page_step=$turn_page-2;
+											if($turn_page <= 3)$start_page_step = 1;
+											else if($turn_page >= $pages-2) $start_page_step = $pages-4;
+											for($i_page_step=$start_page_step; $i_page_step < $start_page_step+5; $i_page_step++)
+											{
+												$text_button = $i_page_step;
+												if($i_page_step == $turn_page) $text_button = $text_button . "👀";
+												$inline_array[0][] = array('text' => $text_button, 'callback_data' => $i_page_step);
+											}
+											
+											if($pages > 5)
+											{
+												$inline_array[] = array();
+												if($turn_page > 3) $inline_array[1][] = array('text' => "1 ⏮", 'callback_data' => "1");
+												if($turn_page < $pages-2) $inline_array[1][] = array('text' => "⏩ ${pages}", 'callback_data' => $pages);
+											}
+											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
+											$bot->sendMessage($id_user, "Отправьте номер страницы или выберите нужную ниже", null, true, null, $keyboard_inline, true);
+										}
 									}
 									else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 								}
@@ -431,7 +495,12 @@ $bot->on(function ($Update) use ($bot) {
 { 
 	$callback = $Update->getCallbackQuery();
 	if (is_null($callback)) return true;
-	else return false;
+	else 
+	{
+		$data = $callback->getData();
+		if(preg_match('/^\d+$/', $data)) return true;
+		return false;
+	}
 });
 
 //---Обработка инлайн запросов---//
@@ -524,7 +593,12 @@ $bot->on(function ($Update) use ($bot) {
 		{ 
 			$callback = $Update->getCallbackQuery();
 			if (is_null($callback)) return false;
-			else return true;
+			else 
+			{
+				$data = $callback->getData();
+				if(preg_match('/^\d+$/', $data)) return false;
+				return true;
+			}
 		});
 		//---конец Обработка инлайн запросов---//
 
