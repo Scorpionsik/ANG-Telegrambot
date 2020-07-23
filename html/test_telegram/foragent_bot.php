@@ -107,6 +107,13 @@ $bot->on(function ($Update) use ($bot) {
 
 	$lock=true;
     $message = $Update->getMessage();
+	
+	if(is_null($message))
+	{
+		$callback = $Update->getCallbackQuery();
+		if(!is_null($callback)) $message = $callback->getMessage();
+	}
+	
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
@@ -339,7 +346,7 @@ $bot->on(function ($Update) use ($bot) {
 								{					
 									include "foragent_functions.php";
 									
-									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
+									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0], null, 20);
 									$count_offer_array = count($offer_array);
 									
 									//если для агента есть информация
@@ -450,7 +457,12 @@ $bot->on(function ($Update) use ($bot) {
 { 
 	$callback = $Update->getCallbackQuery();
 	if (is_null($callback)) return true;
-	else return false;
+	else 
+	{
+		$data = $callback->getData();
+		if(preg_match('/^\d+$/', $data)) return true;
+		return false;
+	}
 });
 
 //---Обработка инлайн запросов---//
@@ -543,7 +555,12 @@ $bot->on(function ($Update) use ($bot) {
 		{ 
 			$callback = $Update->getCallbackQuery();
 			if (is_null($callback)) return false;
-			else return true;
+			else 
+			{
+				$data = $callback->getData();
+				if(preg_match('/^\d+$/', $data)) return false;
+				return true;
+			}
 		});
 		//---конец Обработка инлайн запросов---//
 
