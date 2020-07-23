@@ -107,18 +107,23 @@ $bot->on(function ($Update) use ($bot) {
 
 	$lock=true;
     $message = $Update->getMessage();
-	
+	$callback_data = "";
 	if(is_null($message))
 	{
 		$callback = $Update->getCallbackQuery();
-		if(!is_null($callback)) $message = $callback->getMessage();
+		if(!is_null($callback)) 
+		{
+			$callback_data = $callback->getData();
+			$message = $callback->getMessage();
+		}
 	}
 	
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
-		$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
+		if(is_null($callback_data) || $callback_data == "")$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
+		else $msg_text = $callback_data;
 
 		//---команда start---//
 		if($msg_text == "/start")
@@ -155,6 +160,14 @@ $bot->on(function ($Update) use ($bot) {
 						//код проверки по белому листу
 						$clear_phone = preg_replace("/\D/i","",$msg_text);
 						$clear_phone = preg_replace("/^[38]{0,2}/i","",$clear_phone);
+						
+						//---Назначает для пользователя введенную страницу---//
+						if(preg_match('/^\d+$/', $message_text))
+						{
+							$query = "update white_list set Turn_page=${message_text} where Phonenumber like ('%${clear_phone}%');";
+							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+						}
+						//---конец Назначает для пользователя введенную страницу---//
 						$query = "SELECT * FROM white_list where Phonenumber like ('%${clear_phone}%');";
 						$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 						
