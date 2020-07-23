@@ -366,7 +366,7 @@ $bot->on(function ($Update) use ($bot) {
 									//если для агента есть информация
 									if($count_offer_array > 0)
 									{
-										$offer_show = 15;
+										$offer_show = 10;
 										$pages = 1;
 										if($count_offer_array > $offer_show) $pages = ceil($count_offer_array / $offer_show);
 										
