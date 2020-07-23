@@ -359,7 +359,7 @@ $bot->on(function ($Update) use ($bot) {
 								if($row_from_whitelist[3] == false)
 								{					
 									include "foragent_functions.php";
-									echo 2/0;
+									
 									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
 									
@@ -378,6 +378,38 @@ $bot->on(function ($Update) use ($bot) {
 										$end_index = $start_index + $offer_show;
 										if($end_index > $count_offer_array) $end_index = $count_offer_array;
 
+
+										for($i_offer=$start_index; $i_offer < $end_index; $i_offer++)
+										{
+											$tmp_internal_id = $offer_array[$i_offer]->getInternalId();
+											//полная инлайн клавиатура
+											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+												[
+													[
+														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $offer_array[$i_offer]->getEntityId()]
+													],[
+														['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
+													]
+												]
+											);
+											//---проверка доступа к кнопке "Объект в базе"---//
+											if($row_from_whitelist[4] == 0)
+											{
+												//инлайн клавиатура без кнопки "Объект в базе"
+												$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+													[
+														[
+															['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id]
+														],[
+															['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
+														]
+													]
+												);
+											}
+											//---конец проверка доступа к кнопке "Объект в базе"---//
+										
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), null, true, null, $keyboard_inline, true);
+										}
 										/*
 										foreach($offer_array as $offer)
 										{
