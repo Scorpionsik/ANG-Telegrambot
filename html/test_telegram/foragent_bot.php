@@ -390,7 +390,7 @@ $bot->on(function ($Update) use ($bot) {
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
 										
 										if($pages == 1) $end_text = "В" . $end_text;
-										else $end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($offer_show, array('объект','объекта','объектов')) . "\r\nВ" . $end_text;
+										else $end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($offer_show, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
 										
 										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
 										
