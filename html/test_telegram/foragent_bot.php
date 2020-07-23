@@ -348,7 +348,7 @@ $bot->on(function ($Update) use ($bot) {
 										$pages = 1;
 										
 										if($count_offer_array > 15) $pages = ceil($count_offer_array / 15);
-										$bot->sendMessage($id_user, $pages);
+										$bot->sendMessage($id_user, $pages . " " $count_offer_array);
 										/*
 										foreach($offer_array as $offer)
 										{
