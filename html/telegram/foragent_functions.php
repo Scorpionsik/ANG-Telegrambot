@@ -131,7 +131,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				if($row_bind[11] != null && $row_bind[11] > 0) $offer_message = $offer_message . ", участок " .  declOfNum($row_bind[11],array('сотка','сотки','соток'));
 				
 				//цена
-				$offer_message = $offer_message . "\r\n \n💰 Цена: " . $row_bind[14];
+				$offer_message = $offer_message . "\r\n \n💰 Цена: " . preg_replace('/(?<=\d)(?=(\d{3})+$)/', ' ', $row_bind[14]);
 				if($row_bind[1] == "аренда") $offer_message = $offer_message . " грн.";
 				else $offer_message = $offer_message . " $";
 				
