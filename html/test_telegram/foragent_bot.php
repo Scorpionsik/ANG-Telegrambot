@@ -339,7 +339,7 @@ $bot->on(function ($Update) use ($bot) {
 								{					
 									include "foragent_functions.php";
 									
-									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0], null, 40);
+									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
 									
 									//если для агента есть информация
@@ -349,7 +349,7 @@ $bot->on(function ($Update) use ($bot) {
 										
 										if($count_offer_array > 15) $pages = ceil($count_offer_array / 15);
 										$bot->sendMessage($id_user, $pages);
-										
+										/*
 										foreach($offer_array as $offer)
 										{
 											$tmp_internal_id = $offer->getInternalId();
@@ -384,6 +384,7 @@ $bot->on(function ($Update) use ($bot) {
 										}
 										
 										$bot->sendMessage($id_user, "Всего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.", null, false, null, $keyboard);
+										*/
 									}
 									else $bot->sendMessage($id_user, "Информации по вашему району на данный момент нет, попробуйте позже!", null, false, null, $keyboard);
 								}
