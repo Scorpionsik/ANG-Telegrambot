@@ -359,7 +359,7 @@ $bot->on(function ($Update) use ($bot) {
 								if($row_from_whitelist[3] == false)
 								{					
 									include "foragent_functions.php";
-									
+									echo 2/0;
 									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
 									
