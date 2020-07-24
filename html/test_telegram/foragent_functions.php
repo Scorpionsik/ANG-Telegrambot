@@ -89,7 +89,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 					//$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 					$smile_status = "";
 					$text_status = "";
-					$curr = ""
+					$curr = "";
 					$diff = $row_bind[22] - $row_bind[14];
 					
 					if($row_bind[1] == "аренда") $curr = "грн.";
