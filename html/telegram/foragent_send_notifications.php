@@ -22,16 +22,7 @@ if($result)
 {
 	//код выдачи данных
 	include "foragent_functions.php";
-	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-		[
-			[
-				['text'=>'📥 Получить всё за последние 3 дня']
-			],[
-				['text'=>'❕ Присылать только новые объекты в уведомлениях']
-			]
-		],
-		false,
-		true);
+	
 	$count = mysqli_num_rows($result);
 	for($i = 0; $i < $count; $i++)
 	{
@@ -45,23 +36,34 @@ if($result)
 			$is_new = $row[3];
 			$is_edit = $row[4];
 			$is_exist = $row[5];
-			
-			if($is_edit == 0)
-			{
-				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-				[
-					[
-						['text'=>'📥 Получить всё за последние 3 дня']
-					],[
-						['text'=>'✅ Получать все объекты в уведомлениях']
-					]
-				],
-				false,
-				true);
-			}
-			
+						
 			if($is_new == 1 || $is_edit == 1)
 			{
+				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+					[
+						[
+							['text'=>'📥 Получить всё за последние 3 дня']
+						],[
+							['text'=>'❕ Присылать только новые объекты в уведомлениях']
+						]
+					],
+					false,
+					true);
+					
+					if($is_edit == 0)
+					{
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+						[
+							[
+								['text'=>'📥 Получить всё за последние 3 дня']
+							],[
+								['text'=>'✅ Получать все объекты в уведомлениях']
+							]
+						],
+						false,
+						true);
+					}
+				
 				$id_user = $row[1];
 				
 				//show results code
