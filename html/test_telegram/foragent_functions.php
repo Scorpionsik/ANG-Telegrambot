@@ -84,7 +84,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				
 				//новая/обновленная
 				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
-				else if($row_bind[17]==1)
+				if($row_bind[22] != $row_bind[14] && $row_bind[22] != 0)
 				{
 					//$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
 					$smile_status = "";
