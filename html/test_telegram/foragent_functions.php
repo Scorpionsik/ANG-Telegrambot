@@ -93,7 +93,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 					$diff = $row_bind[22] - $row_bind[14];
 					
 					if($row_bind[1] == "аренда") $curr = "грн.";
-					else $offer_message = $curr = "$";
+					else $curr = "$";
 					
 					if($diff > 0)
 					{
