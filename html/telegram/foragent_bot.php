@@ -99,7 +99,9 @@ $bot->command('send_news', function ($message) use ($bot) {
 					mysqli_free_result($result);
 				}
 				mysqli_close($dblink);
-			}			
+			}	
+			$id_message = $message->getMessageId();
+			$bot->deleteMessage($id_user,$id_message);
 		}
     });
 
