@@ -434,8 +434,12 @@ $bot->on(function ($Update) use ($bot) {
 										{
 											$inline_array = array(array());
 											$start_page_step=$turn_page-2;
-											if($turn_page <= 3)$start_page_step = 1;
-											else if($turn_page >= $pages-2) $start_page_step = $pages-4;
+											if($pages >= 5)
+											{
+												if($turn_page <= 3)$start_page_step = 1;
+												else if($turn_page >= $pages-2) $start_page_step = $pages-4;
+											}
+											else $start_page_step=1;
 											
 											$end_page_step = min($pages, 5);
 											
