@@ -590,7 +590,7 @@ $bot->on(function ($Update) use ($bot) {
 					);
 					}
 					//---//
-					$bot->sendMessage(425486413, $error_id_user);
+					//$bot->sendMessage(425486413, $error_id_user);
 					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
