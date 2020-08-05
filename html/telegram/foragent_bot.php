@@ -377,7 +377,7 @@ $bot->on(function ($Update) use ($bot) {
 										$offer_show = 10;
 										$pages = 1;
 										if($count_offer_array > $offer_show) $pages = ceil($count_offer_array / $offer_show);
-										
+										if($pages == 0) $pages=1;
 										$turn_page = $row_from_whitelist[7];
 										if($turn_page > $pages) $turn_page=$pages;
 										else if($turn_page < 1) $turn_page=1;
