@@ -45,7 +45,7 @@
 
         // Set chart options
         var options = {'title':'Информация по агентам, подключенным к боту',
-                       'width':400,
+                       'width':800,
                        'height':300};
 
         // Instantiate and draw our chart, passing in some options.
