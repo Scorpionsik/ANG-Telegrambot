@@ -58,7 +58,7 @@
                        'width':800,
                        'height':300};
 					   
-		var options_all = {'title':<?php echo "Всего " . array_sum($values) . " агентов" ?>,
+		var options_all = {'title':'Подключенные агенты',
                        'width':800,
                        'height':300};
 
