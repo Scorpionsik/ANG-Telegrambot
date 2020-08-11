@@ -10,7 +10,7 @@
 	$values = array();
 	$queries = array("SELECT * FROM `Not yet registered users` LEFT JOIN `Not binding users` ON `Not yet registered users`.Id_whitelist_user=`Not binding users`.Id_whitelist_user WHERE !isnull(`Not binding users`.Id_whitelist_user) AND `Not yet registered users`.Id_whitelist_user!=10 AND `Not yet registered users`.Id_whitelist_user!=11 ORDER BY `Not yet registered users`.Username;","SELECT * FROM `!Registered users` LEFT JOIN `Not binding users` ON `!Registered users`.Id_whitelist_user=`Not binding users`.Id_whitelist_user WHERE !isnull(`Not binding users`.Id_whitelist_user) AND `!Registered users`.Id_whitelist_user!=10 AND `!Registered users`.Id_whitelist_user!=11 ORDER BY `!Registered users`.Username;","SELECT * FROM `Not yet registered users` LEFT JOIN `Not binding users` ON `Not yet registered users`.Id_whitelist_user=`Not binding users`.Id_whitelist_user WHERE isnull(`Not binding users`.Id_whitelist_user) AND `Not yet registered users`.Id_whitelist_user!=10 AND `Not yet registered users`.Id_whitelist_user!=11 ORDER BY `Not yet registered users`.Username;","SELECT * FROM `!Registered users` LEFT JOIN `Not binding users` ON `!Registered users`.Id_whitelist_user=`Not binding users`.Id_whitelist_user WHERE isnull(`Not binding users`.Id_whitelist_user) AND `!Registered users`.Id_whitelist_user!=10 AND `!Registered users`.Id_whitelist_user!=11 ORDER BY `!Registered users`.Username;");
 	
-	foreach($query in $queries)
+	foreach($queries as $query)
 	{
 		$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));	
 		if($result)
