@@ -75,5 +75,8 @@
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
 	<div id="chart_div_all"></div>
+	<?php 
+		echo "Всего " . array_sum($values) . " агентов";
+	?>
   </body>
 </html>
