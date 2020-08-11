@@ -20,6 +20,9 @@
 		}
 		else $values[] = 0;
 	}
+	
+	$all_register = $values[1] + $values[3];
+	$all_not_register = $values[0] + $values[2];
 ?>
       // Load the Visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
@@ -42,15 +45,28 @@
           ['Не подключался, есть привязка', <?php echo $values[2]; ?>],
           ['Подключался, есть привязка', <?php echo $values[3]; ?>]
         ]);
-
+		
+		var data_all = new google.visualization.DataTable();
+		data_all.addColumn('string', 'Состояние');
+        data_all.addColumn('number', 'Количество');
+		data_all.addRows([
+          ['Подключились', <?php echo $all_register; ?>],
+          ['Не подключились', <?php echo $all_not_register; ?>]
+        ]);
         // Set chart options
         var options = {'title':'Информация по агентам, подключенным к боту',
+                       'width':800,
+                       'height':300};
+					   
+		var options_all = {'title':<?php echo "Всего " . array_sum($values) . " агентов" ?>,
                        'width':800,
                        'height':300};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+		var chart_all = new google.visualization.PieChart(document.getElementById('chart_div_all'));
+		chart_all.draw(data_all, options_all);
       }
     </script>
   </head>
@@ -58,8 +74,6 @@
   <body>
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
-	<?php
-	echo "Всего " . array_sum($values) . " агентов в базе бота.";
-	?>
+	<div id="chart_div_all"></div>
   </body>
 </html>
