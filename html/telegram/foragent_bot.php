@@ -515,7 +515,7 @@ $bot->on(function ($Update) use ($bot) {
 	else 
 	{
 		$data = $callback->getData();
-		if(preg_match('/^\d+$/', $data)) return true;
+		if(preg_match('/^-?\d+$/', $data)) return true;
 		return false;
 	}
 });
