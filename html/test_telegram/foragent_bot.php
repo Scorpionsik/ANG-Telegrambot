@@ -580,7 +580,8 @@ $bot->on(function ($Update) use ($bot) {
 						];
 					}
 					//---//
-					$text_message = preg_replace("\r\n$", "",$text_message); 
+					$bot->sendMessage(425486413, $text_message);
+					$text_message = preg_replace("\r\n$", "", $text_message); 
 					$bot->sendMessage(425486413, $text_message);
 					$split_array = preg_split("\r\n", $text_message);
 					foreach($split_array as $b)
