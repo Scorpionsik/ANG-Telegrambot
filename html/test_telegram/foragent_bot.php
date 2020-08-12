@@ -582,7 +582,7 @@ $bot->on(function ($Update) use ($bot) {
 					//---//
 					foreach(preg_split("\r\n", $text_message) as $button)
 					{
-						$inline_array[] = array(['text' => $button, 'callback_data' => 'phone']);
+						if($button)$inline_array[] = array(['text' => $button, 'callback_data' => 'phone']);
 					}
 					
 					
