@@ -518,7 +518,7 @@ $bot->on(function ($Update) use ($bot) {
 	{
 		$id_user = $message->getChat()->getId();
 		$entity_id=0;
-		$text_message = "<b>               Контакты объекта ${internal_id}                 </b>\r\n";
+		$text_message = "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖\r\n<b>Контакты объекта ${internal_id}</b>\r\n";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
