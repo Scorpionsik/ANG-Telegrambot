@@ -562,27 +562,27 @@ $bot->on(function ($Update) use ($bot) {
 						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					}
 					
-					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-						[
+					
+						$inline_array = [
 							[
 								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],
 								['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
 							]
-						]
-					);
+						];
+					
 					//проверка доступа к кнопке "Объект в базе"
 					if($row_whitelist_id[1] == 0)
 					{
-						$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-						[
+						$inline_array = [
 							[
 								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id]
 							]
-						]
-					);
+						];
 					}
 					//---//
-					$keyboard_inline[] = array(['text' => $text_message, 'callback_data' => 'phone']);
+					$inline_array[] = array(['text' => $text_message, 'callback_data' => 'phone']);
+					
+					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
 					$bot->editMessageText($id_user,$message->getMessageId(),$message->getText() . " ",null,false,$keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
