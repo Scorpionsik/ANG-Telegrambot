@@ -545,7 +545,7 @@ $bot->on(function ($Update) use ($bot) {
 						
 						if($row_user_entity_id[1] != null && $row_user_entity_id[1] != "") $text_message = $text_message . "📎 Агенство " . $row_user_entity_id[1] . "\r\n";
 					}
-					$text_message = $text_message . $row_user_entity_id[2] . "\r\n";
+					$text_message = $text_message . preg_replace("/(0\d{2})(\d{3})(\d{2})(\d{2})/", "$1 $2 $3 $4", $row_user_entity_id[2]) . "\r\n";
 				}
 			}
 			
