@@ -408,7 +408,7 @@ $bot->on(function ($Update) use ($bot) {
 											}
 											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), null, true, null);
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null);
 											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 										}
 										
