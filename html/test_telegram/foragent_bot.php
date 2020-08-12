@@ -580,7 +580,11 @@ $bot->on(function ($Update) use ($bot) {
 						];
 					}
 					//---//
-					$inline_array[] = array(['text' => $text_message, 'callback_data' => 'phone']);
+					foreach(preg_split("\r\n", $text_message) as $button)
+					{
+						$inline_array[] = array(['text' => $button, 'callback_data' => 'phone']);
+					}
+					
 					
 					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
