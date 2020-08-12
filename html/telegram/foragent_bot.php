@@ -417,7 +417,8 @@ $bot->on(function ($Update) use ($bot) {
 											}
 											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), null, true, null, $keyboard_inline, true);
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null);
+											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 										}
 										
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
@@ -529,7 +530,7 @@ $bot->on(function ($Update) use ($bot) {
 		$id_user = $message->getChat()->getId();
 		$error_id_user = $id_user;
 		$entity_id=0;
-		$text_message = $message->getText() . "\r\n\r\n";
+		$text_message = "➖➖➖➖➖<b>Контакты объекта ${internal_id}</b>➖➖➖➖➖\r\n";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
@@ -595,7 +596,7 @@ $bot->on(function ($Update) use ($bot) {
 					}
 					//---//
 					//$bot->sendMessage(425486413, $error_id_user);
-					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false,$keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}

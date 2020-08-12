@@ -119,7 +119,8 @@ if($result)
 						
 						//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 						try{
-							$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
+							$bot->sendMessage($id_user, $offer->getMessage(), null, true, null);
+							$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 						}	
 						catch (Exception $e)
 						{
