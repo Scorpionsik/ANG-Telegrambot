@@ -518,7 +518,7 @@ $bot->on(function ($Update) use ($bot) {
 	{
 		$id_user = $message->getChat()->getId();
 		$entity_id=0;
-		$text_message = "Контакты:\r\n";
+		$text_message = "<b>Контакты объекта ${internal_id}</b>\r\n";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
@@ -592,7 +592,7 @@ $bot->on(function ($Update) use ($bot) {
 					
 					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
-					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,null,false,$keyboard_inline);
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false,$keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
