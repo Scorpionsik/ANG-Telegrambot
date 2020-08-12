@@ -56,12 +56,12 @@
         ]);
         // Set chart options
         var options = {'title':'Информация по агентам, подключенным к боту',
-                       'width':800,
-                       'height':300};
+                       'width':500,
+                       'height':500};
 					   
 		var options_all = {'title':'Подключенные агенты',
-                       'width':800,
-                       'height':300};
+                       'width':500,
+                       'height':500};
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
