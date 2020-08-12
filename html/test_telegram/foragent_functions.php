@@ -80,7 +80,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 			{				
 				$row_bind = mysqli_fetch_row($result_bind);
 				//код базы			
-				$offer_message = "🔍 " . $row_bind[0];
+				$offer_message = "🔍 <a href='http://an-gorod.com.ua/real/flat/sale?q=" . $row_bind[0] . ">" . $row_bind[0] ."</a>";
 				
 				//новая/обновленная
 				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
