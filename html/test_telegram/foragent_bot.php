@@ -584,7 +584,7 @@ $bot->on(function ($Update) use ($bot) {
 					//---//
 					$keyboard_inline[] = array(['text' => $text_message, 'callback_data' => 'phone']);
 					
-					$bot->editMessageText($id_user,$message->getMessageId(),$message->getText() . " test",null,false,$keyboard_inline);
+					$bot->editMessageText($id_user,$message->getMessageId(),$message->getText() . " ",null,false,$keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
