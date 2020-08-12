@@ -75,7 +75,7 @@
     <!--Div that will hold the pie chart-->
 	<?php 
 	date_default_timezone_set("Europe/Kiev");
-	echo date(time()) . "<br>"; 
+	echo date("'Y-m-d H:i:s'",time()) . "<br>"; 
 	?>
     <div id="chart_div"></div>
 	<div id="chart_div_all"></div>
