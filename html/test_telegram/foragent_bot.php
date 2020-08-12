@@ -607,8 +607,9 @@ $bot->on(function ($Update) use ($bot) {
 			else 
 			{
 				$data = $callback->getData();
-				if(preg_match('/^\d+$/', $data)) return false;
-				return true;
+				
+				if(preg_match('/^\d+\/\d+$/', $data)) return true;
+				return false;
 			}
 		});
 		//---конец Обработка инлайн запросов---//
