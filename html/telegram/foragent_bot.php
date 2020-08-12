@@ -269,7 +269,7 @@ $bot->on(function ($Update) use ($bot) {
 				{
 					//код получения информации из белого списка
 					//---Назначает для пользователя введенную страницу---//
-						if(preg_match('/^\d+$/', $msg_text))
+						if(preg_match('/^-?\d+$/', $msg_text))
 						{
 							$query = "update white_list set Turn_page=${msg_text} where Id_whitelist_user=" . $row[1] . ";";
 							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
