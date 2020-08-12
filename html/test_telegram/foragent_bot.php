@@ -583,7 +583,7 @@ $bot->on(function ($Update) use ($bot) {
 					$text_message = preg_replace("\r\n$",$text_message); 
 					$bot->sendMessage(425486413, $text_message);
 					$split_array = preg_split("\r\n", $text_message);
-					$bot->sendMessage(425486413, echo $split_array);
+					$bot->sendMessage(425486413, implode("|",$split_array));
 					foreach($split_array as $b)
 					{
 						if($b)$inline_array[] = array(['text' => $b, 'callback_data' => 'phone']);
