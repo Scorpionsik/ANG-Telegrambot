@@ -162,6 +162,9 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				//описание
 				$offer_message = $offer_message . "\n\n" . $row_bind[6];
 				
+				//фото
+				$offer_message = $offer_message . "\n\nhttps://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $row_bind[0];
+				
 				//сохраняем готовый объект
 				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19]);
 			}
