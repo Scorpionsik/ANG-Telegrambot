@@ -11,7 +11,7 @@ class Offer{
 		$this->message = $message;
 		$this->internal_id = $internal_id;
 		$this->entity_id = $entity_id;
-		$this->image_url = $image_url
+		$this->image_url = $image_url;
 	}
 	
 	public function getMessage()
