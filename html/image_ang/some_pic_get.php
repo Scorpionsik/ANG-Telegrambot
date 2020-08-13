@@ -9,6 +9,11 @@
     <meta property="og:description" content="">
     <meta property="og:image" content="https://ireland.apollo.olxcdn.com:443/v1/files/z3upfb16v0gb2-UA/image;s=1500x1583">
     <meta property="og:site_name" content="Telegraph">
+	
+	<meta name="twitter:description" content="В прошлой части был показан процесс разработки модели цилиндра. В этой речь пойдет о его материализации. На момент начала этой работы у меня имелся опыт литья не...">
+<meta name="twitter:title" content="Свой 2-тактный мотор: песочница, куличики и 10кг расплавленного металла" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@habr_com" />
 </head>
 <body>
 <?php
