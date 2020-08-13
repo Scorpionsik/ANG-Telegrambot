@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Фотографии объекта</title>
+	<meta name="description" content="Фотографии объекта">
+</head>
+<body>
 <?php
 include "givemyprecious.php";
 
@@ -16,3 +24,5 @@ include "givemyprecious.php";
 		}
 	}
 ?>
+</body>
+</html>
