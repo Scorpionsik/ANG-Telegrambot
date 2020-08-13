@@ -11,7 +11,7 @@ include "givemyprecious.php";
 		{
 			foreach($array as $key => $value)
 			{
-				if($key == "origin") echo $value . "<br>";
+				if($key == "origin") echo "<image src='https://an-gorod-image.com.ua/" . $value . "'/><br>";
 			}
 		}
 	}
