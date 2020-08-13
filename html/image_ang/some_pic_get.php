@@ -1,5 +1,5 @@
 <?php
-require_once "givemyprecious.php";
+include "givemyprecious.php";
 
 	if (isset($_GET['entity']))
 	{
