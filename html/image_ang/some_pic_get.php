@@ -11,7 +11,7 @@ include "givemyprecious.php";
 		{
 			foreach($array as $key => $value)
 			{
-				if($key == "origin") echo $pic_path . "<br>";
+				if($key == "origin") echo $value . "<br>";
 			}
 		}
 	}
