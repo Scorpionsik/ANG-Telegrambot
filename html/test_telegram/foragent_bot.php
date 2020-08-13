@@ -409,6 +409,13 @@ $bot->on(function ($Update) use ($bot) {
 											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
 											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null);
+											
+											$im_url = $offer_array[$i_offer]->getImageUrl();
+											if(!is_null($im_url))
+											{
+												$bot->sendPhoto($id_user, "https://an-gorod-image.com.ua/storage/uploads/preview/" . $im_url, "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $tmp_internal_id . "'><b>Посмотреть все фотографии</b></a>", null, null, false, "HTML");
+											}
+											
 											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 										}
 										
