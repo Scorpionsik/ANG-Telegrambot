@@ -120,6 +120,18 @@ if($result)
 						//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 						try{
 							$bot->sendMessage($id_user, $offer->getMessage(), null, true, null);
+							$im_url = $offer->getImageUrl();
+							if(!is_null($im_url) && $im_url != "")
+							{
+								try
+								{
+									$bot->sendPhoto($id_user, "https://an-gorod-image.com.ua/storage/uploads/preview/" . $im_url, "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $tmp_internal_id . "'><b>Посмотреть все фотографии</b></a>", null, null, false, "HTML");
+								}
+								catch (Exception $e)
+								{
+									
+								}
+							}
 							$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 						}	
 						catch (Exception $e)
