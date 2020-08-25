@@ -574,7 +574,7 @@ $bot->on(function ($Update) use ($bot) {
 					$text_message = $text_message . preg_replace("/(0\d{2})(\d{3})(\d{2})(\d{2})/", "$1 $2 $3 $4", $row_user_entity_id[2]) . "\r\n";
 				}
 			}
-			else $text_message = $text_message . "Этот объект является эксклюзивом, контакты скрыты.";
+			else $text_message = $text_message . "Контакты скрыты.";
 			
 			$query = "select Id_whitelist_user, Is_accept_base_button from telegram_users join white_list using (Id_whitelist_user) where Id_telegram_user=" . $id_user . ";";
 			$result_whitelist_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
