@@ -358,7 +358,7 @@ $bot->on(function ($Update) use ($bot) {
 						//если функции бота разблокированы
 						if($lock == false)
 						{
-							$query="insert into get_offers_press values(" . $row_from_whitelist[0] . ", " . time() . ");";
+							if($row_from_whitelist[0] != 10) $query="insert into get_offers_press values(" . $row_from_whitelist[0] . ", " . time() . ");";
 							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 							//---код выдачи данных---//						
 							if($row_from_whitelist[0] != 11)
