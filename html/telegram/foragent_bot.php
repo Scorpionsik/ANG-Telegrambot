@@ -431,7 +431,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 												}
 											}
-											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ". $offer_array[$i_offer]->getLinkInternalId() .", нажмите на кнопку 'Телефоны' ниже.", "HTML", true, null, $keyboard_inline, true);
+											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта , нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 										}
 										
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
