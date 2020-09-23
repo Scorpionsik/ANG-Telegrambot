@@ -590,7 +590,7 @@ $bot->on(function ($Update) use ($bot) {
 						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					}
 					
-					$query = "SELECT types.Type_name, flat_types.Typename FROM offers JOIN types USING(Id_type) JOIN flat_types USING (Id_flat_type) WHERE offers.Internal_id='" . $internal_id . "';";
+						$query = "SELECT types.Type_name, flat_types.Typename FROM offers JOIN types USING(Id_type) JOIN flat_types USING (Id_flat_type) WHERE offers.Internal_id='" . $internal_id . "';";
 						$result_base = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 						$link_for_button = "";
 						
@@ -610,21 +610,51 @@ $bot->on(function ($Update) use ($bot) {
 								['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
 							]
 						];
+						
+					
+					
 					//проверка доступа к кнопке "Объект в базе"
+					
 					if($row_whitelist_id[1] == 0)
 					{
-						$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-						[
+						/*
+						if($count_inline_array == 2)
+						{
+							array_splice($inline_array[0][0], 1, 1);
+						}
+					*/
+						
+						$inline_array = [
 							[
 								['text' => '🛄 Объект на сайте', 'url' => $link_for_button]
 							]
-						]
-					);
+						];
+						
+					}
+					else
+					{
+						/*
+						if($count_inline_array == 1)
+						{
+							$inline_array[0][] = array('text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id);
+						}*/
 					}
 					//---//
-					//$bot->sendMessage(780925203, $error_id_user);
-					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false,$keyboard_inline);
-					//$bot->sendMessage($id_user, $internal_id);
+					
+					
+					
+					/*
+					$text_message = preg_replace("/\r\n$/", "", $text_message); 
+					$split_array = preg_split("/\r\n/", $text_message);
+					foreach($split_array as $b)
+					{
+						if($b)$inline_array[] = array(['text' => $b, 'callback_data' => 'phone']);
+					}
+					*/
+					
+					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
+					
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML", false, $keyboard_inline);
 				}
 			}
 		}
