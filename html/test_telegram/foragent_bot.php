@@ -588,7 +588,7 @@ $bot->on(function ($Update) use ($bot) {
 						];
 						*/
 					
-					$count_inline_array = count($inline_array)
+					$count_inline_array = count($inline_array);
 					//проверка доступа к кнопке "Объект в базе"
 					if($row_whitelist_id[1] == 0)
 					{
