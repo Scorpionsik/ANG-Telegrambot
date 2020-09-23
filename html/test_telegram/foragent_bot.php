@@ -671,10 +671,11 @@ $bot->on(function ($Update) use ($bot) {
 $bot->run();
 }
 catch (\TelegramBot\Api\Exception $e) {
+	/*
 	$bot = new \TelegramBot\Api\Client($token_test);
 	$bot->sendMessage(425486413, "<b><u>ERROR</u></b>", "HTML");
 	$bot->sendMessage(425486413, $e->getMessage());
 	$bot->sendMessage(425486413, $e->getFile() . ", строка " . $e->getLine());
-	$bot->sendMessage(425486413, $e->getTraceAsString());
+	$bot->sendMessage(425486413, $e->getTraceAsString());*/
 }
 ?>
