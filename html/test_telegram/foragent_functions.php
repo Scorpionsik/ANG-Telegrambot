@@ -5,13 +5,15 @@ class Offer{
 	private $internal_id;
 	private $entity_id;
 	private $image_url;
+	private $site_url;
 	
-	public function __construct($message, $internal_id, $entity_id, $image_url)
+	public function __construct($message, $internal_id, $entity_id, $image_url, $site_url)
 	{
 		$this->message = $message;
 		$this->internal_id = $internal_id;
 		$this->entity_id = $entity_id;
 		$this->image_url = $image_url;
+		$this->site_url = $site_url;
 	}
 	
 	public function getMessage()
@@ -33,11 +35,87 @@ class Offer{
 	{
 		return $this->image_url;
 	}
+	
+	public function getSiteUrl()
+	{
+		return $this->site_url;
+	}
 }
 
 function declOfNum($num, $titles) {
     $cases = array(2, 0, 1, 1, 1, 2);
     return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
+}
+
+function getSiteUrl($offer_type, $flat_type)
+{
+	$result = "https://an-gorod.com.ua/";
+	
+	switch($flat_type)
+	{
+		case "Квартира":
+			if($offer_type == "продажа")
+			{
+				//продажа
+				$result = $result . "real/flat/sale";
+			}
+			else 
+			{
+				//аренда
+				$result = $result . "real/flat/rent";
+			}
+		break;
+		case "Гостинка":
+			if($offer_type == "продажа")
+			{
+				//продажа
+				$result = $result . "kupit-komnatu-v-kharkove";
+			}
+			else 
+			{
+				//аренда
+				$result = $result . "snyat-gostinku-kharkov";
+			}
+		break;
+		case "Дом":
+			if($offer_type == "продажа")
+			{
+				//продажа
+				$result = $result . "real/house/sale";
+			}
+			else 
+			{
+				//аренда
+				$result = $result . "snyat-dom-v-kharkove";
+			}
+		break;
+		case "Участок":
+			if($offer_type == "продажа")
+			{
+				//продажа
+				$result = $result . "kupit-uchastok";
+			}
+			else 
+			{
+				//аренда
+				$result = $result . "arenda-komercheskoi-nedvigimosti"; //возможно надо будет исправить
+			}
+		break;
+		default: //коммерческая
+		if($offer_type == "продажа")
+			{
+				//продажа
+				$result = $result . "real/estate/sale";
+			}
+			else 
+			{
+				//аренда
+				$result = $result . "arenda-komercheskoi-nedvigimosti";
+			}
+		break;
+	}
+
+return ($result . "?q=");
 }
 
 function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
@@ -88,7 +166,8 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 			{				
 				$row_bind = mysqli_fetch_row($result_bind);
 				//код базы			
-				$offer_message = "🔍 <a href=\"http://an-gorod.com.ua/real/flat/sale?q=" . $row_bind[0] . "\">" . $row_bind[0] ."</a>";
+				$site_url = getSiteUrl($row_bind[1], $row_bind[2]);
+				$offer_message = "🔍 <a href=\"" . $site_url . $row_bind[0] . "\">" . $row_bind[0] ."</a>";
 				
 				//новая/обновленная
 				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
@@ -171,7 +250,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				$offer_message = $offer_message . "\n\n" . $row_bind[6];
 								
 				//сохраняем готовый объект
-				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23]);
+				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23], $site_url);
 			}
 			
 		}

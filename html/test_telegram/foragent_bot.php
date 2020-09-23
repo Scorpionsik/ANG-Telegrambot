@@ -382,11 +382,12 @@ $bot->on(function ($Update) use ($bot) {
 										for($i_offer=$start_index; $i_offer < $end_index; $i_offer++)
 										{
 											$tmp_internal_id = $offer_array[$i_offer]->getInternalId();
+											$tmp_site_url = $offer_array[$i_offer]->getSiteUrl();
 											//полная инлайн клавиатура
 											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 												[
 													[
-														['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $offer_array[$i_offer]->getEntityId()]
+														['text' => '🛄 Объект на сайте', 'url' => $tmp_site_url . $tmp_internal_id],['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $offer_array[$i_offer]->getEntityId()]
 													],[
 														['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
 													]
@@ -399,7 +400,7 @@ $bot->on(function ($Update) use ($bot) {
 												$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 													[
 														[
-															['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $tmp_internal_id]
+															['text' => '🛄 Объект на сайте', 'url' => $tmp_site_url . $tmp_internal_id]
 														],[
 															['text' => '☎️ Телефоны', 'callback_data' => $tmp_internal_id]
 														]
@@ -528,6 +529,7 @@ $bot->on(function ($Update) use ($bot) {
 	$callback = $Update->getCallbackQuery();
 	$internal_id = $callback->getData();
 	$message = $callback->getMessage();
+	$inline_array = $message->getReplyMarkup()->getInlineKeyboard();
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
@@ -577,24 +579,43 @@ $bot->on(function ($Update) use ($bot) {
 						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					}
 					
-					
+						/*
 						$inline_array = [
 							[
 								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id],
 								['text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id]
 							]
 						];
+						*/
 					
+					$count_inline_array = count($inline_array)
 					//проверка доступа к кнопке "Объект в базе"
 					if($row_whitelist_id[1] == 0)
 					{
+						if($count_inline_array == 2)
+						{
+							array_splice($inline_array[0][0], 1, 1);
+						}
+						
+						/*
 						$inline_array = [
 							[
 								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id]
 							]
 						];
+						*/
+					}
+					else
+					{
+						if($count_inline_array == 1)
+						{
+							$inline_array[0][] = array('text' => '💼 Объект в базе', 'url' => 'http://newcab.bee.th1.vps-private.net/node/' . $entity_id);
+						}
 					}
 					//---//
+					
+					
+					
 					/*
 					$text_message = preg_replace("/\r\n$/", "", $text_message); 
 					$split_array = preg_split("/\r\n/", $text_message);
@@ -606,7 +627,7 @@ $bot->on(function ($Update) use ($bot) {
 					
 					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
-					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false,$keyboard_inline);
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false, $keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
