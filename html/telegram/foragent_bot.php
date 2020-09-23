@@ -418,7 +418,7 @@ $bot->on(function ($Update) use ($bot) {
 											}
 											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage() . $tmp_site_url, "HTML", true, null);
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null);
 											$im_url = $offer_array[$i_offer]->getImageUrl();
 											if(!is_null($im_url) && $im_url != "")
 											{
