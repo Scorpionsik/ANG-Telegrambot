@@ -6,14 +6,21 @@ class Offer{
 	private $entity_id;
 	private $image_url;
 	private $site_url;
+	private $link_internal_id;
 	
-	public function __construct($message, $internal_id, $entity_id, $image_url, $site_url)
+	public function __construct($message, $internal_id, $entity_id, $image_url, $site_url, $link)
 	{
 		$this->message = $message;
 		$this->internal_id = $internal_id;
 		$this->entity_id = $entity_id;
 		$this->image_url = $image_url;
 		$this->site_url = $site_url;
+		$this->link_internal_id = $link;
+	}
+	
+	public function getLinkInternalId()
+	{
+		return $this->link_internal_id;
 	}
 	
 	public function getMessage()
@@ -167,7 +174,8 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				$row_bind = mysqli_fetch_row($result_bind);
 				//код базы			
 				$site_url = getSiteUrl($row_bind[1], $row_bind[2]);
-				$offer_message = "🔍 <a href=\"" . $site_url . $row_bind[0] . "\">" . $row_bind[0] ."</a>";
+				$link_internal_id = "<a href=\"" . $site_url . $row_bind[0] . "\">" . $row_bind[0] ."</a>";
+				$offer_message = "🔍 " . $link_internal_id;
 				
 				//новая/обновленная
 				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
@@ -250,7 +258,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				$offer_message = $offer_message . "\n\n" . $row_bind[6];
 								
 				//сохраняем готовый объект
-				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23], $site_url);
+				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23], $site_url, $link_internal_id);
 			}
 			
 		}

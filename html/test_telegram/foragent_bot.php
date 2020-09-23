@@ -424,7 +424,7 @@ $bot->on(function ($Update) use ($bot) {
 												}
 											}
 											
-											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
+											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ". $offer_array[$i_offer]->getLinkInternalId() .", нажмите на кнопку 'Телефоны' ниже.", "HTML", true, null, $keyboard_inline, true);
 										}
 										
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
@@ -529,8 +529,8 @@ $bot->on(function ($Update) use ($bot) {
 	$callback = $Update->getCallbackQuery();
 	$internal_id = $callback->getData();
 	$message = $callback->getMessage();
-	$inline_tmp = $message->getReplyMarkup();
-	$inline_array = $inline_tmp->getInlineKeyboard();
+	//$inline_tmp = $message->getReplyMarkup();
+	//$inline_array = $inline_tmp->getInlineKeyboard();
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
@@ -589,22 +589,24 @@ $bot->on(function ($Update) use ($bot) {
 						];
 						*/
 					
+					/*
 					$count_inline_array = count($inline_array);
 					//проверка доступа к кнопке "Объект в базе"
+					
 					if($row_whitelist_id[1] == 0)
 					{
 						if($count_inline_array == 2)
 						{
 							array_splice($inline_array[0][0], 1, 1);
 						}
+					
 						
-						/*
 						$inline_array = [
 							[
 								['text' => '🛄 Объект на сайте', 'url' => 'http://an-gorod.com.ua/real/flat/sale?q=' . $internal_id]
 							]
 						];
-						*/
+						
 					}
 					else
 					{
@@ -615,7 +617,7 @@ $bot->on(function ($Update) use ($bot) {
 					}
 					//---//
 					
-					
+					*/
 					
 					/*
 					$text_message = preg_replace("/\r\n$/", "", $text_message); 
@@ -626,9 +628,9 @@ $bot->on(function ($Update) use ($bot) {
 					}
 					*/
 					
-					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
+					//$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
-					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false, $keyboard_inline);
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML");
 					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
