@@ -22,7 +22,7 @@ $bot->command('help', function ($message) use ($bot) {
 $bot->command('send_news', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
 		$error_id_user = $id_user;
-		if($id_user == 425486413)
+		if($id_user == 780925203)
 		{
 			$message_text = $message->getText();
 			
@@ -205,12 +205,12 @@ $bot->on(function ($Update) use ($bot) {
 							}
 							else if($row_from_whitelist>1)
 							{
-								$bot->sendMessage(425486413, "Внимание, есть повторный номер (${clear_phone}) у:");
+								$bot->sendMessage(780925203, "Внимание, есть повторный номер (${clear_phone}) у:");
 								$count_row_error = $row_from_whitelist;
 								for($i=0; $i<$count_row_error; $i++)
 								{
 									$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
-									$bot->sendMessage(425486413, $row_from_whitelist[0] . " - " . $row_from_whitelist[2]);
+									$bot->sendMessage(780925203, $row_from_whitelist[0] . " - " . $row_from_whitelist[2]);
 								}
 								$bot->sendMessage($id_user, "Похоже, что номер (${clear_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Вайбер/Телеграм):");
 								$bot->sendContact($id_user,'+380951473711','Саша');
@@ -431,7 +431,7 @@ $bot->on(function ($Update) use ($bot) {
 													
 												}
 											}
-											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта , нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
+											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ". $offer_array[$i_offer]->getLinkInternalId() .", нажмите на кнопку 'Телефоны' ниже.", "HTML", true, null, $keyboard_inline, true);
 										}
 										
 										$end_text = "сего " . declOfNum($count_offer_array,array('объект','объекта','объектов')) . " за последние 3 дня.";
@@ -622,7 +622,7 @@ $bot->on(function ($Update) use ($bot) {
 					);
 					}
 					//---//
-					//$bot->sendMessage(425486413, $error_id_user);
+					//$bot->sendMessage(780925203, $error_id_user);
 					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML",false,$keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
@@ -649,11 +649,11 @@ $bot->on(function ($Update) use ($bot) {
 $bot->run();
 }
 catch (\TelegramBot\Api\Exception $e) {
-	/*
+	
 	$bot = new \TelegramBot\Api\Client($token);
-	$bot->sendMessage(425486413, "<b><u>ERROR</u></b>, user: " . $error_id_user, "HTML");
-	$bot->sendMessage(425486413, $e->getMessage());
-	$bot->sendMessage(425486413, $e->getFile() . ", строка " . $e->getLine());
-	$bot->sendMessage(425486413, $e->getTraceAsString());*/
+	$bot->sendMessage(780925203, "<b><u>ERROR</u></b>, user: " . $error_id_user, "HTML");
+	$bot->sendMessage(780925203, $e->getMessage());
+	$bot->sendMessage(780925203, $e->getFile() . ", строка " . $e->getLine());
+	$bot->sendMessage(780925203, $e->getTraceAsString());
 }
 ?>
