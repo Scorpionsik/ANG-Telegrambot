@@ -121,6 +121,7 @@ function getSiteUrl($offer_type, $flat_type)
 			}
 		break;
 	}
+}
 
 function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
 	/*
