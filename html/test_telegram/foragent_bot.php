@@ -644,7 +644,7 @@ $bot->on(function ($Update) use ($bot) {
 					
 					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
-					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML");
+					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML", false, $keyboard_inline);
 					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
