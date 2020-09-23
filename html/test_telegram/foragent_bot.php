@@ -529,7 +529,8 @@ $bot->on(function ($Update) use ($bot) {
 	$callback = $Update->getCallbackQuery();
 	$internal_id = $callback->getData();
 	$message = $callback->getMessage();
-	$inline_array = $message->getReplyMarkup()->getInlineKeyboard();
+	$inline_tmp = $message->getReplyMarkup();
+	$inline_array = $inline_tmp->getInlineKeyboard();
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
