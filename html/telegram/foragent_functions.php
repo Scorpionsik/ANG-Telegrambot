@@ -121,6 +121,8 @@ function getSiteUrl($offer_type, $flat_type)
 			}
 		break;
 	}
+
+return ($result . "?q=");
 }
 
 function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
@@ -176,7 +178,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				$offer_message = "🔍 " . $link_internal_id;
 				
 				//новая/обновленная
-				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥 Новый объект 🔥";
+				if($row_bind[16]==1) $offer_message = $offer_message . "\r\n🔥🔥Новая🔥🔥";
 				if($row_bind[22] != $row_bind[14] && $row_bind[22] != 0)
 				{
 					//$offer_message = $offer_message . "\r\n➡️➡️Обновлена⬅️⬅️";
@@ -190,12 +192,12 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 					
 					if($diff > 0)
 					{
-						$smile_status = "📉";
+						$smile_status = "📉📉";
 						$text_status = "Цена упала на";
 					}
 					else
 					{
-						$smile_status = "📈";
+						$smile_status = "📈📈";
 						$text_status = "Цена поднялась на";
 						$diff = $diff * -1;
 					}
@@ -254,7 +256,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				
 				//описание
 				$offer_message = $offer_message . "\n\n" . $row_bind[6];
-				
+								
 				//сохраняем готовый объект
 				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23], $site_url, $link_internal_id);
 			}
