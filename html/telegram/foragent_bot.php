@@ -592,7 +592,7 @@ $bot->on(function ($Update) use ($bot) {
 					
 						$query = "SELECT types.Type_name, flat_types.Typename FROM offers JOIN types USING(Id_type) JOIN flat_types USING (Id_flat_type) WHERE offers.Internal_id='" . $internal_id . "';";
 						$result_base = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-						$link_for_button = "";
+						$link_for_button = "https://an-gorod.com.ua/";
 						
 						if($result_base)
 						{
