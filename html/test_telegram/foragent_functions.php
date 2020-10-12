@@ -147,7 +147,9 @@ function makeArrayForDefaultKeyboard($is_get_edit_offer){
 			'text'=>'❕ Присылать только новые объекты в уведомлениях'
 		);
 	}
-	
+	$result[1][] = array(
+			'text'=>'🔎 Поиск по цене'
+		);	
 	return $result;
 }
 
