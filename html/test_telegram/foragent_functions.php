@@ -124,6 +124,33 @@ function getSiteUrl($offer_type, $flat_type)
 	return ($result . "?q=");
 }
 
+function makeArrayForDefaultKeyboard($is_get_edit_offer){
+	$result = new array(
+		new array(), 
+		new array()
+		);
+		
+		
+	$result[0][] = new array(
+		'text'=>'📥 Получить всё за последние 3 дня'
+	);
+	
+	if($is_get_edit_offer == 0)
+	{
+		$result[1][] = new array(
+			'text'=>'✅ Получать все объекты в уведомлениях'
+		);
+	}
+	else
+	{
+		$result[1][] = new array(
+			'text'=>'❕ Присылать только новые объекты в уведомлениях'
+		);
+	}
+	
+	return $result;
+}
+
 function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
 	/*
 	0	offers.Internal_id			string

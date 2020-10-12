@@ -39,31 +39,10 @@ if($result)
 						
 			if($is_new == 1 || $is_edit == 1)
 			{
-				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-					[
-						[
-							['text'=>'📥 Получить всё за последние 3 дня']
-						],[
-							['text'=>'❕ Присылать только новые объекты в уведомлениях']
-						]
-					],
+				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($is_edit),
 					false,
 					true);
 					
-					if($is_edit == 0)
-					{
-						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-						[
-							[
-								['text'=>'📥 Получить всё за последние 3 дня']
-							],[
-								['text'=>'✅ Получать все объекты в уведомлениях']
-							]
-						],
-						false,
-						true);
-					}
-				
 				$id_user = $row[1];
 				
 				//show results code
@@ -143,15 +122,15 @@ if($result)
 					//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 					try{
 						$bot->sendMessage($id_user, declOfNum($count_offer_array,array('объект пришел','объекта пришло','объектов пришло')) . " за последние пару минут.", null, false, null, $keyboard);
-						if($is_exist == 0){
+						/*if($is_exist == 0){
 							$query = "update telegram_users set IsExist=1 where telegram_users.Id_whitelist_user=" . $id_whitelist . ";";
 							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-						}
+						}*/
 					}	
 					catch (Exception $e) 
 					{
-						$query = "update telegram_users set IsExist=0 where telegram_users.Id_whitelist_user=" . $id_whitelist . ";";
-						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+						/*$query = "update telegram_users set IsExist=0 where telegram_users.Id_whitelist_user=" . $id_whitelist . ";";
+						mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));*/
 					}
 				}
 			}

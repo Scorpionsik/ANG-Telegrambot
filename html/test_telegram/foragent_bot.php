@@ -24,6 +24,7 @@ $bot->command('send_news', function ($message) use ($bot) {
 		$error_id_user = $id_user;
 		if($id_user == 780925203)
 		{
+			include "foragent_functions.php";
 			$message_text = $message->getText();
 			
 			$news_text = preg_replace('/^\/[^ ]+[ ]+/',"",$message_text);
@@ -45,30 +46,10 @@ $bot->command('send_news', function ($message) use ($bot) {
 						for($i=0; $i < $count; $i++)
 						{
 							$row = mysqli_fetch_row($result);
-							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-								[
-									[
-										['text'=>'📥 Получить всё за последние 3 дня']
-									],[
-										['text'=>'❕ Присылать только новые объекты в уведомлениях']
-									]
-								],
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($row[1]),
 								false,
 								true);
-							if($row[1] == 0)
-							{
-								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-									[
-										[
-											['text'=>'📥 Получить всё за последние 3 дня']
-										],[
-											['text'=>'✅ Получать все объекты в уведомлениях']
-										]
-									],
-									false,
-									true);
-							}
-							
+														
 							$array = preg_split('/=/',$news_text);
 							$count_array = count($array) - 1;
 							$index = 0;
@@ -87,13 +68,15 @@ $bot->command('send_news', function ($message) use ($bot) {
 							try
 							{
 								$bot->sendMessage($row[0], $array[$index], "HTML", false, null, $keyboard);
+								/*
 								$query='update telegram_users set IsExist=1 where telegram_users.Id_telegram_user=' . $row[0] . ";";
-								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));*/
 							}
 							catch(Exception $e)
 							{
+								/*
 								$query='update telegram_users set IsExist=0 where telegram_users.Id_telegram_user=' . $row[0] . ";";
-								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));*/
 							}
 							
 							//$bot->sendMessage($id_user, $news_text, "HTML", false, null, $keyboard);
@@ -111,7 +94,8 @@ $bot->command('send_news', function ($message) use ($bot) {
 
 $bot->on(function ($Update) use ($bot) {
 	include "connection_agent.php";
-
+	include "foragent_functions.php";
+	
 	$lock=true;
     $message = $Update->getMessage();
 	$callback_data = "";
@@ -234,14 +218,7 @@ $bot->on(function ($Update) use ($bot) {
 					if($lock) $bot->sendMessage($id_user, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
 					else //если регистрация прошла успешно
 					{
-						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-						[
-							[
-								['text'=>'📥 Получить всё за последние 3 дня']
-							],[
-								['text'=>'❕ Присылать только новые объекты в уведомлениях']
-							]
-						],
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(1),
 						false,
 						true);
 						if($row_from_whitelist[0] != 11)
@@ -279,47 +256,21 @@ $bot->on(function ($Update) use ($bot) {
 					$result_from_whitelist = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 					if($result_from_whitelist)
 					{
-						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-									[
-										[
-											['text'=>'📥 Получить всё за последние 3 дня']
-										],[
-											['text'=>'❕ Присылать только новые объекты в уведомлениях']
-										]
-									],
-									false,
-									true);
+						$keyboard = null;
 															
 						$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
 						if($row_from_whitelist) //если агент есть в таблице, приветствуем и разблокируем основные функции бота
 						{
-							if($row_from_whitelist[6] == 0)
-							{
-								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-									[
-										[
-											['text'=>'📥 Получить всё за последние 3 дня']
-										],[
-											['text'=>'✅ Получать все объекты в уведомлениях']
-										]
-									],
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(row_from_whitelist[6]),
 									false,
 									true);
-							}
-							
+														
 							if(preg_match('/уведомл/',$msg_text))
 							{
 								$lock=true;
 								if(preg_match('/Присылать только/', $msg_text))
 								{
-									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-									[
-										[
-											['text'=>'📥 Получить всё за последние 3 дня']
-										],[
-											['text'=>'✅ Получать все объекты в уведомлениях']
-										]
-									],
+									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(0),
 									false,
 									true);
 									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
@@ -328,14 +279,7 @@ $bot->on(function ($Update) use ($bot) {
 								}
 								else if(preg_match('/Получать/', $msg_text))
 								{
-									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-									[
-										[
-											['text'=>'📥 Получить всё за последние 3 дня']
-										],[
-											['text'=>'❕ Присылать только новые объекты в уведомлениях']
-										]
-									],
+									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(1),
 									false,
 									true);
 									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
@@ -365,9 +309,7 @@ $bot->on(function ($Update) use ($bot) {
 							{
 								//если пользователь не забанен (IsBlocked в таблице white_list)
 								if($row_from_whitelist[3] == false)
-								{					
-									include "foragent_functions.php";
-									
+								{														
 									$offer_array = makeOfferMessages($dblink, $row_from_whitelist[0]);
 									$count_offer_array = count($offer_array);
 									
