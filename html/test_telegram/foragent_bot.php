@@ -261,7 +261,7 @@ $bot->on(function ($Update) use ($bot) {
 						$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
 						if($row_from_whitelist) //если агент есть в таблице, приветствуем и разблокируем основные функции бота
 						{
-							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(row_from_whitelist[6]),
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($row_from_whitelist[6]),
 									false,
 									true);
 														
