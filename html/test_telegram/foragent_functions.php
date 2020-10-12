@@ -160,7 +160,7 @@ function getModeMessage($id_mode)
 	switch($id_mode)
 	{
 		case 1:
-		$result = "Search by price";
+		$result = "Введите цену <u>без пробелов</u>. Чтобы убрать фильтр по цене, <b>введите 0</b>.";
 		break;
 	}
 	
