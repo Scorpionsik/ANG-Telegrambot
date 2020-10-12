@@ -125,25 +125,25 @@ function getSiteUrl($offer_type, $flat_type)
 }
 
 function makeArrayForDefaultKeyboard($is_get_edit_offer){
-	$result = new array(
-		new array(), 
-		new array()
+	$result = array(
+		array(), 
+		array()
 		);
 		
 		
-	$result[0][] = new array(
+	$result[0][] = array(
 		'text'=>'📥 Получить всё за последние 3 дня'
 	);
 	
 	if($is_get_edit_offer == 0)
 	{
-		$result[1][] = new array(
+		$result[1][] = array(
 			'text'=>'✅ Получать все объекты в уведомлениях'
 		);
 	}
 	else
 	{
-		$result[1][] = new array(
+		$result[1][] = array(
 			'text'=>'❕ Присылать только новые объекты в уведомлениях'
 		);
 	}
