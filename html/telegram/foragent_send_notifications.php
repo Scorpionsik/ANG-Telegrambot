@@ -119,7 +119,7 @@ if($result)
 						
 						//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 						try{
-							$bot->sendMessage($id_user, $offer->getMessage(), null, true, null);
+							$bot->sendMessage($id_user, $offer->getMessage(), "HTML", true, null);
 							$im_url = $offer->getImageUrl();
 							if(!is_null($im_url) && $im_url != "")
 							{
