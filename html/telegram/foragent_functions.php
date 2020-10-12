@@ -124,6 +124,49 @@ function getSiteUrl($offer_type, $flat_type)
 	return ($result . "?q=");
 }
 
+function makeArrayForDefaultKeyboard($is_get_edit_offer){
+	$result = array(
+		array(), 
+		array()
+		);
+		
+		
+	$result[0][] = array(
+		'text'=>'📥 Получить всё за последние 3 дня'
+	);
+	
+	if($is_get_edit_offer == 0)
+	{
+		$result[1][] = array(
+			'text'=>'✅ Получать все объекты в уведомлениях'
+		);
+	}
+	else
+	{
+		$result[1][] = array(
+			'text'=>'❕ Присылать только новые объекты в уведомлениях'
+		);
+	}
+	$result[1][] = array(
+			'text'=>'🔎 Поиск по цене'
+		);	
+	return $result;
+}
+
+function getModeMessage($id_mode)
+{
+	$result = "";
+	
+	switch($id_mode)
+	{
+		case 1:
+		$result = "Введите цену <u>без пробелов</u>. Бот найдёт и отобразит объекты с такой же ценой или ниже. Чтобы убрать фильтр по цене, <b>введите 0</b>.";
+		break;
+	}
+	
+	return $result;
+}
+
 function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
 	/*
 	0	offers.Internal_id			string
