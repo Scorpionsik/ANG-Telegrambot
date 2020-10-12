@@ -269,8 +269,15 @@ $bot->on(function ($Update) use ($bot) {
 						$keyboard = null;
 															
 						$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
+						
+						
+						
 						if($row_from_whitelist) //если агент есть в таблице, приветствуем и разблокируем основные функции бота
 						{
+							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($row_from_whitelist[6]),
+									false,
+									true);
+							
 							if($mode > 0)
 							{
 								
@@ -303,9 +310,7 @@ $bot->on(function ($Update) use ($bot) {
 							}
 							else
 							{
-								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($row_from_whitelist[6]),
-									false,
-									true);
+								
 														
 								if(preg_match('/уведомл/',$msg_text))
 								{
