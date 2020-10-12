@@ -143,6 +143,16 @@ $bot->on(function ($Update) use ($bot) {
 			$row = mysqli_fetch_row($result);
 			if($row)
 			{
+				$keyboard_mode = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(
+					[
+						[
+							['text' => 'Отмена']
+						]
+					],
+					false,
+					true);
+				$mode = $row[4];
+				
 				//если id чата ещё не указан
 				if($row[1] == null)
 				{
@@ -261,41 +271,79 @@ $bot->on(function ($Update) use ($bot) {
 						$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
 						if($row_from_whitelist) //если агент есть в таблице, приветствуем и разблокируем основные функции бота
 						{
-							$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($row_from_whitelist[6]),
+							if($mode > 0)
+							{
+								
+								if($msg_text == 'Отмена')
+								{
+									$query = "update telegram_users set Mode=0 where Id_telegram_user=${id_user};";
+									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									$lock = false;
+								}
+								else
+								{
+									if($mode == 1)
+									{
+										if(!preg_match('/^\d+$/',$msg_text))
+										{
+											$bot->sendMessage($id_user, getModeMessage($mode), "HTML", true, null, $keyboard_mode);
+										}
+										else
+										{
+											
+											$query = "update bind_whitelist_distr_flats set Price_lower_than=". $msg_text ." where Id_whitelist_user=" . $row_from_whitelist[0] . ";";
+											mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+											$query = "update telegram_users set Mode=0 where Id_telegram_user=${id_user};";
+											mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+											$lock = false;
+										}
+									}
+								}
+								
+							}
+							else
+							{
+								$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard($row_from_whitelist[6]),
 									false,
 									true);
 														
-							if(preg_match('/уведомл/',$msg_text))
-							{
-								$lock=true;
-								if(preg_match('/Присылать только/', $msg_text))
+								if(preg_match('/уведомл/',$msg_text))
 								{
-									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(0),
-									false,
-									true);
-									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
-									$query = "update white_list set Is_get_edit_offers=0 where Id_whitelist_user=" . $row[1] . ";";
-									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									$lock=true;
+									if(preg_match('/Присылать только/', $msg_text))
+									{
+										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(0),
+										false,
+										true);
+										$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
+										$query = "update white_list set Is_get_edit_offers=0 where Id_whitelist_user=" . $row[1] . ";";
+										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									}
+									else if(preg_match('/Получать/', $msg_text))
+									{
+										$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(1),
+										false,
+										true);
+										$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
+										$query = "update white_list set Is_get_edit_offers=1 where Id_whitelist_user=" . $row[1] . ";";
+										mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									}
+									else
+									{
+										$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
+										$lock=false;
+									}
+									
 								}
-								else if(preg_match('/Получать/', $msg_text))
+								else if(preg_match('/Поиск/', $))
 								{
-									$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(1),
-									false,
-									true);
-									$bot->sendMessage($id_user, "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", 'HTML', false, null, $keyboard);
-									$query = "update white_list set Is_get_edit_offers=1 where Id_whitelist_user=" . $row[1] . ";";
-									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
+									$bot->sendMessage($id_user, getModeMessage(1), "HTML", true, null, $keyboard_mode);
 								}
 								else
 								{
 									$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
 									$lock=false;
 								}
-							}
-							else
-							{
-								$bot->sendMessage($id_user, "Добро пожаловать, " . $row_from_whitelist[2] . "!", null, true, null, null, true);
-								$lock=false;
 							}
 						}
 					

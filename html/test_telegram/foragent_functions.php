@@ -153,6 +153,20 @@ function makeArrayForDefaultKeyboard($is_get_edit_offer){
 	return $result;
 }
 
+function getModeMessage(int id_mode)
+{
+	$result = "";
+	
+	switch($id_mode)
+	{
+		case 1:
+		$result = "Search by price";
+		break;
+	}
+	
+	return $result;
+}
+
 function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit = -1){
 	/*
 	0	offers.Internal_id			string
