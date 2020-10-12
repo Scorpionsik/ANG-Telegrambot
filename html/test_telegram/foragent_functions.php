@@ -153,7 +153,7 @@ function makeArrayForDefaultKeyboard($is_get_edit_offer){
 	return $result;
 }
 
-function getModeMessage(int id_mode)
+function getModeMessage($id_mode)
 {
 	$result = "";
 	
