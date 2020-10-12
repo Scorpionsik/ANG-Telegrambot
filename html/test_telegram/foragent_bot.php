@@ -143,7 +143,7 @@ $bot->on(function ($Update) use ($bot) {
 			$row = mysqli_fetch_row($result);
 			if($row)
 			{
-				$keyboard_mode = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(makeArrayForDefaultKeyboard(
+				$keyboard_mode = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 					[
 						[
 							['text' => 'Отмена']
