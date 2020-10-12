@@ -337,6 +337,8 @@ $bot->on(function ($Update) use ($bot) {
 								}
 								else if(preg_match('/Поиск/', $))
 								{
+									$query = "update telegram_users set Mode=1 where Id_telegram_user=${id_user};";
+									mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 									$bot->sendMessage($id_user, getModeMessage(1), "HTML", true, null, $keyboard_mode);
 								}
 								else
