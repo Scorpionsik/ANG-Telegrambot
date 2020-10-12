@@ -16,22 +16,13 @@ $bot = new \TelegramBot\Api\Client($token_test);
 4	white_list.Is_get_edit_offers		boolean
 5	telegram_users.IsExist				boolean
 */
-$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers, telegram_users.IsExist from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user=10;";
+$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers, telegram_users.IsExist from telegram_users join white_list using (Id_whitelist_user) WHERE telegram_users.Id_whitelist_user != 11 && white_list.Is_Banned != 1;";
 $result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 if($result)
 {
 	//код выдачи данных
 	include "foragent_functions.php";
-	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-		[
-			[
-				['text'=>'📥 Получить всё за последние 3 дня']
-			],[
-				['text'=>'❕ Присылать только новые объекты в уведомлениях']
-			]
-		],
-		false,
-		true);
+	
 	$count = mysqli_num_rows($result);
 	for($i = 0; $i < $count; $i++)
 	{
@@ -45,23 +36,34 @@ if($result)
 			$is_new = $row[3];
 			$is_edit = $row[4];
 			$is_exist = $row[5];
-			
-			if($is_edit == 0)
-			{
-				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-				[
-					[
-						['text'=>'📥 Получить всё за последние 3 дня']
-					],[
-						['text'=>'✅ Получать все объекты в уведомлениях']
-					]
-				],
-				false,
-				true);
-			}
-			
+						
 			if($is_new == 1 || $is_edit == 1)
 			{
+				$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+					[
+						[
+							['text'=>'📥 Получить всё за последние 3 дня']
+						],[
+							['text'=>'❕ Присылать только новые объекты в уведомлениях']
+						]
+					],
+					false,
+					true);
+					
+					if($is_edit == 0)
+					{
+						$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+						[
+							[
+								['text'=>'📥 Получить всё за последние 3 дня']
+							],[
+								['text'=>'✅ Получать все объекты в уведомлениях']
+							]
+						],
+						false,
+						true);
+					}
+				
 				$id_user = $row[1];
 				
 				//show results code
@@ -117,7 +119,20 @@ if($result)
 						
 						//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 						try{
-							$bot->sendMessage($id_user, $offer->getMessage(), null, true, null, $keyboard_inline, true);
+							$bot->sendMessage($id_user, $offer->getMessage(), "HTML", true, null);
+							$im_url = $offer->getImageUrl();
+							if(!is_null($im_url) && $im_url != "")
+							{
+								try
+								{
+									$bot->sendPhoto($id_user, "https://an-gorod-image.com.ua/storage/uploads/preview/" . $im_url, "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $tmp_internal_id . "'><b>Посмотреть все фотографии</b></a>", null, null, false, "HTML");
+								}
+								catch (Exception $e)
+								{
+									
+								}
+							}
+							$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ${tmp_internal_id}, нажмите на кнопку 'Телефоны' ниже.", null, true, null, $keyboard_inline, true);
 						}	
 						catch (Exception $e)
 						{

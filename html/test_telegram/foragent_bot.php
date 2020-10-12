@@ -4,6 +4,7 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 include "givemyprecious.php";
 require_once $root_dir . "/vendor/autoload.php";
 
+$error_id_user = -1;
 try
 {
 $bot = new \TelegramBot\Api\Client($token_test);
@@ -11,6 +12,7 @@ $bot = new \TelegramBot\Api\Client($token_test);
 //command /help
 $bot->command('help', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
+		$error_id_user = $id_user;
         $bot->sendMessage($id_user, 'Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.');
 		$bot->sendMessage($id_user, 'Хорошего дня и отличного настроения, будьте здоровы!');
 		$bot->sendContact($id_user,'+380951473711','Саша');
@@ -19,7 +21,8 @@ $bot->command('help', function ($message) use ($bot) {
 	//command /send_news
 $bot->command('send_news', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
-		if($id_user == 425486413)
+		$error_id_user = $id_user;
+		if($id_user == 780925203)
 		{
 			$message_text = $message->getText();
 			
@@ -31,7 +34,7 @@ $bot->command('send_news', function ($message) use ($bot) {
 				include "connection_agent.php";
 				$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 				
-				$query = 'SELECT telegram_users.Id_telegram_user, white_list.Is_get_edit_offers from telegram_users join white_list on telegram_users.Id_whitelist_user=white_list.Id_whitelist_user where telegram_users.Id_whitelist_user =10;';
+				$query = 'SELECT telegram_users.Id_telegram_user, white_list.Is_get_edit_offers from telegram_users join white_list on telegram_users.Id_whitelist_user=white_list.Id_whitelist_user where telegram_users.Id_whitelist_user != 11 AND white_list.Is_banned=0;';
 				$result = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 				
 				if($result)
@@ -84,6 +87,8 @@ $bot->command('send_news', function ($message) use ($bot) {
 							try
 							{
 								$bot->sendMessage($row[0], $array[$index], "HTML", false, null, $keyboard);
+								$query='update telegram_users set IsExist=1 where telegram_users.Id_telegram_user=' . $row[0] . ";";
+								mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 							}
 							catch(Exception $e)
 							{
@@ -97,7 +102,9 @@ $bot->command('send_news', function ($message) use ($bot) {
 					mysqli_free_result($result);
 				}
 				mysqli_close($dblink);
-			}			
+			}	
+			$id_message = $message->getMessageId();
+			$bot->deleteMessage($id_user,$id_message);
 		}
     });
 
@@ -121,6 +128,7 @@ $bot->on(function ($Update) use ($bot) {
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
+		$error_id_user = $id_user;
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		if(is_null($callback_data) || $callback_data == "")$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 		else $msg_text = $callback_data;
@@ -197,12 +205,12 @@ $bot->on(function ($Update) use ($bot) {
 							}
 							else if($row_from_whitelist>1)
 							{
-								$bot->sendMessage(425486413, "Внимание, есть повторный номер (${clear_phone}) у:");
+								$bot->sendMessage(780925203, "Внимание, есть повторный номер (${clear_phone}) у:");
 								$count_row_error = $row_from_whitelist;
 								for($i=0; $i<$count_row_error; $i++)
 								{
 									$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
-									$bot->sendMessage(425486413, $row_from_whitelist[0] . " - " . $row_from_whitelist[2]);
+									$bot->sendMessage(780925203, $row_from_whitelist[0] . " - " . $row_from_whitelist[2]);
 								}
 								$bot->sendMessage($id_user, "Похоже, что номер (${clear_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Вайбер/Телеграм):");
 								$bot->sendContact($id_user,'+380951473711','Саша');
@@ -261,7 +269,7 @@ $bot->on(function ($Update) use ($bot) {
 				{
 					//код получения информации из белого списка
 					//---Назначает для пользователя введенную страницу---//
-						if(preg_match('/^\d+$/', $msg_text))
+						if(preg_match('/^-?\d+$/', $msg_text))
 						{
 							$query = "update white_list set Turn_page=${msg_text} where Id_whitelist_user=" . $row[1] . ";";
 							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
@@ -350,7 +358,7 @@ $bot->on(function ($Update) use ($bot) {
 						//если функции бота разблокированы
 						if($lock == false)
 						{
-							$query="insert into get_offers_press values(" . $row_from_whitelist[0] . ", " . time() . ");";
+							if($row_from_whitelist[0] != 10) $query="insert into get_offers_press values(" . $row_from_whitelist[0] . ", " . time() . ");";
 							mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 							//---код выдачи данных---//						
 							if($row_from_whitelist[0] != 11)
@@ -369,16 +377,17 @@ $bot->on(function ($Update) use ($bot) {
 										$offer_show = 10;
 										$pages = 1;
 										if($count_offer_array > $offer_show) $pages = ceil($count_offer_array / $offer_show);
-										
+										if($pages == 0) $pages=1;
 										$turn_page = $row_from_whitelist[7];
 										if($turn_page > $pages) $turn_page=$pages;
 										else if($turn_page < 1) $turn_page=1;
 										
 										$start_index = ($offer_show * ($turn_page - 1));
-										$end_index = $start_index + $offer_show;
-										if($end_index > $count_offer_array) $end_index = $count_offer_array;
+										$end_index = min($start_index + $offer_show, $count_offer_array);
+										//if($end_index > $count_offer_array) $end_index = $count_offer_array;
 
-
+										$bot->sendMessage($id_user, "Начало страницы ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
+										
 										for($i_offer=$start_index; $i_offer < $end_index; $i_offer++)
 										{
 											$tmp_internal_id = $offer_array[$i_offer]->getInternalId();
@@ -410,7 +419,6 @@ $bot->on(function ($Update) use ($bot) {
 											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
 											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null);
-											
 											$im_url = $offer_array[$i_offer]->getImageUrl();
 											if(!is_null($im_url) && $im_url != "")
 											{
@@ -423,7 +431,6 @@ $bot->on(function ($Update) use ($bot) {
 													
 												}
 											}
-											
 											$bot->sendMessage($id_user, "Чтобы посмотреть контакты владельца объекта ". $offer_array[$i_offer]->getLinkInternalId() .", нажмите на кнопку 'Телефоны' ниже.", "HTML", true, null, $keyboard_inline, true);
 										}
 										
@@ -432,7 +439,7 @@ $bot->on(function ($Update) use ($bot) {
 										if($pages == 1) $end_text = "В" . $end_text;
 										else 
 										{
-											$end_text = "Страница ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
+											$end_text = "Конец страницы ${turn_page} из ${pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\r\n\r\nВ" . $end_text;
 										}
 										
 										$bot->sendMessage($id_user, $end_text, null, false, null, $keyboard);
@@ -441,12 +448,14 @@ $bot->on(function ($Update) use ($bot) {
 										{
 											$inline_array = array(array());
 											$start_page_step=$turn_page-2;
-											if($turn_page <= 3)$start_page_step = 1;
-											else if($turn_page >= $pages-2) $start_page_step = $pages-4;
+											if($pages >= 5)
+											{
+												if($turn_page <= 3)$start_page_step = 1;
+												else if($turn_page >= $pages-2) $start_page_step = $pages-4;
+											}
+											else $start_page_step=1;
 											
-											$end_page_step = 0;
-											if($pages < 5) $end_page_step = $pages;
-											else $end_page_step = 5;
+											$end_page_step = min($pages, 5);
 											
 											for($i_page_step=$start_page_step; $i_page_step < $start_page_step+$end_page_step; $i_page_step++)
 											{
@@ -458,7 +467,7 @@ $bot->on(function ($Update) use ($bot) {
 											if($pages > 5)
 											{
 												$inline_array[] = array();
-												if($turn_page > 3) $inline_array[1][] = array('text' => "1 ⏮", 'callback_data' => "1");
+												if($turn_page > 3) $inline_array[1][] = array('text' => "1 ⏪", 'callback_data' => "1");
 												if($turn_page < $pages-2) $inline_array[1][] = array('text' => "⏩ ${pages}", 'callback_data' => $pages);
 											}
 											$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
@@ -519,7 +528,7 @@ $bot->on(function ($Update) use ($bot) {
 	else 
 	{
 		$data = $callback->getData();
-		if(preg_match('/^\d+$/', $data)) return true;
+		if(preg_match('/^-?\d+$/', $data)) return true;
 		return false;
 	}
 });
@@ -529,17 +538,16 @@ $bot->on(function ($Update) use ($bot) {
 	$callback = $Update->getCallbackQuery();
 	$internal_id = $callback->getData();
 	$message = $callback->getMessage();
-	//$inline_tmp = $message->getReplyMarkup();
-	//$inline_array = $inline_tmp->getInlineKeyboard();
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
+		$error_id_user = $id_user;
 		$entity_id=0;
-		$text_message = "➖➖➖➖➖<b>Контакты объекта ${internal_id}</b>➖➖➖➖➖\r\n";
+		$text_message = "➖➖➖<b>Контакты объекта</b>➖➖➖\r\n";
 		include "connection_agent.php";
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		
-		$query = "SELECT flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id FROM offers JOIN flat_owners USING (User_entity_id) JOIN owner_phones USING (User_entity_id) WHERE offers.Internal_id='" . $internal_id . "';";
+		$query = "SELECT flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) WHERE offers.Internal_id='" . $internal_id . "' and flat_owners.IsExclusive=0;";
 		$result_user_entity_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
 		if($result_user_entity_id)
 		{
@@ -563,9 +571,11 @@ $bot->on(function ($Update) use ($bot) {
 						
 						if($row_user_entity_id[1] != null && $row_user_entity_id[1] != "") $text_message = $text_message . "📎 Агенство " . $row_user_entity_id[1] . "\r\n";
 					}
+					//$text_message = $text_message . $row_user_entity_id[2] . "\r\n";
 					$text_message = $text_message . preg_replace("/(0\d{2})(\d{3})(\d{2})(\d{2})/", "$1 $2 $3 $4", $row_user_entity_id[2]) . "\r\n";
 				}
 			}
+			else $text_message = $text_message . "Контакты скрыты.";
 			
 			$query = "select Id_whitelist_user, Is_accept_base_button from telegram_users join white_list using (Id_whitelist_user) where Id_telegram_user=" . $id_user . ";";
 			$result_whitelist_id = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
@@ -582,7 +592,7 @@ $bot->on(function ($Update) use ($bot) {
 					
 						$query = "SELECT types.Type_name, flat_types.Typename FROM offers JOIN types USING(Id_type) JOIN flat_types USING (Id_flat_type) WHERE offers.Internal_id='" . $internal_id . "';";
 						$result_base = mysqli_query($dblink, $query) or die("Ошибка " . mysqli_error($dblink));
-						$link_for_button = "";
+						$link_for_button = "https://an-gorod.com.ua/";
 						
 						if($result_base)
 						{
@@ -645,7 +655,6 @@ $bot->on(function ($Update) use ($bot) {
 					$keyboard_inline = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($inline_array);
 					
 					$bot->editMessageText($id_user,$message->getMessageId(),$text_message,"HTML", false, $keyboard_inline);
-					//$bot->sendMessage($id_user, $internal_id);
 				}
 			}
 		}
@@ -661,9 +670,8 @@ $bot->on(function ($Update) use ($bot) {
 			else 
 			{
 				$data = $callback->getData();
-				
-				if(preg_match('/^\d+\/\d+$/', $data)) return true;
-				return false;
+				if(preg_match('/^\d+$/', $data)) return false;
+				return true;
 			}
 		});
 		//---конец Обработка инлайн запросов---//
@@ -671,11 +679,11 @@ $bot->on(function ($Update) use ($bot) {
 $bot->run();
 }
 catch (\TelegramBot\Api\Exception $e) {
-	/*
-	$bot = new \TelegramBot\Api\Client($token_test);
-	$bot->sendMessage(425486413, "<b><u>ERROR</u></b>", "HTML");
-	$bot->sendMessage(425486413, $e->getMessage());
-	$bot->sendMessage(425486413, $e->getFile() . ", строка " . $e->getLine());
-	$bot->sendMessage(425486413, $e->getTraceAsString());*/
+	
+	$bot = new \TelegramBot\Api\Client($token);
+	$bot->sendMessage(780925203, "<b><u>ERROR</u></b>, user: " . $error_id_user, "HTML");
+	$bot->sendMessage(780925203, $e->getMessage());
+	$bot->sendMessage(780925203, $e->getFile() . ", строка " . $e->getLine());
+	$bot->sendMessage(780925203, $e->getTraceAsString());
 }
 ?>
