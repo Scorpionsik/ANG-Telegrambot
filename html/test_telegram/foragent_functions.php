@@ -7,10 +7,11 @@ class Offer{
 	private $image_url;
 	private $site_url;
 	private $link_internal_id;
+	private $country;
 	private $address;
 	private $house_num;
 	
-	public function __construct($message, $internal_id, $entity_id, $image_url, $site_url, $link, $address, $house_num)
+	public function __construct($message, $internal_id, $entity_id, $image_url, $site_url, $link, $country, $address, $house_num)
 	{
 		$this->message = $message;
 		$this->internal_id = $internal_id;
@@ -18,6 +19,7 @@ class Offer{
 		$this->image_url = $image_url;
 		$this->site_url = $site_url;
 		$this->link_internal_id = $link;
+		$this->country = $country;
 		$this->address = $address;
 		$this->house_num = $house_num;
 	}
@@ -50,6 +52,11 @@ class Offer{
 	public function getSiteUrl()
 	{
 		return $this->site_url;
+	}
+	
+	public function getCountry()
+	{
+		return $this->country;
 	}
 	
 	public function getAddress()
@@ -264,7 +271,8 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				
 				//---адрес---//
 				//город
-				$offer_message = $offer_message . "\r\n📍 " . $row_bind[3];
+				$country = $row_bind[3];
+				$offer_message = $offer_message . "\r\n📍 " . $country;
 				
 				//район
 				if($row_bind[4] != 1)
@@ -325,7 +333,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				$offer_message = $offer_message . "\n\n" . $row_bind[6];
 				
 				//сохраняем готовый объект
-				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23], $site_url, $link_internal_id, $address, $house_num);
+				$result_array[] = new Offer($offer_message, $row_bind[0], $row_bind[19], $row_bind[23], $site_url, $link_internal_id, $country, $address, $house_num);
 			}
 			
 		}
