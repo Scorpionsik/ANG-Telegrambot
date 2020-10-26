@@ -272,7 +272,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 					$offer_message = $offer_message . ", " . $row_bind[4];
 				}
 				
-				$offer_message = $offer_message . "\r\n🚏"
+				$offer_message = $offer_message . "\r\n🚏";
 				
 				//улица
 				$address = $row_bind[5];
