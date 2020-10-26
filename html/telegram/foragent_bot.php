@@ -415,7 +415,22 @@ $bot->on(function ($Update) use ($bot) {
 											}
 											//---конец проверка доступа к кнопке "Объект в базе"---//
 										
-											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null);
+											$google_map_keyboard = null;
+											
+											$country = $offer_array[$i_offer]->getCountry();
+											$address = $offer_array[$i_offer]->getAddress();
+											$house_num = $offer_array[$i_offer]->getHouseNum();
+											
+											if($country != null && $address != null && $house_num != null)
+											{
+												$country = preg_replace('/[ ]/','+',$country);
+												$address = preg_replace('/[ ]/','+',$address);
+												$house_num = preg_replace('/[ ]/','+',$house_num);
+												$google_map_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([[['text'=>'🗺 Посмотреть на карте', 'url'=>'https://www.google.com.ua/maps/place/' . $address . "," . $house_num . "," . $country]]]);
+											}
+											
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null, $google_map_keyboard);
+											
 											$im_url = $offer_array[$i_offer]->getImageUrl();
 											if(!is_null($im_url) && $im_url != "")
 											{
