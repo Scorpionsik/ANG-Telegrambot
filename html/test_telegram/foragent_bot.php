@@ -426,7 +426,7 @@ $bot->on(function ($Update) use ($bot) {
 												$country = preg_replace('/[ ]/','+',$country);
 												$address = preg_replace('/[ ]/','+',$address);
 												$house_num = preg_replace('/[ ]/','+',$house_num);
-												$google_map_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([[['text'=>'Посмотреть на карте', 'url'=>'https://www.google.com.ua/maps/place/' . $address . "," . $house_num . "," . $country]]]);
+												$google_map_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([[['text'=>'🗺 Посмотреть на карте', 'url'=>'https://www.google.com.ua/maps/place/' . $address . "," . $house_num . "," . $country]]]);
 											}
 											
 											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null, $google_map_keyboard);
