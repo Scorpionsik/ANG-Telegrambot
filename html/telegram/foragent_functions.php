@@ -299,7 +299,8 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				//ориентир
 				if($row_bind[18] != null and $row_bind[18] != "")
 				{
-					$offer_message = $offer_message . ", ориентир: " . $row_bind[18];
+					if($address != null || $house_num != null) $offer_message = $offer_message . ", ";
+					$offer_message = $offer_message . "ориентир: " . $row_bind[18];
 				}
 				//---конец адрес---//
 				
