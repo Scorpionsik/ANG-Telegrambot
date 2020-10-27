@@ -285,6 +285,7 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				//улица
 				$address = preg_replace("/\([^)]+\)/", "", $row_bind[5]);
 				$address = preg_replace("/[ ]{2,}/"," ", $address);
+				$address = preg_replace("/[ ]*$/","", $address);
 				if($address != null)
 				{
 					$offer_message = $offer_message . $address;
