@@ -98,7 +98,22 @@ if($result)
 						
 						//Выбивало ошибку, что не может отправить агенту. Возможно, удалил бота у себя. Проверить и фиксировать
 						try{
-							$bot->sendMessage($id_user, $offer->getMessage(), "HTML", true, null);
+							$google_map_keyboard = null;
+							
+							$country = $offer->getCountry();
+							$address = $offer->getAddress();
+							$house_num = $offer->getHouseNum();
+							
+							if($country != null && $address != null && $house_num != null)
+							{
+								$country = preg_replace('/[ ]/','+',$country);
+								$address = preg_replace('/[ ]/','+',$address);
+								$house_num = preg_replace('/[ ]/','+',$house_num);
+								$google_map_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([[['text'=>'🗺 Посмотреть на карте', 'url'=>'https://www.google.com.ua/maps/place/' . $address . "," . $house_num . "," . $country]]]);
+							}
+							
+							$bot->sendMessage($id_user, $offer->getMessage(), "HTML", true, null, $google_map_keyboard);
+							//$bot->sendMessage($id_user, $offer->getMessage(), "HTML", true, null);
 							$im_url = $offer->getImageUrl();
 							if(!is_null($im_url) && $im_url != "")
 							{
