@@ -429,7 +429,8 @@ $bot->on(function ($Update) use ($bot) {
 												$google_map_keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([[['text'=>'🗺 Посмотреть на карте', 'url'=>'https://www.google.com.ua/maps/place/' . $address . "," . $house_num . "," . $country]]]);
 											}
 											
-											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null, $google_map_keyboard);
+											//$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), "HTML", true, null, $google_map_keyboard);
+											$bot->sendMessage($id_user, $offer_array[$i_offer]->getMessage(), null, true, null, $google_map_keyboard);
 											
 											$im_url = $offer_array[$i_offer]->getImageUrl();
 											if(!is_null($im_url) && $im_url != "")

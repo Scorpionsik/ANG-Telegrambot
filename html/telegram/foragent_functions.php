@@ -238,7 +238,8 @@ function makeOfferMessages($dblink, $whitelist_id_user, $clause = null, $limit =
 				$row_bind = mysqli_fetch_row($result_bind);
 				//код базы			
 				$site_url = getSiteUrl($row_bind[1], $row_bind[2]);
-				$link_internal_id = "<a href=\"" . $site_url . $row_bind[0] . "\">" . $row_bind[0] ."</a>";
+				//$link_internal_id = "<a href=\"" . $site_url . $row_bind[0] . "\">" . $row_bind[0] ."</a>";
+				$link_internal_id = $row_bind[0];
 				$offer_message = "🔍 " . $link_internal_id;
 				
 				//новая/обновленная
