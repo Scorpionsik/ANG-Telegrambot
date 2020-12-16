@@ -4,7 +4,6 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 include "givemyprecious.php";
 require_once $root_dir . "/vendor/autoload.php";
 
-$error_id_user = -1;
 try
 {
 $bot = new \TelegramBot\Api\Client($token);
@@ -12,7 +11,6 @@ $bot = new \TelegramBot\Api\Client($token);
 //command /help
 $bot->command('help', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
-		$error_id_user = $id_user;
         $bot->sendMessage($id_user, 'Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.');
 		$bot->sendMessage($id_user, 'Хорошего дня и отличного настроения, будьте здоровы!');
 		$bot->sendContact($id_user,'+380951473711','Саша');
@@ -21,7 +19,6 @@ $bot->command('help', function ($message) use ($bot) {
 	//command /send_news
 $bot->command('send_news', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
-		$error_id_user = $id_user;
 		if($id_user == 780925203)
 		{
 			include "foragent_functions.php";
@@ -112,7 +109,6 @@ $bot->on(function ($Update) use ($bot) {
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
-		$error_id_user = $id_user;
 		$dblink = new mysqli($host, $dblogin, $dbpassw, $database); 
 		if(is_null($callback_data) || $callback_data == "")$msg_text = htmlentities(mysqli_real_escape_string($dblink,$message->getText()));
 		else $msg_text = $callback_data;
@@ -554,7 +550,6 @@ $bot->on(function ($Update) use ($bot) {
 	if($message)
 	{
 		$id_user = $message->getChat()->getId();
-		$error_id_user = $id_user;
 		$entity_id=0;
 		$text_message = "➖➖➖<b>Контакты объекта</b>➖➖➖\r\n";
 		include "connection_agent.php";
@@ -694,7 +689,7 @@ $bot->run();
 catch (\TelegramBot\Api\Exception $e) {
 	
 	$bot = new \TelegramBot\Api\Client($token);
-	$bot->sendMessage(780925203, "<b><u>ERROR</u></b>, user: " . $error_id_user, "HTML");
+	$bot->sendMessage(780925203, "<b><u>ERROR</u></b>", "HTML");
 	$bot->sendMessage(780925203, $e->getMessage());
 	$bot->sendMessage(780925203, $e->getFile() . ", строка " . $e->getLine());
 	$bot->sendMessage(780925203, $e->getTraceAsString());
