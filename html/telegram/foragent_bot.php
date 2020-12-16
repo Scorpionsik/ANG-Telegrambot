@@ -3,7 +3,7 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 
 include "givemyprecious.php";
 require_once $root_dir . "/vendor/autoload.php";
-
+define("admin", 780925203);
 try
 {
 $bot = new \TelegramBot\Api\Client($token);
@@ -19,7 +19,7 @@ $bot->command('help', function ($message) use ($bot) {
 	//command /send_news
 $bot->command('send_news', function ($message) use ($bot) {
 		$id_user = $message->getChat()->getId();
-		if($id_user == 780925203)
+		if($id_user == admin)
 		{
 			include "foragent_functions.php";
 			$message_text = $message->getText();
@@ -195,12 +195,12 @@ $bot->on(function ($Update) use ($bot) {
 							}
 							else if($row_from_whitelist>1)
 							{
-								$bot->sendMessage(780925203, "Внимание, есть повторный номер (${clear_phone}) у:");
+								$bot->sendMessage(admin, "Внимание, есть повторный номер (${clear_phone}) у:");
 								$count_row_error = $row_from_whitelist;
 								for($i=0; $i<$count_row_error; $i++)
 								{
 									$row_from_whitelist = mysqli_fetch_row($result_from_whitelist);
-									$bot->sendMessage(780925203, $row_from_whitelist[0] . " - " . $row_from_whitelist[2]);
+									$bot->sendMessage(admin, $row_from_whitelist[0] . " - " . $row_from_whitelist[2]);
 								}
 								$bot->sendMessage($id_user, "Похоже, что номер (${clear_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Вайбер/Телеграм):");
 								$bot->sendContact($id_user,'+380951473711','Саша');
@@ -689,9 +689,9 @@ $bot->run();
 catch (\TelegramBot\Api\Exception $e) {
 	
 	$bot = new \TelegramBot\Api\Client($token);
-	$bot->sendMessage(780925203, "<b><u>ERROR</u></b>", "HTML");
-	$bot->sendMessage(780925203, $e->getMessage());
-	$bot->sendMessage(780925203, $e->getFile() . ", строка " . $e->getLine());
-	$bot->sendMessage(780925203, $e->getTraceAsString());
+	$bot->sendMessage(admin, "<b><u>ERROR</u></b>", "HTML");
+	$bot->sendMessage(admin, $e->getMessage());
+	$bot->sendMessage(admin, $e->getFile() . ", строка " . $e->getLine());
+	$bot->sendMessage(admin, $e->getTraceAsString());
 }
 ?>
