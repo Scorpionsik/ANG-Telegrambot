@@ -1,5 +1,5 @@
 <?php
-include "BotModule.php";
+require_once "BotModule.php";
 
 class RegisterBotModule extends BotModule{
 	public function __construct($main_bot){
