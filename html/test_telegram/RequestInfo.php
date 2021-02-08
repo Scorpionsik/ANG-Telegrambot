@@ -8,11 +8,11 @@ class RequestInfo{
 
 	public function __construct($update){
 
-		if(is_a($update, 'Message', true)){
+		if(is_a($update, '\TelegramBot\Api\Types\Message', true)){
 			$this->id_telegram = $update->getChat()->getId();
 			$this->message_text = $update;
 		}
-		else if(is_a($update, 'Update', true)){
+		else if(is_a($update, '\TelegramBot\Api\Types\Update', true)){
 			$this->message_text = $update->getMessage();
 			if(is_null($this->message_text)){
 				$callback = $update->getCallbackQuery();
