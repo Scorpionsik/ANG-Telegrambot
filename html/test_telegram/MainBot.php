@@ -10,9 +10,9 @@ class MainBot{
 	//private $db;
 
 	public function __construct($bot_token){
-		$bot = new \TelegramBot\Api\Client($bot_token);
+		$this->bot = new \TelegramBot\Api\Client($bot_token);
 
-		$bot->command('help', function ($message) use ($bot) {
+		$this->bot->command('help', function ($message) use ($bot) {
 			$id_user = $message->getChat()->getId();
 			$error_id_user = $id_user;
 			$this->sendMessage($id_user, 'help');
@@ -20,11 +20,11 @@ class MainBot{
 	}
 
 	public function sendMessage($id_telegram, $message_text){
-		$bot->sendMessage($id_telegram, $message_text, 'HTML');
+		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
 	}
 
 	public function run(){
-		$bot->run();
+		$this->bot->run();
 	}
 }
 
