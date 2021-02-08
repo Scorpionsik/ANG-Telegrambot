@@ -12,7 +12,7 @@ class MainBot{
 	public function __construct($bot_token){
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
 
-		$this->bot->command('help', function ($message) use ($bot) {
+		$this->bot->command('help', function ($message) use ($this->bot) {
 			$id_user = $message->getChat()->getId();
 			$error_id_user = $id_user;
 			$this->sendMessage($id_user, 'help');
