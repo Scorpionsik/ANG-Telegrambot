@@ -2,8 +2,8 @@
 $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
-include __DIR__ . "/Modules/MainBotModule.php"
-include __DIR__ . "/Modules/RegisterBotModule.php"
+include __DIR__ . "/Modules/MainBotModule.php";
+include __DIR__ . "/Modules/RegisterBotModule.php";
 
 
 class MainBot{
