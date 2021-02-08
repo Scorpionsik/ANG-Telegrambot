@@ -18,7 +18,7 @@ class MainBot{
 		$this->bot->command('start', function ($message) {
 			$request_info = $this->getFullInfo(new \ANGBot\RequestInfo($message));
 			$this->sendMessage($request_info->getIdTelegram(), $request_info->getIdTelegram() . ": " . $request_info->getIdWhitelist() . ", " . $request_info->getModeValue());
-		}
+		});
 
 		$this->bot->command('help', function ($message) {
 			$this->commandHelp($message->getChat()->getId());
