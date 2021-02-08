@@ -26,7 +26,7 @@ class MainBot{
 			$this->commandHelp($message->getChat()->getId());
 		});
 
-		$bot->on(function ($Update) use ($bot) {
+		$this->bot->on(function ($Update) use ($bot) {
 			$this->distribute($this->getFullInfo(new RequestInfo($Update)));
 		}, function ($Update){
 			return true;
