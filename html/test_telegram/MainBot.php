@@ -16,11 +16,11 @@ class MainBot{
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
-		/*
+		
 		$this->bot->command('start', function ($message) {
 			$request_info = $this->getFullInfo(new RequestInfo($message));
 			$this->sendMessage($request_info->getIdTelegram(), $request_info->getIdTelegram() . ": " . $request_info->getIdWhitelist() . ", " . $request_info->getModeValue());
-		});*/
+		});
 
 		$this->bot->command('help', function ($message) {
 			$this->commandHelp($message->getChat()->getId());
@@ -66,7 +66,8 @@ class MainBot{
 		$return = $request_info;
 		$query = "SELECT * FROM telegram_users  where Id_telegram_user=". $request_info->getIdTelegram() .";";
 		$result = $this->getRequestResult($query);
-		if($result){
+		if($result)
+		{
 			$row_check = mysqli_num_rows($result);
 			if($row_check == 0){
 				$query = "INSERT INTO telegram_users (Id_telegram_user) values (". $request_info->getIdTelegram() .");";
