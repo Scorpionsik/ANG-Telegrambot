@@ -28,7 +28,7 @@ class MainBot{
 
 		$bot->on(function ($Update) use ($bot) {
 			$this->distribute($this->getFullInfo(new RequestInfo($Update)));
-		}, function ($Update)
+		}, function ($Update){
 			return true;
 		});
 
