@@ -44,7 +44,7 @@ class RequestInfo{
 	}
 
 	public function getIdWhitelist(){
-		return $this->$id_whitelist;
+		return $this->id_whitelist;
 	}
 
 	public function getModeValue(){
