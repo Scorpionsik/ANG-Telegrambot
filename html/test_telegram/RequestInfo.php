@@ -7,20 +7,22 @@ class RequestInfo{
 	private $callback_data;
 
 	public function __construct($update){
-		$this->message_text = $update->getMessage();
-		if(is_null($this->message_text)){
-			$callback = $update->getCallbackQuery();
-			if(!is_null($callback)){
-				$this->callback_data = $callback->getData();
-				$this->message = $callback->getMessage();
-			}
-		}
-		$this->id_telegram = $message->getChat()->getId();
-	}
 
-	public function __construct($id_telegram, $message_text){
-		$this->id_telegram = $id_telegram;
-		$this->message_text = $message_text;
+		if(is_a($update, 'Message', true)){
+			$this->id_telegram = $update->getChat()->getId();
+			$this->message_text = $update;
+		}
+		else if(is_a($update, 'Update', true)){
+			$this->message_text = $update->getMessage();
+			if(is_null($this->message_text)){
+				$callback = $update->getCallbackQuery();
+				if(!is_null($callback)){
+					$this->callback_data = $callback->getData();
+					$this->message_text = $callback->getMessage();
+				}
+			}
+			$this->id_telegram = $this->message_text->getChat()->getId();
+		}
 	}
 
 	public function getIdTelegram(){
