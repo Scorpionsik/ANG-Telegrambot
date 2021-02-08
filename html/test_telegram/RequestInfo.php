@@ -1,6 +1,4 @@
 <?php
-namespace ANGBot;
-
 class RequestInfo{
 	private $id_telegram;
 	private $id_whitelist;
@@ -24,7 +22,7 @@ class RequestInfo{
 			}
 			$this->id_telegram = $this->$message_data->getChat()->getId();
 		}
-		else if(is_a($update, '\ANGBot\RequestInfo')){
+		else if(is_a($update, 'RequestInfo')){
 			$this->id_telegram = $update->getIdTelegram();
 			$this->message_data = $update->getMessageData();
 			$this->callback_data = $update->getCallbackData();

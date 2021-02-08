@@ -1,7 +1,4 @@
 <?php 
-
-namespace ANGBot;
-
 $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
@@ -14,9 +11,10 @@ class MainBot{
 	//инициализация бота
 	public function __construct($bot_token){
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
+		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot->command('start', function ($message) {
-			$request_info = $this->getFullInfo(new \ANGBot\RequestInfo($message));
+			$request_info = $this->getFullInfo(new RequestInfo($message));
 			$this->sendMessage($request_info->getIdTelegram(), $request_info->getIdTelegram() . ": " . $request_info->getIdWhitelist() . ", " . $request_info->getModeValue());
 		});
 
@@ -26,7 +24,7 @@ class MainBot{
 
 		$this->bot->run();
 
-		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
+		
 	}
 
 	function __destruct(){
@@ -52,7 +50,7 @@ class MainBot{
 			else{
 				$row = mysqli_fetch_row($result);
 				if($row){
-					$return = new \ANGBot\RequestInfo($request_info, $row[1], $row[4]);
+					$return = new RequestInfo($request_info, $row[1], $row[4]);
 				}
 				
 			}
