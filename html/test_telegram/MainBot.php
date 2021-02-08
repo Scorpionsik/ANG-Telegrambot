@@ -2,6 +2,8 @@
 $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
+include __DIR__ . "/Modules/MainBotModule.php"
+include __DIR__ . "/Modules/RegisterBotModule.php"
 
 
 class MainBot{
@@ -11,42 +13,64 @@ class MainBot{
 	//инициализация бота
 	public function __construct($bot_token){
 		include "connection_agent.php";
-		$this->bot = new \TelegramBot\Api\Client($bot_token);
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
+		$this->bot = new \TelegramBot\Api\Client($bot_token);
+		/*
 		$this->bot->command('start', function ($message) {
 			$request_info = $this->getFullInfo(new RequestInfo($message));
 			$this->sendMessage($request_info->getIdTelegram(), $request_info->getIdTelegram() . ": " . $request_info->getIdWhitelist() . ", " . $request_info->getModeValue());
-		});
+		});*/
 
 		$this->bot->command('help', function ($message) {
 			$this->commandHelp($message->getChat()->getId());
 		});
 
-		$this->bot->run();
+		$bot->on(function ($Update) use ($bot) {
+			$this->distribute($this->getFullInfo(new RequestInfo($Update)));
+		}, function ($Update)
+			return true;
+		});
 
-		
+		$this->bot->run();
 	}
 
+	//очистка данных
 	function __destruct(){
 		$this->dispose();
 	}
 
-	//отправка сообщений
+	private function distribute($request_info){
+		$module = null;
+		if(is_null($request_info->getIdWhitelist())){
+			$module = new RegisterBotModule($this);
+		}
+		else{
+			$module = new MainBotModule($this);
+		}
+		$module->Start($request_info);
+	}
+
+	//отправка сообщений в телеграм-чат
 	public function sendMessage($id_telegram, $message_text){
 		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
+	}
+
+	//получить результат запроса из базы данных
+	public function getRequestResult($query){
+		return mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
 	}
 
 	//Получает RequestInfo с информацией о id_whitelist пользователя; если пользователя не было в базе данных, добавляет его
 	private function getFullInfo($request_info){
 		$return = $request_info;
 		$query = "SELECT * FROM telegram_users  where Id_telegram_user=". $request_info->getIdTelegram() .";";
-		$result = mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
+		$result = $this->getRequestResult($query);
 		if($result){
 			$row_check = mysqli_num_rows($result);
 			if($row_check == 0){
 				$query = "INSERT INTO telegram_users (Id_telegram_user) values (". $request_info->getIdTelegram() .");";
-				mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
+				$this->getRequestResult($query);
 			}
 			else{
 				$row = mysqli_fetch_row($result);
@@ -65,6 +89,7 @@ class MainBot{
 		$this->sendMessage($id_telegram, 'help <b>me</b>');
 	}
 
+	//закрывает подключение к базе данных
 	private function dispose(){
 		mysqli_close($this->db);
 	}
