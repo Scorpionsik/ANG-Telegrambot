@@ -1,3 +1,4 @@
+.vs/
 composer.json
 composer.lock
 find_root_dir.php
