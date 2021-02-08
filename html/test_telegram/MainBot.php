@@ -15,7 +15,7 @@ class MainBot{
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
 
 		$this->bot->command('help', function ($message) {
-			$this->commandHelp(new \ANGBot\RequestInfo($message->getChat()->getId(), $message));
+			$this->commandHelp(new \ANGBot\RequestInfo($message));
 		});
 
 		$this->bot->run();
