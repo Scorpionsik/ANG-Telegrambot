@@ -2,7 +2,7 @@
 $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
-include "connection_agent.php";
+
 
 class MainBot{
 	private $bot;
@@ -10,6 +10,7 @@ class MainBot{
 
 	//инициализация бота
 	public function __construct($bot_token){
+		include "connection_agent.php";
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
