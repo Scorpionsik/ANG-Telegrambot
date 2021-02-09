@@ -69,7 +69,7 @@ class MainBot{
 
 	//отправка сообщений в телеграм-чат
 	public function sendMessage($id_telegram, $message_text){
-		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
+		$this->bot->sendMessage($id_telegram, mb_convert_encoding($message_text, "UTF-8", "auto"), 'HTML');
 	}
 
 	public function getMessageText($message_data){
