@@ -85,6 +85,7 @@ class RegisterBotModule extends BotModule{
 	private function sendErrorMessage($id_telegram, $error_text = null){
 		if(is_null($error_text)) $error_text = $this->default_error_text;
 		$this->main_bot->sendMessage($id_telegram, $error_text);
+		$this->main_bot->sendMessage($id_telegram, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
 	}
 	
 	private function sendAccessMessage($id_telegram, $username){
