@@ -48,7 +48,7 @@ class MainBot{
 			$module = new RegisterBotModule($this);
 		}
 		else{
-			switch($request_info->getModuleValue()){
+			switch($request_info->getModeValue()){
 				//изменение максимальной цены для агентов
 				case 1:
 					
