@@ -65,7 +65,7 @@ class MainBot{
 	private function getFullInfo($request_info){
 		$return = $request_info;
 		$query = "SELECT * FROM telegram_users  where Id_telegram_user=". $request_info->getIdTelegram() .";";
-		$result = mysqli_query($this->db, $query) or die("Îøèáêà " . mysqli_error($this->db));
+		$result = $this->getRequestResult($query); //mysqli_query($this->db, $query) or die("Îøèáêà " . mysqli_error($this->db));
 		if($result)
 		{
 			$row_check = mysqli_num_rows($result);
@@ -77,7 +77,7 @@ class MainBot{
 				$row = mysqli_fetch_row($result);
 				if($row){
 					//$this->sendMessage($request_info->getIdTelegram(), $row);
-					$return = new RequestInfo($request_info, $row[1], $row[4]);
+					$return = $this->getRequestResult($query);//new RequestInfo($request_info, $row[1], $row[4]);
 				}
 				
 			}
