@@ -76,6 +76,7 @@ class MainBot{
 			else{
 				$row = mysqli_fetch_row($result);
 				if($row){
+					$this->sendMessage($request_info->getIdTelegram(), $row);
 					$return = new RequestInfo($request_info, $row[1], $row[4]);
 				}
 				
