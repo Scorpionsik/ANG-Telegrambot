@@ -10,7 +10,7 @@ include __DIR__ . "/Modules/TestBotModule.php";
 class MainBot{
 	private $bot;
 	private $db;
-	private const $id_admin = 780925203;
+	private static $id_admin = 780925203;
 
 	//инициализация бота
 	public function __construct($bot_token){
