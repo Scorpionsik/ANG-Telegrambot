@@ -2,15 +2,15 @@
 require_once "BotModule.php";
 
 class RegisterBotModule extends BotModule{
-	//
+	//сообщение ошибки по умолчанию
 	private $default_error_text = "Введён некорректный номер!";
-	//ищет признаки номера телефона в сообщении
+	//ищет вхождение номера телефона в сообщении
 	private $regex_check_phones = "/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/i";
-	//
+	//ищет вхождение команды /start в сообщении
 	private $regex_check_command_in_text = "/^\s*\/start/i";
-	//
+	//ищет не числа
 	private $regex_clear_all_not_digit = "/\D/i";
-	//
+	//ищет код 38 или 8 в начале номера телефона
 	private $regex_clear_global_id_in_phone = "/^[38]{0,2}/i";
 
 	public function __construct($main_bot){
@@ -82,12 +82,14 @@ class RegisterBotModule extends BotModule{
 		}
 	}
 
+	//сообщение об ошибке
 	private function sendErrorMessage($id_telegram, $error_text = null){
 		if(is_null($error_text)) $error_text = $this->default_error_text;
 		$this->main_bot->sendMessage($id_telegram, $error_text);
 		$this->main_bot->sendMessage($id_telegram, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
 	}
 	
+	//сообщение о успешном завершении регистрации
 	private function sendAccessMessage($id_telegram, $username){
 		$this->main_bot->sendMessage($id_telegram, "Здравствуйте, ${username}!");
 		$this->main_bot->sendMessage($id_telegram, "Ваша личность подтверждена! Вы подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
