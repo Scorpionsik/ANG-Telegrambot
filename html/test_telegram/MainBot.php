@@ -2,6 +2,7 @@
 $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
+include "WhitelistInfo.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/TestBotModule.php";
@@ -20,7 +21,7 @@ class MainBot{
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
 		/*
 		$this->bot->command('test', function ($message) {
-			$request_info = $this->getFullInfo(new RequestInfo($message));
+			$request_info = $this->getFullRequestInfo(new RequestInfo($message));
 			$this->sendMessage($request_info->getIdTelegram(), $request_info->getIdTelegram() . ": " . $request_info->getIdWhitelist() . ", " . $request_info->getModeValue());
 		});*/
 
@@ -29,7 +30,7 @@ class MainBot{
 		});
 
 		$this->bot->on(function ($Update) {
-			$this->distribute($this->getFullInfo(new RequestInfo($Update)));
+			$this->distribute($this->getFullRequestInfo(new RequestInfo($Update)));
 		}, function ($Update){
 			return true;
 		});
@@ -42,12 +43,16 @@ class MainBot{
 		$this->dispose();
 	}
 
-	private function distribute($request_info){
+	private function distribute($request_info, $whitelist_info = null){
 		$module = null;
 		if(is_null($request_info->getIdWhitelist())){
 			$module = new RegisterBotModule($this);
 		}
 		else{
+			if(is_null($whitelist_info)){
+				$whitelist_info = $this->getFullWhitelistInfo($request_info);
+			}
+
 			switch($request_info->getModeValue()){
 				//изменение максимальной цены дл€ агентов
 				case 1:
@@ -59,12 +64,16 @@ class MainBot{
 				break;
 			}
 		}
-		if(!is_null($module)) $module->Start($request_info, null);
+		if(!is_null($module)) $module->Start($request_info, $whitelist_info);
 	}
 
 	//отправка сообщений в телеграм-чат
 	public function sendMessage($id_telegram, $message_text){
 		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
+	}
+
+	public function getMessageText($message_data){
+		return htmlentities(mysqli_real_escape_string($this->db, $message_data->getText()));
 	}
 
 	//отправка сообщени€ админу
@@ -86,16 +95,33 @@ class MainBot{
 		return $result;
 	}
 
+	private function getFullWhitelistInfo($request_info){
+		$id_whitelist = $request_info->getIdWhitelist();
+		$return = null;
+		if(!is_null($id_whitelist)){
+			$query = "SELECT * FROM white_list WHERE id_whitelist_user=${id_whitelist};";
+			$result = $this->getRequestResult($query);
+			if($result){
+				$row_check = mysqli_num_rows($result);
+				if($row_check > 0){
+					$row = mysqli_fetch_row($result);
+					$return = new WhitelistInfo($id_whitelist, $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8]);
+				}
+			}
+		}
+		return $return;
+	}
+
 	//ѕолучает RequestInfo с информацией о id_whitelist пользовател€; если пользовател€ не было в базе данных, добавл€ет его
-	private function getFullInfo($request_info){
+	private function getFullRequestInfo($request_info){
 		$return = $request_info;
-		$query = "SELECT * FROM telegram_users  where Id_telegram_user=". $request_info->getIdTelegram() .";";
+		$query = "SELECT * FROM telegram_users WHERE Id_telegram_user=". $request_info->getIdTelegram() .";";
 		$result = $this->getRequestResult($query);
 		if($result)
 		{
 			$row_check = mysqli_num_rows($result);
 			if($row_check == 0){
-				$query = "INSERT INTO telegram_users (Id_telegram_user) values (". $request_info->getIdTelegram() .");";
+				$query = "INSERT INTO telegram_users (Id_telegram_user) VALUES (". $request_info->getIdTelegram() .");";
 				$this->getRequestResult($query);
 			}
 			else{
