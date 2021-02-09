@@ -6,8 +6,8 @@ class RegisterBotModule extends BotModule{
 		parent::__construct($main_bot);
 	}
 
-	public function Start($request_info){
-		$this->main_bot->sendMessage($request_info->getIdTelegram(), 'RegisterModule');
+	protected function StartMethod($request_info, $whitelist_info){
+		$this->main_bot->sendMessage($request_info->getIdTelegram(), 'Register');
 	}
 }
 

@@ -6,7 +6,7 @@ class TestBotModule extends BotModule{
 		parent::__construct($main_bot);
 	}
 
-	public function Start($request_info){
+	protected function StartMethod($request_info, $whitelist_info){
 		$this->main_bot->callAdmin('Check');
 	}
 }
