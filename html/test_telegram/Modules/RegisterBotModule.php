@@ -21,10 +21,10 @@ class RegisterBotModule extends BotModule{
 		//получаем ввод
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 		//если ввод валидный и мы получили телефон
-		if(preg_match($regex_check_phones, $message_text)){
+		if(preg_match($this->regex_check_phones, $message_text)){
 			//чистим введенный телефон
-			$input_phone = preg_replace($regex_clear_all_not_digit, "", $message_text);
-			$input_phone = preg_replace($regex_clear_global_id_in_phone, "", $input_phone);
+			$input_phone = preg_replace($this->regex_clear_all_not_digit, "", $message_text);
+			$input_phone = preg_replace($this->regex_clear_global_id_in_phone, "", $input_phone);
 			
 			//ищем телефон в white_list
 			$query = "SELECT * FROM white_list where Phonenumber like ('%${input_phone}%');";
@@ -77,7 +77,7 @@ class RegisterBotModule extends BotModule{
 		//если ввод невалидный, вывод ошибки
 		else {
 			$error_text = $this->default_error_text;
-			if(preg_match($regex_check_command_in_text, $message_text)) $error_text = "Здравствуйте!";
+			if(preg_match($this->regex_check_command_in_text, $message_text)) $error_text = "Здравствуйте!";
 			$this->sendErrorMessage($request_info->getIdTelegram(), $error_text);
 		}
 	}
