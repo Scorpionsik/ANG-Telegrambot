@@ -10,7 +10,7 @@ include __DIR__ . "/Modules/TestBotModule.php";
 class MainBot{
 	private $bot;
 	private $db;
-	private $id_admin = 780925203;
+	private $id_admin = 780925203; //id телеграма админа
 
 	//инициализация бота
 	public function __construct($bot_token){
@@ -59,7 +59,7 @@ class MainBot{
 				break;
 			}
 		}
-		if(!is_null($module)) $module->Start($request_info);
+		if(!is_null($module)) $module->Start($request_info, null);
 	}
 
 	//отправка сообщений в телеграм-чат
@@ -67,8 +67,17 @@ class MainBot{
 		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
 	}
 
+	//отправка сообщения админу
 	public function callAdmin($message_text){
 		$this->bot->sendMessage($this->id_admin, $message_text, 'HTML');
+	}
+
+	//отправка ошибки админу
+	public function sendException($exception, $request_info, $whitelist_info){
+		$this->callAdmin("<b><u>Ошибка</u></b>, Id_whitelist: " . $request_info->getIdWhitelist());
+		$this->callAdmin($exception->getMessage());
+		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine());
+		$this->callAdmin($exception->getTraceAsString());
 	}
 
 	//получить результат запроса из базы данных
