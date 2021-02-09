@@ -58,7 +58,8 @@ class MainBot{
 
 	//получить результат запроса из базы данных
 	public function getRequestResult($query){
-		return mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
+		$result = mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
+		return $result;
 	}
 
 	//Получает RequestInfo с информацией о id_whitelist пользователя; если пользователя не было в базе данных, добавляет его
