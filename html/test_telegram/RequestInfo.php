@@ -9,18 +9,18 @@ class RequestInfo{
 	public function __construct($update, $id_whitelist = null, $mode_value = 0){
 		if(is_a($update, '\TelegramBot\Api\Types\Message')){
 			$this->id_telegram = $update->getChat()->getId();
-			$this->$message_data = $update;
+			$this->message_data = $update;
 		}
 		else if(is_a($update, '\TelegramBot\Api\Types\Update')){
-			$this->$message_data = $update->getMessage();
-			if(is_null($this->$message_data)){
+			$this->message_data = $update->getMessage();
+			if(is_null($this->message_data)){
 				$callback = $update->getCallbackQuery();
 				if(!is_null($callback)){
 					$this->callback_data = $callback->getData();
-					$this->$message_data = $callback->getMessage();
+					$this->message_data = $callback->getMessage();
 				}
 			}
-			$this->id_telegram = $this->$message_data->getChat()->getId();
+			$this->id_telegram = $this->message_data->getChat()->getId();
 		}
 		else if(is_a($update, 'RequestInfo')){
 			$this->id_telegram = $update->getIdTelegram();
@@ -36,7 +36,7 @@ class RequestInfo{
 	}
 
 	public function getMessageData(){
-		return $this->$message_data;
+		return $this->message_data;
 	}
 
 	public function getCallbackData(){
