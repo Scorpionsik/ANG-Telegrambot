@@ -7,7 +7,7 @@ class MainBotModule extends BotModule{
 	}
 
 	protected function StartMethod($request_info, $whitelist_info){
-		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Ïðèâåò, " . $whitelist_info->getUsername() . "!");
+		$this->main_bot->sendMessage($request_info->getIdTelegram(), "ÐŸÑ€Ð¸Ð²ÐµÑ‚, " . $whitelist_info->getUsername() . "!");
 	}
 }
 

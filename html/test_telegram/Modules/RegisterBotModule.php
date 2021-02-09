@@ -3,7 +3,7 @@ require_once "BotModule.php";
 
 class RegisterBotModule extends BotModule{
 
-	//èùåò ïðèçíàêè íîìåðà òåëåôîíà â ñîîáùåíèè
+	//Ð¸Ñ‰ÐµÑ‚ Ð¿Ñ€Ð¸Ð·Ð½Ð°ÐºÐ¸ Ð½Ð¾Ð¼ÐµÑ€Ð° Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ð° Ð² ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ð¸
 	private $regex_check_phones = "/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/i";
 
 	public function __construct($main_bot){
@@ -19,7 +19,7 @@ class RegisterBotModule extends BotModule{
 	}
 
 	private function sendErrorMessage($id_telegram, $message_text){
-		if($message_text != '/start') $this->main_bot->sendMessage($id_telegram, 'Ââåäåí íåêîððåêòíûé íîìåð!');
+		if($message_text != '/start') $this->main_bot->sendMessage($id_telegram, 'Â¬Ð²ÐµÐ´ÐµÐ½ Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ñ‹Ð¹ Ð½Ð¾Ð¼ÐµÑ€!');
 
 	}
 }

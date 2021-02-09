@@ -11,9 +11,9 @@ include __DIR__ . "/Modules/TestBotModule.php";
 class MainBot{
 	private $bot;
 	private $db;
-	private $id_admin = 780925203; //id телеграма админа
+	private $id_admin = 780925203; //id С‚РµР»РµРіСЂР°РјР° Р°РґРјРёРЅР°
 
-	//инициализация бота
+	//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р±РѕС‚Р°
 	public function __construct($bot_token){
 		include "connection_agent.php";
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
@@ -38,7 +38,7 @@ class MainBot{
 		$this->bot->run();
 	}
 
-	//очистка данных
+	//РѕС‡РёСЃС‚РєР° РґР°РЅРЅС‹С…
 	function __destruct(){
 		$this->dispose();
 	}
@@ -54,11 +54,11 @@ class MainBot{
 			}
 
 			switch($request_info->getModeValue()){
-				//изменение максимальной цены для агентов
+				//РёР·РјРµРЅРµРЅРёРµ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ С†РµРЅС‹ РґР»СЏ Р°РіРµРЅС‚РѕРІ
 				case 1:
 					$module = new TestBotModule($this);
 				break;
-				//стандартный режим работы бота
+				//СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ СЂРµР¶РёРј СЂР°Р±РѕС‚С‹ Р±РѕС‚Р°
 				default:
 					$module = new MainBotModule($this);
 				break;
@@ -67,31 +67,32 @@ class MainBot{
 		if(!is_null($module)) $module->Start($request_info, $whitelist_info);
 	}
 
-	//отправка сообщений в телеграм-чат
+	//РѕС‚РїСЂР°РІРєР° СЃРѕРѕР±С‰РµРЅРёР№ РІ С‚РµР»РµРіСЂР°Рј-С‡Р°С‚
 	public function sendMessage($id_telegram, $message_text){
-		$this->bot->sendMessage($id_telegram, mb_convert_encoding($message_text, "UTF-8", "auto"), 'HTML');
+		//$this->bot->sendMessage($id_telegram, mb_convert_encoding($message_text, "UTF-8", "auto"), 'HTML');
+		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
 	}
 
 	public function getMessageText($message_data){
 		return htmlentities(mysqli_real_escape_string($this->db, $message_data->getText()));
 	}
 
-	//отправка сообщения админу
+	//РѕС‚РїСЂР°РІРєР° СЃРѕРѕР±С‰РµРЅРёСЏ Р°РґРјРёРЅСѓ
 	public function callAdmin($message_text){
 		$this->bot->sendMessage($this->id_admin, $message_text, 'HTML');
 	}
 
-	//отправка ошибки админу
+	//РѕС‚РїСЂР°РІРєР° РѕС€РёР±РєРё Р°РґРјРёРЅСѓ
 	public function sendException($exception, $request_info, $whitelist_info){
-		$this->callAdmin("<b><u>Ошибка</u></b>, Id_whitelist: " . $request_info->getIdWhitelist());
+		$this->callAdmin("<b><u>РћС€РёР±РєР°</u></b>, Id_whitelist: " . $request_info->getIdWhitelist());
 		$this->callAdmin($exception->getMessage());
-		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine());
+		$this->callAdmin($exception->getFile() . ", СЃС‚СЂРѕРєР° " . $exception->getLine());
 		$this->callAdmin($exception->getTraceAsString());
 	}
 
-	//получить результат запроса из базы данных
+	//РїРѕР»СѓС‡РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РїСЂРѕСЃР° РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…
 	public function getRequestResult($query){
-		$result = mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
+		$result = mysqli_query($this->db, $query) or die("РћС€РёР±РєР° " . mysqli_error($this->db));
 		return $result;
 	}
 
@@ -112,7 +113,7 @@ class MainBot{
 		return $return;
 	}
 
-	//Получает RequestInfo с информацией о id_whitelist пользователя; если пользователя не было в базе данных, добавляет его
+	//РџРѕР»СѓС‡Р°РµС‚ RequestInfo СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ id_whitelist РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ; РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµ Р±С‹Р»Рѕ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…, РґРѕР±Р°РІР»СЏРµС‚ РµРіРѕ
 	private function getFullRequestInfo($request_info){
 		$return = $request_info;
 		$query = "SELECT * FROM telegram_users WHERE Id_telegram_user=". $request_info->getIdTelegram() .";";
@@ -135,12 +136,12 @@ class MainBot{
 		return $return;
 	}
 
-	//выводит сообщение о помощи
+	//РІС‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РїРѕРјРѕС‰Рё
 	private function commandHelp($id_telegram){
 		$this->sendMessage($id_telegram, 'help <b>me</b>');
 	}
 
-	//закрывает подключение к базе данных
+	//Р·Р°РєСЂС‹РІР°РµС‚ РїРѕРґРєР»СЋС‡РµРЅРёРµ Рє Р±Р°Р·Рµ РґР°РЅРЅС‹С…
 	private function dispose(){
 		mysqli_close($this->db);
 	}
