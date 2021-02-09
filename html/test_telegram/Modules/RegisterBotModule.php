@@ -58,7 +58,7 @@ class RegisterBotModule extends BotModule{
 				}
 				//телефон найден, один и тот же номер есть у разных агентов в white_list
 				else if($row_check > 1){
-					$this->sendErrorMessage($request_info->getIdTelegram(), "Похоже, что номер (${input_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Телеграм):");
+					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Похоже, что номер (${input_phone}) уже привязан к другому человеку. Если это точно ваш номер - напишите мне сюда (Телеграм):");
 					$this->main_bot->sendAdminContact($request_info->getIdTelegram());
 					
 					$this->main_bot->callAdmin("Внимание, есть повторный номер (${input_phone}) у:");

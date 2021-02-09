@@ -76,7 +76,7 @@ class MainBot{
 		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
 	}
 	
-	public function sendMessageForBanned($id_telegram){
+	private function sendMessageForBanned($id_telegram){
 		$this->bot->sendMessage($id_telegram, 'У нас технические неполадки-шоколадки!😱🍫 Но не переживайте, скоро всё заработает. Хорошего вам настроения и удачного дня!😊');
 	}
 
