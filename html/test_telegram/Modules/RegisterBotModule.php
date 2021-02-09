@@ -76,13 +76,14 @@ class RegisterBotModule extends BotModule{
 		}
 		//если ввод невалидный, вывод ошибки
 		else {
-			$error_text = $default_error_text;
+			$error_text = $this->default_error_text;
 			if(preg_match($regex_check_command_in_text, $message_text)) $error_text = "Здравствуйте!";
 			$this->sendErrorMessage($request_info->getIdTelegram(), $error_text);
 		}
 	}
 
-	private function sendErrorMessage($id_telegram, $error_text = $default_error_text){
+	private function sendErrorMessage($id_telegram, $error_text = null){
+		if(is_null($error_text)) $error_text = $this->default_error_text;
 		$this->main_bot->sendMessage($id_telegram, $error_text);
 	}
 	
