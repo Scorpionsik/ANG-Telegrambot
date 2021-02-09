@@ -30,7 +30,8 @@ class MainBot{
 		});
 
 		$this->bot->on(function ($Update) {
-			$this->distribute($this->getFullRequestInfo(new RequestInfo($Update)));
+			$request_info = $this->getFullRequestInfo(new RequestInfo($Update));
+			$this->distribute($request_info);
 		}, function ($Update){
 			return true;
 		});
@@ -52,25 +53,31 @@ class MainBot{
 			if(is_null($whitelist_info)){
 				$whitelist_info = $this->getFullWhitelistInfo($request_info);
 			}
-
-			switch($request_info->getModeValue()){
-				//изменение максимальной цены для агентов
-				case 1:
-					$module = new TestBotModule($this);
-				break;
-				//стандартный режим работы бота
-				default:
-					$module = new MainBotModule($this);
-				break;
+			//проверяем, забанен ли пользователь
+			if(!is_null($whitelist_info) && !$whitelist_info->getIsBanned()){
+				switch($request_info->getModeValue()){
+					//изменение максимальной цены для агентов
+					case 1:
+						$module = new TestBotModule($this);
+					break;
+					//стандартный режим работы бота
+					default:
+						$module = new MainBotModule($this);
+					break;
+				}
 			}
+			else $this->sendMessageForBanned($request_info->getIdTelegram());
 		}
 		if(!is_null($module)) $module->Start($request_info, $whitelist_info);
 	}
 
 	//отправка сообщений в телеграм-чат
 	public function sendMessage($id_telegram, $message_text){
-		//$this->bot->sendMessage($id_telegram, mb_convert_encoding($message_text, "UTF-8", "auto"), 'HTML');
 		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
+	}
+	
+	public function sendMessageForBanned($id_telegram){
+		$this->bot->sendMessage($id_telegram, 'У нас технические неполадки-шоколадки!😱🍫 Но не переживайте, скоро всё заработает. Хорошего вам настроения и удачного дня!😊');
 	}
 
 	public function getMessageText($message_data){
@@ -80,6 +87,10 @@ class MainBot{
 	//отправка сообщения админу
 	public function callAdmin($message_text){
 		$this->bot->sendMessage($this->id_admin, $message_text, 'HTML');
+	}
+	
+	public function sendAdminContact($id_telegram){
+		$this->bot->sendMessage($id_telegram, "+380951473711");
 	}
 
 	//отправка ошибки админу
