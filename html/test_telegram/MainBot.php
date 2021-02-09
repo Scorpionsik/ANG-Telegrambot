@@ -72,13 +72,13 @@ class MainBot{
 			$row_check = mysqli_num_rows($result);
 			if($row_check == 0){
 				$query = "INSERT INTO telegram_users (Id_telegram_user) values (". $request_info->getIdTelegram() .");";
-				mysqli_query($this->db, $query) or die("Îøèáêà " . mysqli_error($this->db));
+				$this->getRequestResult($query);//mysqli_query($this->db, $query) or die("Îøèáêà " . mysqli_error($this->db));
 			}
 			else{
 				$row = mysqli_fetch_row($result);
 				if($row){
 					//$this->sendMessage($request_info->getIdTelegram(), $row);
-					$return = $this->getRequestResult($query);//new RequestInfo($request_info, $row[1], $row[4]);
+					$return = new RequestInfo($request_info, $row[1], $row[4]);
 				}
 				
 			}
