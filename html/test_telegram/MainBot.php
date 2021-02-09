@@ -51,7 +51,7 @@ class MainBot{
 			switch($request_info->getModeValue()){
 				//изменение максимальной цены для агентов
 				case 1:
-					
+					$module = new TestBotModule($this);
 				break;
 				//стандартный режим работы бота
 				default:
