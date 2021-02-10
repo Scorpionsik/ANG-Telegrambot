@@ -76,6 +76,7 @@ class MainBot{
 		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null);
 		else{
 			$this->bot->sendMessage($id_telegram, json_encode($bot_keyboard->getKeyboardArray()));
+			$this->bot->sendMessage($id_telegram, json_encode($this->makeArrayForDefaultKeyboard()));
 			$keyboard = null;
 			if($is_inline){
 				$keyboard = $this->getInlineKeyboard($bot_keyboard);
@@ -86,6 +87,32 @@ class MainBot{
 			$this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null, $keyboard);
 		}
 	}
+	
+	/*debug keyboard*/
+	private function makeArrayForDefaultKeyboard($is_get_edit_offer = 0){
+		$result = array(array(), array());
+		$result[0][] = array(
+			'text'=>'📥 Получить всё за последние 3 дня'
+		);
+		
+		if($is_get_edit_offer == 0)
+		{
+			$result[1][] = array(
+				'text'=>'✅ Получать все объекты в уведомлениях'
+			);
+		}
+		else
+		{
+			$result[1][] = array(
+				'text'=>'❕ Присылать только новые объекты в уведомлениях'
+			);
+		}
+		$result[1][] = array(
+				'text'=>'🔎 Поиск по цене'
+			);	
+		return $result;
+	}
+	/*end debug keyboard*/
 	
 	private function sendMessageForBanned($id_telegram){
 		$this->bot->sendMessage($id_telegram, 'У нас технические неполадки-шоколадки!😱🍫 Но не переживайте, скоро всё заработает. Хорошего вам настроения и удачного дня!😊');
