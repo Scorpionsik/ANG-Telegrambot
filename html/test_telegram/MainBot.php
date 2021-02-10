@@ -75,7 +75,7 @@ class MainBot{
 	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false){
 		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null);
 		else{
-			$this->bot->sendMessage($id_telegram, implode("=", $bot_keyboard->getKeyboardArray()));
+			$this->bot->sendMessage($id_telegram, json_encode($bot_keyboard->getKeyboardArray()));
 			$keyboard = null;
 			if($is_inline){
 				$keyboard = $this->getInlineKeyboard($bot_keyboard);
@@ -106,7 +106,7 @@ class MainBot{
 
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
-		$this->callAdmin("<b><u>Ошибка</u></b>, Id_whitelist: " . $request_info->getIdWhitelist());
+		$this->callAdmin("<b><u>Ошибка</u></b>, вызванная: Id_whitelist: " . $request_info->getIdWhitelist() . ", Username: " . $whitelist_info->getUsername());
 		$this->callAdmin($exception->getMessage());
 		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine());
 		$this->callAdmin($exception->getTraceAsString());
