@@ -72,8 +72,18 @@ class MainBot{
 	}
 
 	//отправка сообщений в телеграм-чат
-	public function sendMessage($id_telegram, $message_text){
-		$this->bot->sendMessage($id_telegram, $message_text, 'HTML');
+	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false){
+		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null);
+		else{
+			$keyboard = null;
+			if($is_inline){
+				$keyboard = $this->getInlineKeyboard($bot_keyboard);
+			}
+			else{
+				$keyboard = $this->getReplyKeyboard($bot_keyboard);
+			}
+			$this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null, $keyboard);
+		}
 	}
 	
 	private function sendMessageForBanned($id_telegram){
@@ -86,11 +96,11 @@ class MainBot{
 
 	//отправка сообщения админу
 	public function callAdmin($message_text){
-		$this->bot->sendMessage($this->id_admin, $message_text, 'HTML');
+		$this->sendMessage($this->id_admin, $message_text);
 	}
 	
 	public function sendAdminContact($id_telegram){
-		$this->bot->sendMessage($id_telegram, "+380951473711");
+		$this->sendMessage($id_telegram, "+380951473711");
 	}
 
 	//отправка ошибки админу
@@ -105,6 +115,14 @@ class MainBot{
 	public function getRequestResult($query){
 		$result = mysqli_query($this->db, $query) or die("Ошибка " . mysqli_error($this->db));
 		return $result;
+	}
+
+	private function getReplyKeyboard($bot_keyboard){
+		return new \TelegramBot\Api\Types\ReplyKeyboardMarkup($bot_keyboard->getKeyboardArray(), false, true);
+	}
+	
+	private function getInlineKeyboard($bot_keyboard){
+		return new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($bot_keyboard->getKeyboardArray());
 	}
 
 	private function getFullWhitelistInfo($request_info){
