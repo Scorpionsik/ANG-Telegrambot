@@ -11,13 +11,11 @@ require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 class MainBot{
 	private $bot;
 	private $db;
-	private $empty_keyboard;
 	private $id_admin = 780925203; //id телеграма админа
 
 	//инициализация бота
 	public function __construct($bot_token){
 		include "connection_agent.php";
-		$this->empty_keyboard = new BotKeyboard(1);
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
@@ -86,10 +84,6 @@ class MainBot{
 			}
 			$this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null, $keyboard);
 		}
-	}
-	
-	public function getEmptyKeyboard(){
-		return $this->empty_keyboard;
 	}
 	
 	private function sendMessageForBanned($id_telegram){
