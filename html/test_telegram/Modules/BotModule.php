@@ -7,16 +7,19 @@ abstract class BotModule{
 		$this->main_bot = $main_bot;
 	}
 
-	public function Start($request_info, $whitelist_info){
+	public function start($request_info, $whitelist_info){
 		try{
-			$this->StartMethod($request_info, $whitelist_info);
+			if(is_null($request_info->getCallbackData())) $this->forMessages($request_info, $whitelist_info);
+			else $this->forCallbacks($request_info, $whitelist_info)
 		}
 		catch(Exception $e){
 			$this->main_bot->sendException($e, $request_info, $whitelist_info);
 		}
 	}
 
-	abstract protected function StartMethod($request_info, $whitelist_info);
+	abstract protected function forMessages($request_info, $whitelist_info);
+	
+	abstract protected function forCallbacks($request_info, $whitelist_info);
 }
 
 ?>

@@ -17,7 +17,7 @@ class RegisterBotModule extends BotModule{
 		parent::__construct($main_bot);
 	}
 
-	protected function StartMethod($request_info, $whitelist_info = null){
+	protected function forMessages($request_info, $whitelist_info = null){
 		//получаем ввод
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 		//если ввод валидный и мы получили телефон
@@ -80,6 +80,10 @@ class RegisterBotModule extends BotModule{
 			if(preg_match($this->regex_check_command_in_text, $message_text)) $error_text = "Здравствуйте!";
 			$this->sendErrorMessage($request_info->getIdTelegram(), $error_text);
 		}
+	}
+	
+	protected function forCallbacks($request_info, $whitelist_info){
+		$this->forMessages($request_info, $whitelist_info);
 	}
 
 	//сообщение об ошибке
