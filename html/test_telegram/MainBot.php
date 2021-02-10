@@ -11,12 +11,13 @@ require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 class MainBot{
 	private $bot;
 	private $db;
-	private $empty_keyboard = new BotKeyboard(0);
+	private $empty_keyboard;
 	private $id_admin = 780925203; //id телеграма админа
 
 	//инициализация бота
 	public function __construct($bot_token){
 		include "connection_agent.php";
+		$this->empty_keyboard = new BotKeyboard(0);
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
