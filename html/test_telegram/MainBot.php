@@ -76,7 +76,7 @@ class MainBot{
 		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null);
 		else{
 			$this->bot->sendMessage($id_telegram, json_encode($bot_keyboard->getKeyboardArray()));
-			$this->bot->sendMessage($id_telegram, json_encode($this->makeArrayForDefaultKeyboard()));
+			$this->bot->sendMessage($id_telegram, json_encode($this->testInlineKeyboard()));
 			$keyboard = null;
 			if($is_inline){
 				$keyboard = $this->getInlineKeyboard($bot_keyboard);
@@ -112,6 +112,15 @@ class MainBot{
 			);	
 		return $result;
 	}
+	
+	private function testInlineKeyboard(){
+		$inline_array = array(array());
+		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
+		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
+		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
+		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
+		return $inline_array;
+	}
 	/*end debug keyboard*/
 	
 	private function sendMessageForBanned($id_telegram){
@@ -133,7 +142,7 @@ class MainBot{
 
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
-		$this->callAdmin("<b><u>Ошибка</u></b>\nId_whitelist: " . $request_info->getIdWhitelist() . "\nUsername: " . $whitelist_info->getUsername());
+		$this->callAdmin("<b><u>Ошибка</u></b>\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername());
 		$this->callAdmin($exception->getMessage());
 		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine());
 		$this->callAdmin($exception->getTraceAsString());
