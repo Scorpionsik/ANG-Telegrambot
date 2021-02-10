@@ -1,7 +1,8 @@
 <?php
 $keyboard_dir = explode('test_telegram',__DIR__)[0] . 'test_telegram/Keyboards';
-require_once "BotModule.php";
 require_once $keyboard_dir . "/DefaultBotKeyboard.php";
+require_once "BotModule.php";
+
 
 class RegisterBotModule extends BotModule{
 	//сообщение ошибки по умолчанию
