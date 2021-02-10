@@ -6,8 +6,6 @@ include "WhitelistInfo.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/TestBotModule.php";
-require_once __DIR__ . "/Keyboards/KeyboardButton.php";
-
 
 class MainBot{
 	private $bot;
@@ -76,9 +74,6 @@ class MainBot{
 	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false){
 		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null);
 		else{
-			//$this->bot->sendMessage($id_telegram, json_encode($bot_keyboard->getKeyboardArray()));
-			//$this->bot->sendMessage($id_telegram, json_encode($this->testInlineKeyboard()));
-			$this->testKeyboard();
 			$keyboard = null;
 			if($is_inline){
 				$keyboard = $this->getInlineKeyboard($bot_keyboard);
@@ -89,50 +84,6 @@ class MainBot{
 			$this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null, $keyboard);
 		}
 	}
-	
-	/*debug keyboard*/
-	private function makeArrayForDefaultKeyboard($is_get_edit_offer = 0){
-		$result = array(array(), array());
-		$result[0][] = array(
-			'text'=>'📥 Получить всё за последние 3 дня'
-		);
-		
-		if($is_get_edit_offer == 0)
-		{
-			$result[1][] = array(
-				'text'=>'✅ Получать все объекты в уведомлениях'
-			);
-		}
-		else
-		{
-			$result[1][] = array(
-				'text'=>'❕ Присылать только новые объекты в уведомлениях'
-			);
-		}
-		$result[1][] = array(
-				'text'=>'🔎 Поиск по цене'
-			);	
-		return $result;
-	}
-	
-	private function testInlineKeyboard(){
-		$inline_array = array(array());
-		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
-		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
-		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
-		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
-		return $inline_array;
-	}
-	
-	private function testKeyboard(){
-		$button = new KeyboardButton();
-		$button->addData('text', 'text');
-		$button->addData('callback_data', 'text');
-		
-		$this->callAdmin(json_encode(array('text' => 'text', 'callback_data' => 'text')));
-		$this->callAdmin(json_encode($button->getButtonArray()));
-	}
-	/*end debug keyboard*/
 	
 	private function sendMessageForBanned($id_telegram){
 		$this->bot->sendMessage($id_telegram, 'У нас технические неполадки-шоколадки!😱🍫 Но не переживайте, скоро всё заработает. Хорошего вам настроения и удачного дня!😊');
