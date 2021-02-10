@@ -146,10 +146,7 @@ function getSiteUrl($offer_type, $flat_type)
 }
 
 function makeArrayForDefaultKeyboard($is_get_edit_offer){
-	$result = array(
-		array(), 
-		array()
-		);
+	$result = array(array(), array());
 		
 		
 	$result[0][] = array(

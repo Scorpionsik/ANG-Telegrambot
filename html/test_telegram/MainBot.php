@@ -118,11 +118,13 @@ class MainBot{
 	}
 
 	private function getReplyKeyboard($bot_keyboard){
-		return new \TelegramBot\Api\Types\ReplyKeyboardMarkup($bot_keyboard->getKeyboardArray(), false, true);
+		$return = new \TelegramBot\Api\Types\ReplyKeyboardMarkup($bot_keyboard->getKeyboardArray(), false, true);
+		return $return;
 	}
 	
 	private function getInlineKeyboard($bot_keyboard){
-		return new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($bot_keyboard->getKeyboardArray());
+		$return = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($bot_keyboard->getKeyboardArray());
+		return $return;
 	}
 
 	private function getFullWhitelistInfo($request_info){
