@@ -1,6 +1,6 @@
 <?php
 
-abstract class BotKeyboard{
+class BotKeyboard{
 	private $keyboard_array;
 	
 	public function __construct($row_count){

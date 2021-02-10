@@ -6,10 +6,12 @@ include "WhitelistInfo.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/TestBotModule.php";
+require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 
 class MainBot{
 	private $bot;
 	private $db;
+	private $empty_keyboard = new BotKeyboard(0);
 	private $id_admin = 780925203; //id телеграма админа
 
 	//инициализация бота
@@ -83,6 +85,10 @@ class MainBot{
 			}
 			$this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null, $keyboard);
 		}
+	}
+	
+	public function getEmptyKeyboard(){
+		return $this->empty_keyboard;
 	}
 	
 	private function sendMessageForBanned($id_telegram){
