@@ -68,7 +68,7 @@ class MainBot{
 			}
 			else $this->sendMessageForBanned($request_info->getIdTelegram());
 		}
-		if(!is_null($module)) $module->Start($request_info, $whitelist_info);
+		if(!is_null($module)) $module->start($request_info, $whitelist_info);
 	}
 
 	//отправка сообщений в телеграм-чат
