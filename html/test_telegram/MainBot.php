@@ -6,7 +6,7 @@ include "WhitelistInfo.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/TestBotModule.php";
-include __DIR__ . "/Keyboards/KeyboardButton.php";
+require_once __DIR__ . "/Keyboards/KeyboardButton.php";
 
 
 class MainBot{
