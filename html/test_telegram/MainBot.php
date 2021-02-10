@@ -133,7 +133,7 @@ class MainBot{
 
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
-		$this->callAdmin("<b><u>Ошибка</u></b>, вызванная: Id_whitelist: " . $request_info->getIdWhitelist() . ", Username: " . $whitelist_info->getUsername());
+		$this->callAdmin("<b><u>Ошибка</u></b>\nId_whitelist: " . $request_info->getIdWhitelist() . "\nUsername: " . $whitelist_info->getUsername());
 		$this->callAdmin($exception->getMessage());
 		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine());
 		$this->callAdmin($exception->getTraceAsString());
