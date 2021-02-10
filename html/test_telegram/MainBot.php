@@ -17,7 +17,7 @@ class MainBot{
 	//инициализация бота
 	public function __construct($bot_token){
 		include "connection_agent.php";
-		$this->empty_keyboard = new BotKeyboard(0);
+		$this->empty_keyboard = new BotKeyboard(1);
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
