@@ -6,6 +6,7 @@ include "WhitelistInfo.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/TestBotModule.php";
+include __DIR__ . "/Keyboards/KeyboardButton.php";
 
 
 class MainBot{
@@ -75,8 +76,9 @@ class MainBot{
 	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false){
 		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', false, null);
 		else{
-			$this->bot->sendMessage($id_telegram, json_encode($bot_keyboard->getKeyboardArray()));
-			$this->bot->sendMessage($id_telegram, json_encode($this->testInlineKeyboard()));
+			//$this->bot->sendMessage($id_telegram, json_encode($bot_keyboard->getKeyboardArray()));
+			//$this->bot->sendMessage($id_telegram, json_encode($this->testInlineKeyboard()));
+			$this->testKeyboard();
 			$keyboard = null;
 			if($is_inline){
 				$keyboard = $this->getInlineKeyboard($bot_keyboard);
@@ -120,6 +122,15 @@ class MainBot{
 		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
 		$inline_array[0][] = array('text' => 'text', 'callback_data' => 'text');
 		return $inline_array;
+	}
+	
+	private function testKeyboard(){
+		$button = new KeyboardButton();
+		$button->addData('text', 'text');
+		$button->addData('callback_data', 'text');
+		
+		$this->callAdmin(json_encode(array('text' => 'text', 'callback_data' => 'text')));
+		$this->callAdmin(json_encode($button->getButtonArray()));
 	}
 	/*end debug keyboard*/
 	
