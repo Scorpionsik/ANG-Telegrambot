@@ -18,7 +18,9 @@ class MainBotModule extends BotModule{
 			if(preg_match('/Присылать только/', $message_text)){
 				$this->main_bot->callAdmin("Debug: начали новые объявления");
 				$is_show_offers = false;
+				$this->main_bot->callAdmin("Debug: is_show_offers");
 				$this->switchIsGetEditOffers($whitelist_info, false);
+				$this->main_bot->callAdmin("Debug: switchIsGetEditOffers");
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", new DefaultBotKeyboard(false));
 				$this->main_bot->callAdmin("Debug: закончили новые объявления");
 			}
