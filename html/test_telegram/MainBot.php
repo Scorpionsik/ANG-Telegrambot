@@ -169,7 +169,7 @@ class MainBot{
 			else{
 				$row = mysqli_fetch_row($result);
 				if($row){
-					$return = new RequestInfo($request_info, $row[1], $row[4]);
+					$return = new RequestInfo($request_info, $row[1], $row[4], $row[5]);
 				}
 			}
 			mysqli_free_result($result);

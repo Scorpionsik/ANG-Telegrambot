@@ -5,8 +5,9 @@ class RequestInfo{
 	private $message_data;
 	private $callback_data;
 	private $mode_value;
+	private $mode_param;
 
-	public function __construct($update, $id_whitelist = null, $mode_value = 0){
+	public function __construct($update, $id_whitelist = null, $mode_value = 0, $mode_param = 0){
 		if(is_a($update, '\TelegramBot\Api\Types\Message')){
 			$this->id_telegram = $update->getChat()->getId();
 			$this->message_data = $update;
@@ -29,6 +30,7 @@ class RequestInfo{
 		}
 		$this->id_whitelist = $id_whitelist;
 		$this->mode_value = $mode_value;
+		$this->mode_param = $mode_param;
 	}
 
 	public function getIdTelegram(){
@@ -49,6 +51,10 @@ class RequestInfo{
 
 	public function getModeValue(){
 		return $this->mode_value;
+	}
+	
+	public function getModeParam(){
+		return $this->mode_param;
 	}
 }
 ?>
