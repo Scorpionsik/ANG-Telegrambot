@@ -1,5 +1,5 @@
 <?php
-$keyboard_dir = explode('test_telegram',__DIR__)[0] . 'test_telegram/Keyboards';
+$keyboard_dir = explode('Modules',__DIR__)[0] . 'Keyboards';
 require_once $keyboard_dir . "/DefaultBotKeyboard.php";
 require_once "BotModule.php";
 
@@ -28,19 +28,22 @@ class MainBotModule extends BotModule{
 		else{
 			//переключить на модуль выбора максимальной/минимальной цены
 			if(preg_match('/Поиск по цене/', $message_text)){
-				
+				$is_show_offers = false;
+				//code here
 			}
 			//перелистнуть страницу
 			else if(preg_match('/^\d+$/', $message_text)){
-				
+				$current_turn_page=$message_text;
+				$this->turnThePage($message_text);
 			}
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
-				
+				$is_show_offers = false;
+				//code here
 			}
 		}
 		if($is_show_offers){
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Привет, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 		}
 	}
 	
@@ -50,6 +53,11 @@ class MainBotModule extends BotModule{
 	
 	private function switchIsGetEditOffers($whitelist_info, $value){
 		$query = "update white_list set Is_get_edit_offers=${value} where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+		$this->main_bot->getRequestResult($query);
+	}
+	
+	private function turnThePage($whitelist_info, $page){
+		$query = "update white_list set Turn_page=${page} where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
 		$this->main_bot->getRequestResult($query);
 	}
 }
