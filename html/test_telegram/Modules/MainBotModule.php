@@ -13,18 +13,21 @@ class MainBotModule extends BotModule{
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 		$is_show_offers = true;
 		$current_turn_page = $whitelist_info->getTurnPage();
-		$current_keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
-		$this->main_bot->callAdmin($message_text);
 		if(preg_match('/уведомл/',$message_text)){
+			$this->main_bot->callAdmin("Debug: прошли первую проверку");
 			if(preg_match('/Присылать только/', $msg_text)){
+				$this->main_bot->callAdmin("Debug: начали новые объявления");
 				$is_show_offers = false;
 				$this->switchIsGetEditOffers($whitelist_info, false);
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", new DefaultBotKeyboard(false));
+				$this->main_bot->callAdmin("Debug: закончили новые объявления");
 			}
 			else if(preg_match('/Получать/', $msg_text)){
+				$this->main_bot->callAdmin("Debug: начали все объявления");
 				$is_show_offers = false;
 				$this->switchIsGetEditOffers($whitelist_info, true);
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", new DefaultBotKeyboard(true));
+				$this->main_bot->callAdmin("Debug: закончили все объявления");
 			}
 		}
 		else{
@@ -42,7 +45,7 @@ class MainBotModule extends BotModule{
 			}
 		}
 		if($is_show_offers){
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Привет, " . $whitelist_info->getUsername() . "!", $current_keyboard);
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Привет, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 		}
 	}
 	
