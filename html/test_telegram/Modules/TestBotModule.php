@@ -11,8 +11,7 @@ class TestBotModule extends BotModule{
 		parent::__construct($main_bot);
 		
 		$this->tmp_keyboard = new BotKeyboard(1);
-		$button = new KeyboardButton();
-		$button->addData('text', 'Button');
+		$button = new KeyboardButton("Button");
 		$this->tmp_keyboard->addButton($button, 0);
 	}
 
