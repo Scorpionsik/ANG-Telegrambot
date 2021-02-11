@@ -34,7 +34,7 @@ class MainBotModule extends BotModule{
 			//перелистнуть страницу
 			else if(preg_match('/^\d+$/', $message_text)){
 				$current_turn_page=$message_text;
-				$this->turnThePage($message_text);
+				$this->turnThePage($whitelist_info, $message_text);
 			}
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
