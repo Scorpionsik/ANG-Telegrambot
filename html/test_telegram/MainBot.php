@@ -100,7 +100,15 @@ class MainBot{
 	}
 	
 	public function sendAdminContact($id_telegram){
-		$this->sendMessage($id_telegram, "+380951473711");
+		$query = "SELECT white_list.Phonenumber, white_list.Username FROM white_list JOIN telegram_users USING (Id_whitelist_user) WHERE telegram_users.Id_telegram_user = ". $this->id_admin .";";
+		$result = $this->getRequestResult($query);
+		if($result){
+			$row_check = mysqli_num_rows($result);
+			if($row_check > 0){
+				$row = mysqli_fetch_row($result);
+				$this->bot->sendContact($id_telegram, $row[0], $row[1]);
+			}
+		}
 	}
 
 	//отправка ошибки админу
@@ -169,7 +177,7 @@ class MainBot{
 
 	//выводит сообщение о помощи
 	private function commandHelp($id_telegram){
-		$this->sendMessage($id_telegram, 'help <b>me</b>');
+		$this->sendAdminContact($id_telegram);
 	}
 
 	//закрывает подключение к базе данных
