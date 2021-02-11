@@ -86,6 +86,10 @@ class MainBot{
 		}
 	}
 	
+	public function deleteMessage($message_data){
+		$this->bot->deleteMessage($message_data->getChat()->getId(), $message_data->getMessageId());
+	}
+	
 	private function sendMessageForBanned($id_telegram){
 		$this->bot->sendMessage($id_telegram, 'У нас технические неполадки-шоколадки!😱🍫 Но не переживайте, скоро всё заработает. Хорошего вам настроения и удачного дня!😊');
 	}
