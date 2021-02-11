@@ -7,14 +7,14 @@ class DefaultBotKeyboard extends BotKeyboard{
 		parent::__construct(2);
 		
 		$button = new KeyboardButton("📥 Получить всё за последние 3 дня");
-		$this->addButton($button, 1);
+		$this->addButton($button, 0);
 		
 		if(!$is_get_edit_offers) $button = new KeyboardButton("✅ Получать все объекты в уведомлениях");
 		else $button = new KeyboardButton("❕ Присылать только новые объекты в уведомлениях");
-		$this->addButton($button, 0);
+		$this->addButton($button, 1);
 		
 		$button = new KeyboardButton("🔎 Поиск по цене");
-		$this->addButton($button, 0);
+		$this->addButton($button, 1);
 	}
 }
 
