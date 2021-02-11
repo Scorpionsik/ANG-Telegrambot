@@ -40,6 +40,7 @@ class RegisterBotModule extends BotModule{
 					if($row){
 						$id_whitelist = $row[0];
 						$username = $row[2];
+						$is_get_edit_offer = $row[6];
 						//проверяем, подключен ли уже такой пользователь в telegram_users
 						$query = "SELECT * FROM telegram_users where Id_whitelist_user=${id_whitelist};";
 						$result = $this->main_bot->getRequestResult($query);
@@ -54,7 +55,7 @@ class RegisterBotModule extends BotModule{
 								//здесь обновляем таблицу telegram_users, указывая для id_telegram его id_whitelist и дату, когда случилось это знаменательное событие
 								$query = "UPDATE telegram_users SET Id_whitelist_user=${id_whitelist}, Register_date=" . time() . " where Id_telegram_user=" . $request_info->getIdTelegram() . ";";
 								$this->main_bot->getRequestResult($query);
-								$this->sendAccessMessage($request_info->getIdTelegram(), $username);
+								$this->sendAccessMessage($request_info->getIdTelegram(), $username, $is_get_edit_offer);
 							}
 						}
 					}
@@ -97,11 +98,11 @@ class RegisterBotModule extends BotModule{
 	}
 	
 	//сообщение о успешном завершении регистрации
-	private function sendAccessMessage($id_telegram, $username){
+	private function sendAccessMessage($id_telegram, $username, $is_get_edit_offer){
 		$this->main_bot->sendMessage($id_telegram, "Здравствуйте, ${username}!");
 		$this->main_bot->sendMessage($id_telegram, "Ваша личность подтверждена! Вы подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
 		$this->main_bot->sendMessage($id_telegram, "Если в уведомлениях вам нужны <b>только новые объявления</b>, нажмите на кнопку ниже - <b>❕ Присылать только новые объекты в уведомлениях</b>.");
-		$this->main_bot->sendMessage($id_telegram, "Чтобы получить всю информацию по вашему району за последние 3 дня, нажмите кнопку ниже.", new DefaultBotKeyboard());
+		$this->main_bot->sendMessage($id_telegram, "Чтобы получить всю информацию по вашему району за последние 3 дня, нажмите кнопку ниже.", new DefaultBotKeyboard($is_get_edit_offer));
 	}
 }
 

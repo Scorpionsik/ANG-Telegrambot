@@ -9,7 +9,20 @@ class MainBotModule extends BotModule{
 	}
 
 	protected function forMessages($request_info, $whitelist_info){
-		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Привет, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard());
+		/*
+		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
+		$current_turn_page = $whitelist_info->getTurnPage();
+		$is_show_offers = true;
+		switch($message_text){
+			case "✅ Получать все объекты в уведомлениях":
+			$is_show_offers = false;
+			break;
+			
+			case "":
+			
+			break;
+		}*/
+		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Привет, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 	}
 	
 	protected function forCallbacks($request_info, $whitelist_info){
