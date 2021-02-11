@@ -19,7 +19,7 @@ class MainBotModule extends BotModule{
 				$this->main_bot->callAdmin("Debug: начали новые объявления");
 				$is_show_offers = false;
 				$this->main_bot->callAdmin("Debug: is_show_offers");
-				$this->switchIsGetEditOffers($whitelist_info, false);
+				$this->switchIsGetEditOffers($whitelist_info, 0);
 				$this->main_bot->callAdmin("Debug: switchIsGetEditOffers");
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", new DefaultBotKeyboard(false));
 				$this->main_bot->callAdmin("Debug: закончили новые объявления");
@@ -27,7 +27,7 @@ class MainBotModule extends BotModule{
 			else if(preg_match('/Получать/', $message_text)){
 				$this->main_bot->callAdmin("Debug: начали все объявления");
 				$is_show_offers = false;
-				$this->switchIsGetEditOffers($whitelist_info, true);
+				$this->switchIsGetEditOffers($whitelist_info, 1);
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", new DefaultBotKeyboard(true));
 				$this->main_bot->callAdmin("Debug: закончили все объявления");
 			}
