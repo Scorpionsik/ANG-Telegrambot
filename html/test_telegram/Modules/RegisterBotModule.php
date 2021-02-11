@@ -75,7 +75,7 @@ class RegisterBotModule extends BotModule{
 				else{
 					$this->sendErrorMessage($request_info->getIdTelegram());
 				}
-				
+				mysqli_free_result($result);
 			}
 		}
 		//если ввод невалидный, вывод ошибки

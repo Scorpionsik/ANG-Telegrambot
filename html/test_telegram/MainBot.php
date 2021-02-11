@@ -108,6 +108,7 @@ class MainBot{
 				$row = mysqli_fetch_row($result);
 				$this->bot->sendContact($id_telegram, $row[0], $row[1]);
 			}
+			mysqli_free_result($result);
 		}
 	}
 
@@ -147,6 +148,7 @@ class MainBot{
 					$row = mysqli_fetch_row($result);
 					$return = new WhitelistInfo($id_whitelist, $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8]);
 				}
+				mysqli_free_result($result);
 			}
 		}
 		return $return;
