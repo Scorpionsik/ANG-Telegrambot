@@ -14,22 +14,15 @@ class MainBotModule extends BotModule{
 		$is_show_offers = true;
 		$current_turn_page = $whitelist_info->getTurnPage();
 		if(preg_match('/уведомл/',$message_text)){
-			$this->main_bot->callAdmin("Debug: прошли первую проверку");
 			if(preg_match('/Присылать только/', $message_text)){
-				$this->main_bot->callAdmin("Debug: начали новые объявления");
 				$is_show_offers = false;
-				$this->main_bot->callAdmin("Debug: is_show_offers");
 				$this->switchIsGetEditOffers($whitelist_info, 0);
-				$this->main_bot->callAdmin("Debug: switchIsGetEditOffers");
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", new DefaultBotKeyboard(false));
-				$this->main_bot->callAdmin("Debug: закончили новые объявления");
 			}
 			else if(preg_match('/Получать/', $message_text)){
-				$this->main_bot->callAdmin("Debug: начали все объявления");
 				$is_show_offers = false;
 				$this->switchIsGetEditOffers($whitelist_info, 1);
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", new DefaultBotKeyboard(true));
-				$this->main_bot->callAdmin("Debug: закончили все объявления");
 			}
 		}
 		else{
