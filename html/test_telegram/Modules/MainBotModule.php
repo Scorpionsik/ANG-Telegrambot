@@ -15,14 +15,14 @@ class MainBotModule extends BotModule{
 		$current_turn_page = $whitelist_info->getTurnPage();
 		if(preg_match('/уведомл/',$message_text)){
 			$this->main_bot->callAdmin("Debug: прошли первую проверку");
-			if(preg_match('/Присылать только/', $msg_text)){
+			if(preg_match('/Присылать только/', $message_text)){
 				$this->main_bot->callAdmin("Debug: начали новые объявления");
 				$is_show_offers = false;
 				$this->switchIsGetEditOffers($whitelist_info, false);
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>только новые объекты</b>. Если вы снова хотите получать обновленные объекты, нажмите на \"Получать все объекты в уведомлениях\".", new DefaultBotKeyboard(false));
 				$this->main_bot->callAdmin("Debug: закончили новые объявления");
 			}
-			else if(preg_match('/Получать/', $msg_text)){
+			else if(preg_match('/Получать/', $message_text)){
 				$this->main_bot->callAdmin("Debug: начали все объявления");
 				$is_show_offers = false;
 				$this->switchIsGetEditOffers($whitelist_info, true);
