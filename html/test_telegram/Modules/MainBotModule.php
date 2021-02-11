@@ -14,6 +14,7 @@ class MainBotModule extends BotModule{
 		$is_show_offers = true;
 		$current_turn_page = $whitelist_info->getTurnPage();
 		$current_keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
+		$this->main_bot->callAdmin($message_text);
 		if(preg_match('/уведомл/',$message_text)){
 			if(preg_match('/Присылать только/', $msg_text)){
 				$is_show_offers = false;
