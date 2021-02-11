@@ -61,6 +61,7 @@ class MainBot{
 						$module = new TestBotModule($this);
 					break;
 					//стандартный режим работы бота
+					case 0:
 					default:
 						$module = new MainBotModule($this);
 					break;
@@ -100,7 +101,7 @@ class MainBot{
 
 	//отправка сообщения админу
 	public function callAdmin($message_text){
-		$this->sendMessage($this->id_admin, $message_text);
+		$this->bot->sendMessage($this->id_admin, $message_text);
 	}
 	
 	public function sendAdminContact($id_telegram){
@@ -183,6 +184,8 @@ class MainBot{
 
 	//выводит сообщение о помощи
 	private function commandHelp($id_telegram){
+		$this->bot->sendMessage($id_telegram, "Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.");
+		$this->bot->sendMessage($id_telegram, "Хорошего дня и отличного настроения, будьте здоровы!");
 		$this->sendAdminContact($id_telegram);
 	}
 
