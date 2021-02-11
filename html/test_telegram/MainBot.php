@@ -26,6 +26,7 @@ class MainBot{
 		});*/
 
 		$this->bot->command('help', function ($message) {
+			$this->deleteMessage($message);
 			$this->commandHelp($message->getChat()->getId());
 		});
 
