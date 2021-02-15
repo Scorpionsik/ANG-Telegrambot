@@ -75,7 +75,7 @@ class MainBotModule extends BotModule{
 				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
 				$result = $this->main_bot->getRequestResult($query);
 				if($result){
-					$row_check = mysqli_num_rows($db_result);
+					$row_check = mysqli_num_rows($result);
 					if($row_check > 0){ 
 						$inline_offer_keyboard = null;
 						$text_body = "\n";
