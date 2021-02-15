@@ -58,7 +58,6 @@ class MainBotModule extends BotModule{
 			
 			//есть информация для показа
 			if($count_offers_array > 0){
-				include $this->telegram_dir . "Functions.php";
 				//вычисляем общее количество страниц
 				$total_pages = 1;
 				if($count_offers_array > $this->quantity_per_page){
