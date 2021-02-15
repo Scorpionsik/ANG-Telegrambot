@@ -106,7 +106,7 @@ class MainBotModule extends BotModule{
 	}
 	
 	protected function forCallbacks($request_info, $whitelist_info){
-		$this->main_bot->callAdmin("Test");
+		$this->main_bot->callAdmin($request_info->getCallbackData());
 	}
 	
 	private function getOffers($where_query_part){
