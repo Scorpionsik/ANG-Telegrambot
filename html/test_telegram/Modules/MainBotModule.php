@@ -72,7 +72,7 @@ class MainBotModule extends BotModule{
 			$this->main_bot->callAdmin($request_info->getMessageData()->getText());
 			if(!preg_match("/Контакты объекта/", $request_info->getMessageData()->getText())){
 				$text_title = "➖➖➖<b>${text_title}</b>➖➖➖";
-				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . ";";
+				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
 				$result = $this->main_bot->getRequestResult($query);
 				if($result){
 					$this->main_bot->callAdmin("1");
