@@ -218,7 +218,7 @@ class MainBotModule extends BotModule{
 	}
 	
 	private function setPhonesPress($offer, $whitelist_info){
-		
+		if(is_null($offer)) $this->bot->callAdmin("null");
 		$this->bot->callAdmin($whitelist_info->getIdWhitelist() . " " . $offer->getIdOffer() . " " . $offer->getIdDatabase());
 		$query = "insert into agent_phone_press values (" . $whitelist_info->getIdWhitelist() . ", '" . $offer->getIdOffer() . "', " . $offer->getIdDatabase() .  "," . time() . ");";
 		$this->main_bot->getRequestResult($query);
