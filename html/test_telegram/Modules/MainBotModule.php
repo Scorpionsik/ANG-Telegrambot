@@ -56,10 +56,6 @@ class MainBotModule extends BotModule{
 				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
 				$this->setOffersPress($request_info, $whitelist_info);
 			}
-			//информации нет
-			else{
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
-			}
 	}
 	/* конец Обработка вводимых сообщений*/
 		
@@ -192,6 +188,10 @@ class MainBotModule extends BotModule{
 			
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
 		}
+		//информации нет
+			else{
+				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!");
+			}
 	}
 	
 	private function getOffers($where_query_part){
