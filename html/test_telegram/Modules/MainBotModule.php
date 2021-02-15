@@ -51,7 +51,28 @@ class MainBotModule extends BotModule{
 		}
 		//показ объектов
 		if($is_show_offers){
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
+			}
+			//информации нет
+			else{
+				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!");
+			}
+		}
+	}
+	
+	protected function forCallbacks($request_info, $whitelist_info){
+		//перелистнуть страницу
+		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
+			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
+		}
+		//отобразить телефоны
+		else if(preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
+			
+		}
+	}
+	
+	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info){
+		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 			
 			$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
 			$count_offers_array = count($offers_array);
@@ -97,16 +118,6 @@ class MainBotModule extends BotModule{
 				if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\n\n" . $end_page_text;
 				
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
-			}
-			//информации нет
-			else{
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!");
-			}
-		}
-	}
-	
-	protected function forCallbacks($request_info, $whitelist_info){
-		$this->main_bot->callAdmin($request_info->getCallbackData());
 	}
 	
 	private function getOffers($where_query_part){
