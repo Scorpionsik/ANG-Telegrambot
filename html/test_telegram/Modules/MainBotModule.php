@@ -74,6 +74,7 @@ class MainBotModule extends BotModule{
 				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . ";";
 				$result = $this->main_bot->getRequestResult($query);
 				if($result){
+					$this->main_bot->callAdmin("1");
 					$row_check = mysqli_num_rows($db_result);
 					if($row_check > 0){ 
 						$inline_offer_keyboard = null;
@@ -123,6 +124,7 @@ class MainBotModule extends BotModule{
 						}
 						//редактируем
 						$this->main_bot->editMessage($request_info->getIdTelegram(), $request_info->getMessageData(), $text_title . $text_body, $inline_offer_keyboard);
+						$this->main_bot->callAdmin("2");
 					}
 					//если информации о пользователе нет в базе
 					else{
