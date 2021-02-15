@@ -33,7 +33,7 @@ class InlineCountPagesBotKeyboard extends BotKeyboard {
 					$button->addData("callback_data", "1");
 					$this->addButton($button, 1);
 				}
-				if($current_page < $pages - 2){
+				if($current_page < $count_pages - 2){
 					$button = new KeyboardButton("⏩ ${count_pages}");
 					$button->addData("callback_data", $count_pages);
 					$this->addButton($button, 1);
