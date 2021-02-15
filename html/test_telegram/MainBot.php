@@ -75,21 +75,33 @@ class MainBot{
 
 	//отправка сообщений в телеграм-чат
 	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false){
-		if(is_null($bot_keyboard)) $this->bot->sendMessage($id_telegram, $message_text, 'HTML', true, null);
-		else{
-			$keyboard = null;
+		$keyboard = null;
+		if(!is_null($bot_keyboard)){
 			if($is_inline){
 				$keyboard = $this->getInlineKeyboard($bot_keyboard);
 			}
 			else{
 				$keyboard = $this->getReplyKeyboard($bot_keyboard);
 			}
-			$this->bot->sendMessage($id_telegram, $message_text, 'HTML', true, null, $keyboard);
 		}
+		$this->bot->sendMessage($id_telegram, $message_text, 'HTML', true, null, $keyboard);
 	}
 	
 	public function sendPhoto($id_telegram, $photo_link, $description){
 		$this->bot->sendPhoto($id_telegram, $photo_link, $description, null, null, false, "HTML");
+	}
+	
+	public function editMessage($id_telegram, $message_data, $new_message_text, $bot_keyboard = null, $is_inline = true){
+		$keyboard = null;
+		if(!is_null($bot_keyboard)){
+			if($is_inline){
+				$keyboard = $this->getInlineKeyboard($bot_keyboard);
+			}
+			else{
+				$keyboard = $this->getReplyKeyboard($bot_keyboard);
+			}
+		}
+		$bot->editMessageText($id_telegram, $message_data->getMessageId(), $new_message_text, "HTML", false, $keyboard);
 	}
 	
 	public function deleteMessage($message_data){

@@ -1,6 +1,7 @@
 <?php
 $telegram_dir = explode('Modules',__DIR__)[0];
 require_once $telegram_dir . "Functions.php";
+require_once $telegram_dir . "Offer.php";
 require_once $telegram_dir . "Keyboards/DefaultBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineOfferBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineCountPagesBotKeyboard.php";
@@ -61,11 +62,75 @@ class MainBotModule extends BotModule{
 	protected function forCallbacks($request_info, $whitelist_info){
 		//перелистнуть страницу
 		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
+			$this->turnThePage($whitelist_info, $request_info->getCallbackData());
 			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
 		}
 		//отобразить телефоны
 		else if(preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
-			
+			$text_title = "Контакты объекта";
+			//проверка, изменялся ли уже текст в сообщении
+			if(!preg_match('/${text_title}/', $this->main_bot->getMessageText($request_info->getMessageData())){
+				$text_title = "➖➖➖<b>${text_title}</b>➖➖➖";
+				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . ";";
+				$result = $this->main_bot->getRequestResult($query);
+				if($result){
+					$row_check = mysqli_num_rows($db_result);
+					if($row_check > 0){ 
+						$inline_offer_keyboard = null;
+						$text_body = "\n";
+						//собираем текст сообщения и необходимую информацию
+						for($i = 0; $i < $row_check; $i++){
+							$row = mysqli_fetch_row($result);
+							
+							if($i == 0){
+								$is_exclusive = $row[11];
+								$id_user = $row[0];
+								$username = $row[1];
+								$agency = $row[2];
+								$id_database = $row[4];
+								$image_url = $row[5];
+								$city = $row[6];
+								$street = $row[7];
+								$house_num = $row[8];
+								$flat_type = $row[9];
+								$offer_type = $row[10];
+								
+								
+								//собираем клавиатуру
+								$offer = new Offer("", $request_info->getCallbackData(), $id_database, $image_url, $this->functions->getSiteUrl($offer_type, $flat_type), $city, $street, $house_num, $id_user);
+								$inline_offer_keyboard = new InlineOfferBotKeyboard($offer, $whitelist_info, false);
+								
+								//проверка на эксклюзивы
+								if($is_exclusive == 1){
+									$text_body = "\nКонтакты скрыты";
+									break;
+								}
+								
+								//пишем имя агента
+								if(!is_null($username) && $username != ""){
+									foreach(preg_split("/;/", $username) as $newname)
+										{
+											$text_body = $text_body . "💁‍♂️ ${newname}\r\n";
+										}
+								}
+								else $text_body = $text_body . "🤷 Имя не указано\r\n";
+								//пишем агенство
+								if(!is_null($agency) && $agency != "") $text_body = $text_body . "📎 Агенство ${agency}\r\n"
+							}
+							//пишем телефоны
+							$phonenumber = $row[3];
+							$text_body = $text_body . preg_replace("/(0\d{2})(\d{3})(\d{2})(\d{2})/", "$1 $2 $3 $4", $phonenumber) . "\r\n";
+						}
+						//редактируем
+						$this->main_bot->editMessage($request_info->getIdTelegram(), $request_info->getMessageData(), $text_title . $text_body, $inline_offer_keyboard);
+					}
+					//если информации о пользователе нет в базе
+					else{
+						$this->main_bot->editMessage($request_info->getIdTelegram(), $request_info->getMessageData(), "Данные о владельце не найдены.");
+					}
+					mysqli_free_result($result);
+				}
+			}
 		}
 	}
 	
