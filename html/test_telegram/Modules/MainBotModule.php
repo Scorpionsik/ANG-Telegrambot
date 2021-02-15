@@ -131,7 +131,7 @@ class MainBotModule extends BotModule{
 						//редактируем
 						$this->main_bot->editMessage($request_info->getIdTelegram(), $request_info->getMessageData(), $text_title . $text_body, $inline_offer_keyboard);
 						if(!is_null($offer)) $this->setPhonesPress($offer, $whitelist_info);
-						else $this->main_bot->callAdmin("null");
+						//else $this->main_bot->callAdmin("null");
 					}
 					//если информации о пользователе нет в базе
 					else{
@@ -218,7 +218,7 @@ class MainBotModule extends BotModule{
 	}
 	
 	private function setPhonesPress($offer, $whitelist_info){
-		if(is_null($offer)) $this->bot->callAdmin("null");
+		$this->bot->callAdmin("test");
 		$this->bot->callAdmin($whitelist_info->getIdWhitelist() . " " . $offer->getIdOffer() . " " . $offer->getIdDatabase());
 		$query = "insert into agent_phone_press values (" . $whitelist_info->getIdWhitelist() . ", '" . $offer->getIdOffer() . "', " . $offer->getIdDatabase() .  "," . time() . ");";
 		$this->main_bot->getRequestResult($query);
