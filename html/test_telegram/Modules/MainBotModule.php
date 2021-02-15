@@ -4,7 +4,6 @@ require_once $telegram_dir . "Keyboards/DefaultBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineOfferBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineCountPagesBotKeyboard.php";
 require_once "BotModule.php";
-require_once $telegram_dir . "Functions.php";
 
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
@@ -57,6 +56,7 @@ class MainBotModule extends BotModule{
 			
 			//есть информация для показа
 			if($count_offers_array > 0){
+				include $telegram_dir . "Functions.php";
 				//вычисляем общее количество страниц
 				$total_pages = 1;
 				if($count_offers_array > $this->quantity_per_page){
@@ -109,6 +109,7 @@ class MainBotModule extends BotModule{
 	}
 	
 	private function getOffers($where_query_part){
+		include $telegram_dir . "Functions.php";
 		$result = $this->main_bot->getRequestResult($select_and_from_query_part . $where_query_part);
 		$offers_array = getOffersFromDBResult($result);
 		mysqli_free_result($result);
