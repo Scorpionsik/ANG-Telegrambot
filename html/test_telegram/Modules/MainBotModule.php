@@ -8,6 +8,7 @@ require_once "BotModule.php";
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
 	private $quantity_per_page = 10;
+	private $telegram_dir = explode('Modules',__DIR__)[0];
 	
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
@@ -56,7 +57,7 @@ class MainBotModule extends BotModule{
 			
 			//есть информация для показа
 			if($count_offers_array > 0){
-				include $telegram_dir . "Functions.php";
+				include $this->telegram_dir . "Functions.php";
 				//вычисляем общее количество страниц
 				$total_pages = 1;
 				if($count_offers_array > $this->quantity_per_page){
@@ -92,7 +93,7 @@ class MainBotModule extends BotModule{
 				//конец страницы
 				$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
 				
-				$end_page_text = "Всего " . declOfNum($count_offers_array, array('объект','объекта','объектов') . " за последние 3 дня.");
+				$end_page_text = "Всего " . declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последние 3 дня.");
 				if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . $end_page_text;
 				
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
@@ -109,7 +110,7 @@ class MainBotModule extends BotModule{
 	}
 	
 	private function getOffers($where_query_part){
-		include $telegram_dir . "Functions.php";
+		include $this->telegram_dir . "Functions.php";
 		$result = $this->main_bot->getRequestResult($select_and_from_query_part . $where_query_part);
 		$offers_array = getOffersFromDBResult($result);
 		mysqli_free_result($result);
