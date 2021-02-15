@@ -130,7 +130,7 @@ class MainBotModule extends BotModule{
 						}
 						//редактируем
 						$this->main_bot->editMessage($request_info->getIdTelegram(), $request_info->getMessageData(), $text_title . $text_body, $inline_offer_keyboard);
-						if(!is_null($offer)) $this->setPhonesPress($offer, $whitelist_info);
+						if(!is_null($offer)) $this->setPhonesPress($offer, $request_info, $whitelist_info);
 					}
 					//если информации о пользователе нет в базе
 					else{
