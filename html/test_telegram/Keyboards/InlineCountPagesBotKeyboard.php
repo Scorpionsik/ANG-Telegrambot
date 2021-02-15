@@ -3,7 +3,7 @@ require_once "BotKeyboard.php";
 require_once "KeyboardButton.php";
 
 class InlineCountPagesBotKeyboard extends BotKeyboard {
-	private $max_pages_in_keyboard = 7;
+	private $max_pages_in_keyboard = 5; //максимум 8
 	
 	public function __construct($current_page, $count_pages){
 		parent::__construct(1);
