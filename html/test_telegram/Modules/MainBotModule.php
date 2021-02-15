@@ -108,7 +108,7 @@ class MainBotModule extends BotModule{
 		$this->main_bot->callAdmin("Test");
 	}
 	
-	private getOffers($where_query_part){
+	private function getOffers($where_query_part){
 		$result = $this->main_bot->getRequestResult($select_and_from_query_part . $where_query_part);
 		$offers_array = getOffersFromDBResult($result);
 		mysqli_free_result($result);
