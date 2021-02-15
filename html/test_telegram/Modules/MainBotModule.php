@@ -9,7 +9,7 @@ require_once "BotModule.php";
 
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
-	private $quantity_per_page = 2;
+	private $quantity_per_page = 10;
 	private $functions;
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
@@ -142,7 +142,7 @@ class MainBotModule extends BotModule{
 			}
 		}
 		else{
-			$this->main_bot->callAdmin($request_info->getCallbackData());
+			$this->main_bot->callAdmin("MainBotModule - Callback - " . $request_info->getCallbackData() . " - " . $whitelist_info->getIdWhitelist() . " " .$whitelist_info->getUsername());
 		}
 	}
 	/* конец Обработка инлайн запросов*/
@@ -218,6 +218,7 @@ class MainBotModule extends BotModule{
 	}
 	
 	private function setPhonesPress($offer, $whitelist_info){
+		
 		$query = "insert into agent_phone_press values (" . $whitelist_info->getIdWhitelist() . ", '" . $offer->getIdOffer() . "', " . $offer->getIdDatabase() .  "," . time() . ");";
 		$this->main_bot->getRequestResult($query);
 	}
