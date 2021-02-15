@@ -101,7 +101,6 @@ class MainBot{
 				$keyboard = $this->getReplyKeyboard($bot_keyboard);
 			}
 		}
-		//$this->callAdmin($id_telegram . " " . $message_data->getMessageId() . " " . $new_message_text);
 		$this->bot->editMessageText($id_telegram, $message_data->getMessageId(), $new_message_text, "HTML", false, $keyboard);
 	}
 	
