@@ -16,7 +16,6 @@ class MainBotModule extends BotModule{
 	}
 
 	protected function forMessages($request_info, $whitelist_info){
-		
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 		$is_show_offers = true;
 		$current_turn_page = $whitelist_info->getTurnPage();
@@ -57,9 +56,8 @@ class MainBotModule extends BotModule{
 			else{
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!");
 			}
-		}
 	}
-	
+		
 	protected function forCallbacks($request_info, $whitelist_info){
 		//перелистнуть страницу
 		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
@@ -73,51 +71,52 @@ class MainBotModule extends BotModule{
 	
 	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info){
 		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+		
+		$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
+		$count_offers_array = count($offers_array);
+		
+		//есть информация для показа
+		if($count_offers_array > 0){
+			//вычисляем общее количество страниц
+			$total_pages = 1;
+			if($count_offers_array > $this->quantity_per_page){
+				$total_pages = ceil($count_offers_array / $this->quantity_per_page);
+				if($total_pages < 1) $total_pages=1;
+			}
+			//проверяем на валидность выбранную страницу
+			if($current_turn_page > $total_pages) $current_turn_page = $total_pages;
+			else if ($current_turn_page < 1) $current_turn_page = 1;
+			//вычисляем диапазон, который покажем агенту
+			$start_index = ($this->quantity_per_page * ($current_turn_page - 1));
+			$end_index = min($start_index + $this->quantity_per_page, $count_offers_array);
 			
-			$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
-			$count_offers_array = count($offers_array);
+			//начало страницы
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Начало страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
 			
-			//есть информация для показа
-			if($count_offers_array > 0){
-				//вычисляем общее количество страниц
-				$total_pages = 1;
-				if($count_offers_array > $this->quantity_per_page){
-					$total_pages = ceil($count_offers_array / $this->quantity_per_page);
-					if($total_pages < 1) $total_pages=1;
-				}
-				//проверяем на валидность выбранную страницу
-				if($current_turn_page > $total_pages) $current_turn_page = $total_pages;
-				else if ($current_turn_page < 1) $current_turn_page = 1;
-				//вычисляем диапазон, который покажем агенту
-				$start_index = ($this->quantity_per_page * ($current_turn_page - 1));
-				$end_index = min($start_index + $this->quantity_per_page, $count_offers_array);
-				
-				//начало страницы
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Начало страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
-				
-				//показываем объявления
-				for($i = $start_index; $i < $end_index; $i++){
-					$inline_offer_keyboard = new InlineOfferBotKeyboard($offers_array[$i], $whitelist_info);
-					//основное сообщение
-					$this->main_bot->sendMessage($request_info->getIdTelegram(), $offers_array[$i]->getOfferDescription());
-					//фотографии
-					if(!is_null($offers_array[$i]->getImageUrl()) && $offers_array[$i]->getImageUrl() != ""){
-						try{
-							$this->main_bot->sendPhoto($request_info->getIdTelegram(), "https://an-gorod-image.com.ua/storage/uploads/preview/" . $offers_array[$i]->getImageUrl(), "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $offers_array[$i]->getIdOffer() . "'><b>Посмотреть все фотографии</b></a>");
-						}
-						catch(Exception $e){
-						}
+			//показываем объявления
+			for($i = $start_index; $i < $end_index; $i++){
+				$inline_offer_keyboard = new InlineOfferBotKeyboard($offers_array[$i], $whitelist_info);
+				//основное сообщение
+				$this->main_bot->sendMessage($request_info->getIdTelegram(), $offers_array[$i]->getOfferDescription());
+				//фотографии
+				if(!is_null($offers_array[$i]->getImageUrl()) && $offers_array[$i]->getImageUrl() != ""){
+					try{
+						$this->main_bot->sendPhoto($request_info->getIdTelegram(), "https://an-gorod-image.com.ua/storage/uploads/preview/" . $offers_array[$i]->getImageUrl(), "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $offers_array[$i]->getIdOffer() . "'><b>Посмотреть все фотографии</b></a>");
 					}
-					//место под телефоны и инлайн клаву
-					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Чтобы посмотреть контакты владельца объекта <b>". $offers_array[$i]->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
+					catch(Exception $e){
+					}
 				}
-				//конец страницы
-				$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
-				
-				$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последние 3 дня.";
-				if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\n\n" . $end_page_text;
-				
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
+				//место под телефоны и инлайн клаву
+				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Чтобы посмотреть контакты владельца объекта <b>". $offers_array[$i]->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
+			}
+			//конец страницы
+			$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
+			
+			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последние 3 дня.";
+			if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\n\n" . $end_page_text;
+			
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
+		}
 	}
 	
 	private function getOffers($where_query_part){
