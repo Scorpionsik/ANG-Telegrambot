@@ -106,7 +106,7 @@ class MainBot{
 
 	//отправка сообщения админу
 	public function callAdmin($message_text){
-		$this->bot->sendMessage($this->id_admin, $message_text);
+		$this->bot->sendMessage($this->id_admin, $message_text, "HTML");
 	}
 	
 	public function sendAdminContact($id_telegram){
