@@ -137,7 +137,15 @@ class MainBot{
 
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
-		$this->callAdmin("<b><u>Ошибка</u></b>\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername());
+		$text = "<b><u>Ошибка</u></b>";
+		if(is_null($request_info->getIdWhitelist())){
+			$text = $text . "\n<b>Id_telegram: </b> " . $request_info->getIdTelegram();
+		}
+		else{
+			$text = $text . "\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername();
+		}
+		
+		$this->callAdmin($text);
 		$this->callAdmin($exception->getMessage(), false);
 		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine(), false);
 		$this->callAdmin($exception->getTraceAsString(), false);
