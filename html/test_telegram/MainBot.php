@@ -88,6 +88,10 @@ class MainBot{
 		}
 	}
 	
+	public function sendPhoto($id_telegram, $photo_link, $description){
+		$this->bot->sendPhoto($id_telegram, $photo_link, $description, null, null, false, "HTML");
+	}
+	
 	public function deleteMessage($message_data){
 		$this->bot->deleteMessage($message_data->getChat()->getId(), $message_data->getMessageId());
 	}
