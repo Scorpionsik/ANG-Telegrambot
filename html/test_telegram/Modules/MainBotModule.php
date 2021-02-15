@@ -9,7 +9,7 @@ require_once "BotModule.php";
 
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
-	private $quantity_per_page = 10;
+	private $quantity_per_page = 2;
 	private $functions;
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
