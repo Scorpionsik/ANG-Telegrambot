@@ -132,6 +132,9 @@ class MainBotModule extends BotModule{
 				}
 			}
 		}
+		else{
+			$this->main_bot->callAdmin($request_info->getCallbackData());
+		}
 	}
 	
 	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info){
