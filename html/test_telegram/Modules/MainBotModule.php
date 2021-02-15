@@ -115,7 +115,7 @@ class MainBotModule extends BotModule{
 								}
 								else $text_body = $text_body . "🤷 Имя не указано\r\n";
 								//пишем агенство
-								if(!is_null($agency) && $agency != "") $text_body = $text_body . "📎 Агенство ${agency}\r\n"
+								if(!is_null($agency) && $agency != "") $text_body = $text_body . "📎 Агенство ${agency}\r\n";
 							}
 							//пишем телефоны
 							$phonenumber = $row[3];
