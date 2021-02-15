@@ -117,8 +117,10 @@ class MainBot{
 	}
 
 	//отправка сообщения админу
-	public function callAdmin($message_text){
-		$this->bot->sendMessage($this->id_admin, $message_text, "HTML");
+	public function callAdmin($message_text, $is_html = true){
+		$html = null;
+		if($is_html) $html = "HTML";
+		$this->bot->sendMessage($this->id_admin, $message_text, $html);
 	}
 	
 	public function sendAdminContact($id_telegram){
@@ -137,9 +139,9 @@ class MainBot{
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
 		$this->callAdmin("<b><u>Ошибка</u></b>\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername());
-		$this->callAdmin($exception->getMessage());
-		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine());
-		$this->callAdmin($exception->getTraceAsString());
+		$this->callAdmin($exception->getMessage(), false);
+		$this->callAdmin($exception->getFile() . ", строка " . $exception->getLine(), false);
+		$this->callAdmin($exception->getTraceAsString(), false);
 	}
 
 	//получить результат запроса из базы данных
