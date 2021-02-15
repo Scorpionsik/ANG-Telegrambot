@@ -18,11 +18,6 @@ class MainBot{
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
-		/*
-		$this->bot->command('test', function ($message) {
-			$request_info = $this->getFullRequestInfo(new RequestInfo($message));
-			$this->sendMessage($request_info->getIdTelegram(), $request_info->getIdTelegram() . ": " . $request_info->getIdWhitelist() . ", " . $request_info->getModeValue());
-		});*/
 
 		$this->bot->command('help', function ($message) {
 			$this->deleteMessage($message);
