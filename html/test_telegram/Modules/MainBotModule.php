@@ -54,7 +54,7 @@ class MainBotModule extends BotModule{
 		if($is_show_offers){
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
-				$this->setOffersPress($whitelist_info);
+				$this->setOffersPress($request_info, $whitelist_info);
 			}
 			//информации нет
 			else{
@@ -69,7 +69,7 @@ class MainBotModule extends BotModule{
 		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
 			$this->turnThePage($whitelist_info, $request_info->getCallbackData());
 			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
-			$this->setOffersPress($whitelist_info);
+			$this->setOffersPress($request_info, $whitelist_info);
 		}
 		//отобразить телефоны
 		else if(preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
