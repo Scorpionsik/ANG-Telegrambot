@@ -135,6 +135,11 @@ class MainBot{
 			mysqli_free_result($result);
 		}
 	}
+	
+	public function checkIsIdAdmin($request_info){
+		if($request_info->getIdTelegram() == $this->id_admin) return true;
+		else return false;
+	}
 
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
