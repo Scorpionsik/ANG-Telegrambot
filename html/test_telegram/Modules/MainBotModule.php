@@ -16,6 +16,7 @@ class MainBotModule extends BotModule{
 		$this->functions = new Functions();
 	}
 
+	/* Обработка вводимых сообщений*/
 	protected function forMessages($request_info, $whitelist_info){
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 		$is_show_offers = true;
@@ -51,19 +52,24 @@ class MainBotModule extends BotModule{
 		}
 		//показ объектов
 		if($is_show_offers){
+				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
+				$this->setOffersPress($whitelist_info);
 			}
 			//информации нет
 			else{
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!");
+				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 			}
 	}
+	/* конец Обработка вводимых сообщений*/
 		
+	/* Обработка инлайн запросов*/
 	protected function forCallbacks($request_info, $whitelist_info){
 		//перелистнуть страницу
 		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
 			$this->turnThePage($whitelist_info, $request_info->getCallbackData());
 			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
+			$this->setOffersPress($whitelist_info);
 		}
 		//отобразить телефоны
 		else if(preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
@@ -77,6 +83,7 @@ class MainBotModule extends BotModule{
 					$row_check = mysqli_num_rows($result);
 					if($row_check > 0){ 
 						$inline_offer_keyboard = null;
+						$offer = null;
 						$text_body = "\n";
 						//собираем текст сообщения и необходимую информацию
 						for($i = 0; $i < $row_check; $i++){
@@ -123,6 +130,7 @@ class MainBotModule extends BotModule{
 						}
 						//редактируем
 						$this->main_bot->editMessage($request_info->getIdTelegram(), $request_info->getMessageData(), $text_title . $text_body, $inline_offer_keyboard);
+						if(!is_null($offer)) $this->setPhonesPress($offer, $whitelist_info);
 					}
 					//если информации о пользователе нет в базе
 					else{
@@ -136,10 +144,9 @@ class MainBotModule extends BotModule{
 			$this->main_bot->callAdmin($request_info->getCallbackData());
 		}
 	}
+	/* конец Обработка инлайн запросов*/
 	
 	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info){
-		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
-		
 		$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
 		$count_offers_array = count($offers_array);
 		
@@ -201,6 +208,16 @@ class MainBotModule extends BotModule{
 	
 	private function turnThePage($whitelist_info, $page){
 		$query = "update white_list set Turn_page=${page} where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+		$this->main_bot->getRequestResult($query);
+	}
+	
+	private function setOffersPress($whitelist_info){
+		$query = "insert into get_offers_press values(" . $whitelist_info->getIdWhitelist() . ", " . time() . ");";
+		$this->main_bot->getRequestResult($query);
+	}
+	
+	private function setPhonesPress($offer, $whitelist_info){
+		$query = "insert into agent_phone_press values (" . $whitelist_info->getIdWhitelist() . ", '" . $offer->getIdOffer() . "', " . $offer->getIdDatabase() .  "," . time() . ");";
 		$this->main_bot->getRequestResult($query);
 	}
 }
