@@ -5,7 +5,6 @@ include "RequestInfo.php";
 include "WhitelistInfo.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
-include __DIR__ . "/Modules/TestBotModule.php";
 require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 
 class MainBot{
@@ -59,7 +58,7 @@ class MainBot{
 				switch($request_info->getModeValue()){
 					//изменение максимальной цены для агентов
 					case 1:
-						$module = new TestBotModule($this);
+						
 					break;
 					//стандартный режим работы бота
 					case 0:
