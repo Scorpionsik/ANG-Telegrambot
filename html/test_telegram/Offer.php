@@ -9,8 +9,9 @@ class Offer{
 	private $city;
 	private $street;
 	private $house_num;
+	private $id_user;
 	
-	public function __construct($offer_description, $id_offer, $id_database, $image_url, $site_url, $city, $street, $house_num)
+	public function __construct($offer_description, $id_offer, $id_database, $image_url, $site_url, $city, $street, $house_num, $id_user)
 	{
 		$this->offer_description = $offer_description;
 		$this->id_offer = $id_offer;
@@ -20,6 +21,7 @@ class Offer{
 		$this->city = $city;
 		$this->street = $street;
 		$this->house_num = $house_num;
+		$this->id_user = $id_user;
 	}
 	
 	public function getOfferDescription()
@@ -60,6 +62,10 @@ class Offer{
 	public function getHouseNum()
 	{
 		return $this->house_num;
+	}
+	
+	public function getIdUser(){
+		return $this->id_user;
 	}
 }
 
