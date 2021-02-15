@@ -17,11 +17,13 @@ class InlineOfferBotKeyboard extends BotKeyboard {
 		}
 		
 		if(!is_null($offer->getCity()) && !is_null($offer->getStreet()) && !is_null($offer->getHouseNum())){
-			$this->addRow();
-			$gmap_link = "https://www.google.com.ua/maps/place/" . preg_replace('/[ ]/','+',$offer->getStreet()) . "," . preg_replace('/[ ]/','+',$offer->getHouseNum()) . "," . preg_replace('/[ ]/','+',$offer->getCity());
-			$button = new KeyboardButton("🗺 Посмотреть на карте");
-			$button->addData("url", $gmap_link);
-			$this->addButton($button);
+			if($offer->getCity() != "" && $offer->getStreet() != "" && $offer->getHouseNum() != ""){
+				$this->addRow();
+				$gmap_link = "https://www.google.com.ua/maps/place/" . preg_replace('/[ ]/','+',$offer->getStreet()) . "," . preg_replace('/[ ]/','+',$offer->getHouseNum()) . "," . preg_replace('/[ ]/','+',$offer->getCity());
+				$button = new KeyboardButton("🗺 Посмотреть на карте");
+				$button->addData("url", $gmap_link);
+				$this->addButton($button);
+			}
 		}
 		
 		if($is_show_phones){
