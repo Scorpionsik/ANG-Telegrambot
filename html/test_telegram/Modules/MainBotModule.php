@@ -8,10 +8,11 @@ require_once "BotModule.php";
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
 	private $quantity_per_page = 10;
-	private $telegram_dir = explode('Modules',__DIR__)[0];
+	private $telegram_dir;
 	
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
+		$this->telegram_dir = explode('Modules',__DIR__)[0];
 	}
 
 	protected function forMessages($request_info, $whitelist_info){
