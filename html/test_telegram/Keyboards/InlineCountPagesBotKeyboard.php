@@ -13,7 +13,7 @@ class InlineCountPagesBotKeyboard extends BotKeyboard {
 			$start_page = $current_page - $floor_max_pages;
 			if($count_pages >= $this->max_pages_in_keyboard){
 				if($current_page <= $floor_max_pages + 1) $start_page = 1;
-				else if($current_page >= $count_pages - $floor_max_pages) $start_page = $count_pages - $this->max_pages_in_keyboard - 1;
+				else if($current_page >= $count_pages - $floor_max_pages) $start_page = $count_pages - $this->max_pages_in_keyboard + 1;
 			}
 			else $start_page = 1;
 			
