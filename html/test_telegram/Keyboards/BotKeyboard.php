@@ -11,7 +11,7 @@ class BotKeyboard{
 	}
 	
 	public function addRow($position = -1, $is_overwrite = false){
-		if($position < 0 && $position > count($this->keyboard_array) - 1) $this->keyboard_array[] = array();
+		if($position < 0) $this->keyboard_array[] = array();
 		else{
 			if($is_overwrite) $this->keyboard_array[$position] = array();
 			else array_splice($this->keyboard_array, $position, 0, array());
