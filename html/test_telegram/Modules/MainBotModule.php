@@ -80,12 +80,12 @@ class MainBotModule extends BotModule{
 					//основное сообщение
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), $offers_array[$i]->getOfferDescription());
 					//фотографии
-					if(is_null($offers_array[$i]->getImageUrl()) && $offers_array[$i]->getImageUrl() != ""){
-						//try{
+					if(!is_null($offers_array[$i]->getImageUrl()) && $offers_array[$i]->getImageUrl() != ""){
+						try{
 							$this->main_bot->sendPhoto($request_info->getIdTelegram(), "https://an-gorod-image.com.ua/storage/uploads/preview/" . $offers_array[$i]->getImageUrl(), "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $offers_array[$i]->getIdOffer() . "'><b>Посмотреть все фотографии</b></a>");
-						//}
-						//catch(Exception $e){
-						//}
+						}
+						catch(Exception $e){
+						}
 					}
 					//место под телефоны и инлайн клаву
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Чтобы посмотреть контакты владельца объекта <b>". $offers_array[$i]->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
