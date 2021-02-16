@@ -25,9 +25,9 @@ class FindByPriceBotModule extends BotModule{
 			if(preg_match('/^\d+$/', $message_text)){
 				$query = "update bind_whitelist_distr_flats set Price_lower_than=". $message_text ." where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
 				$this->main_bot->getRequestResult($query);
-				$this->lock = true;
-				$this->resetToDefaultMode($request_info, $whitelist_info, true);
+				$this->exitModule();
 			}
+			else if($message_text == "Отмена") $this->exitModule();
 			else $this->main_bot->sendMessage($request_info->getIdTelegram(), "Введено неверное значение!");
 		}
 		if(!$this->lock) $this->main_bot->sendMessage($request_info->getIdTelegram(), "Введите цену <u>без пробелов</u>. Бот найдёт и отобразит объекты с такой же ценой или ниже. Чтобы убрать фильтр по цене, <b>введите 0</b>.", $this->default_keyboard);
@@ -36,6 +36,11 @@ class FindByPriceBotModule extends BotModule{
 	
 	protected function forCallbacks($request_info, $whitelist_info){
 		
+	}
+	
+	private function exitModule(){
+		$this->lock = true;
+		$this->resetToDefaultMode($request_info, $whitelist_info, true);
 	}
 }
 
