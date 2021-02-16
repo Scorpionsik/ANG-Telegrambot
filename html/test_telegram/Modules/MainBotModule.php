@@ -55,7 +55,7 @@ class MainBotModule extends BotModule{
 				if(count($offer_array) > 0){
 					$this->showOffer($offer_array[0], $request_info, $whitelist_info);
 				}
-				else $this->sendMessage($request_info->getIdTelegram(), "Объект <u>" . $message_text . "</u> не найден в базе телеграм-бота.");
+				else $this->main_bot->sendMessage($request_info->getIdTelegram(), "Объект <u>" . $message_text . "</u> не найден в базе телеграм-бота.");
 			}
 		}
 		//показ объектов
