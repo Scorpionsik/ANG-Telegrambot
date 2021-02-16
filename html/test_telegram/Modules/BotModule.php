@@ -25,7 +25,7 @@ abstract class BotModule{
 	}
 	
 	protected function changeModeParam($request_info, $whitelist_info, $mode_param){
-		$this->main_bot->changeMode($request_info, $whitelist_info, $request_info->getModeParam(), $mode_param, false);
+		$this->main_bot->changeMode($request_info, $whitelist_info, $request_info->getModeValue(), $mode_param, false);
 	}
 	
 	protected function resetToDefaultMode($request_info, $whitelist_info, $is_distribute = false){
