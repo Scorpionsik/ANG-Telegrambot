@@ -33,7 +33,10 @@ class FindByPriceBotModule extends BotModule{
 			else if($message_text == "Отмена") $this->exitModule($request_info, $whitelist_info);
 			else $this->main_bot->sendMessage($request_info->getIdTelegram(), "Введено неверное значение!");
 		}
-		if(!$this->lock) $this->main_bot->sendMessage($request_info->getIdTelegram(), "Введите цену <u>без пробелов</u>. Бот найдёт и отобразит объекты с такой же ценой или ниже. Чтобы убрать фильтр по цене, <b>введите 0</b> или нажмите кнопку <b>Сбросить цену</b>", $this->default_keyboard);
+		if(!$this->lock) {
+			$text = "<b>Текущее значение: </b>" . $this->getFindByPrice($whitelist_info) . "\n\n";
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), $text . "Введите цену <u>без пробелов</u>. Бот найдёт и отобразит объекты с такой же ценой или ниже. Чтобы убрать фильтр по цене, <b>введите 0</b> или нажмите кнопку <b>Сбросить цену</b>", $this->default_keyboard);
+		}
 		
 	}
 	
@@ -49,6 +52,22 @@ class FindByPriceBotModule extends BotModule{
 	private function changeFindByPrice($value, $whitelist_info){
 		$query = "update bind_whitelist_distr_flats set Price_lower_than=". $value ." where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
 		$this->main_bot->getRequestResult($query);
+	}
+	
+	private function getFindByPrice($whitelist_info){
+		$return = "сброшено";
+		$query = "select Price_lower_than from bind_whitelist_distr_flats where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";"
+		$result = $this->main_bot->getRequestResult($query);
+		if($result){
+			$row_check = mysqli_num_rows($result);
+			if($row_check > 0){ 
+				$row = mysqli_fetch_row($result);
+				if($row[0] > 0) $return = $row[0];
+			}
+			mysqli_free_result($result);
+		}
+		
+		return $return;
 	}
 }
 
