@@ -5,7 +5,7 @@ require_once "Functions.php";
 require_once "WhitelistInfo.php";
 require_once "WhitelistUser.php";
 
-class NotofocationBot{
+class NotificationBot{
 	private $bot;
 	private $db;
 	private $functions;
