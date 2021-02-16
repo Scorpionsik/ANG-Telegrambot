@@ -23,11 +23,19 @@ class FindByPriceBotModule extends BotModule{
 		else{
 			$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 			if(preg_match('/^\d+$/', $message_text)){
-				$this->changeFindByPrice($message_text, $whitelist_info);
+				//$this->changeFindByPrice($message_text, $whitelist_info);
+				
+				$query = "update bind_whitelist_distr_flats set Price_lower_than=". $message_text ." where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+				$this->main_bot->getRequestResult($query);
+				
 				$this->exitModule($request_info, $whitelist_info);
 			}
 			else if($message_text == "Сбросить цену"){
-				$this->changeFindByPrice("0", $whitelist_info);
+				//$this->changeFindByPrice(0, $whitelist_info);
+				
+				$query = "update bind_whitelist_distr_flats set Price_lower_than=0 where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+				$this->main_bot->getRequestResult($query);
+				
 				$this->exitModule($request_info, $whitelist_info);
 			}
 			else if($message_text == "Отмена") $this->exitModule($request_info, $whitelist_info);
