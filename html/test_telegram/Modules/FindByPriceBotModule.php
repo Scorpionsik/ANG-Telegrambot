@@ -53,7 +53,6 @@ class FindByPriceBotModule extends BotModule{
 	}
 	
 	private function changeFindByPrice($value, $whitelist_info){
-		$this->main_bot->callAdmin($value . " " . $whitelist_info->getIdWhitelist());
 		$query = "update bind_whitelist_distr_flats set Price_lower_than=". $value ." where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
 		$this->main_bot->getRequestResult($query);
 	}
