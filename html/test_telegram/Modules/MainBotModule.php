@@ -38,7 +38,6 @@ class MainBotModule extends BotModule{
 			if(preg_match('/Поиск по цене/', $message_text)){
 				$is_show_offers = false;
 				$this->main_bot->changeMode($request_info, $whitelist_info, 1, 0);
-				//code here
 			}
 			//перелистнуть страницу
 			else if(preg_match('/^\d+$/', $message_text)){
@@ -48,7 +47,11 @@ class MainBotModule extends BotModule{
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
 				$is_show_offers = false;
-				//code here
+				$offer_array = $this->getOffers("WHERE Internal_id='" . $message_text . "';");
+				if(count($offer_array > 0)){
+					$this->showOffer($offer_array[0], $request_info, $whitelist_info);
+				}
+				else $this->sendMessage($request_info->getIdTelegram(), "Объект <u>" . $message_text . "</u> не найден в базе телеграм-бота.");
 			}
 		}
 		//показ объектов
@@ -167,19 +170,7 @@ class MainBotModule extends BotModule{
 			
 			//показываем объявления
 			for($i = $start_index; $i < $end_index; $i++){
-				$inline_offer_keyboard = new InlineOfferBotKeyboard($offers_array[$i], $whitelist_info);
-				//основное сообщение
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), $offers_array[$i]->getOfferDescription());
-				//фотографии
-				if(!is_null($offers_array[$i]->getImageUrl()) && $offers_array[$i]->getImageUrl() != ""){
-					try{
-						$this->main_bot->sendPhoto($request_info->getIdTelegram(), "https://an-gorod-image.com.ua/storage/uploads/preview/" . $offers_array[$i]->getImageUrl(), "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $offers_array[$i]->getIdOffer() . "'><b>Посмотреть все фотографии</b></a>");
-					}
-					catch(Exception $e){
-					}
-				}
-				//место под телефоны и инлайн клаву
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Чтобы посмотреть контакты владельца объекта <b>". $offers_array[$i]->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
+				$this->showOffer($offers_array[$i], $request_info, $whitelist_info);
 			}
 			//конец страницы
 			$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
@@ -200,6 +191,22 @@ class MainBotModule extends BotModule{
 		$offers_array = $this->functions->getOffersFromDBResult($result);
 		mysqli_free_result($result);
 		return $offers_array;
+	}
+	
+	private function showOffer($offer, $request_info, $whitelist_info){
+		$inline_offer_keyboard = new InlineOfferBotKeyboard($offer, $whitelist_info);
+		//основное сообщение
+		$this->main_bot->sendMessage($request_info->getIdTelegram(), $offer->getOfferDescription());
+		//фотографии
+		if(!is_null($offer->getImageUrl()) && $offer->getImageUrl() != ""){
+			try{
+				$this->main_bot->sendPhoto($request_info->getIdTelegram(), "https://an-gorod-image.com.ua/storage/uploads/preview/" . $offer->getImageUrl(), "<a href='https://angbots.ddns.net/image_ang/some_pic_get.php?entity=" . $offer->getIdOffer() . "'><b>Посмотреть все фотографии</b></a>");
+			}
+			catch(Exception $e){
+			}
+		}
+		//место под телефоны и инлайн клаву
+		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Чтобы посмотреть контакты владельца объекта <b>". $offer->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
 	}
 	
 	private function switchIsGetEditOffers($whitelist_info, $value){
