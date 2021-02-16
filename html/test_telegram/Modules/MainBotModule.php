@@ -60,7 +60,10 @@ class MainBotModule extends BotModule{
 		}
 		//показ объектов
 		if($is_show_offers){
-				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+				if($request_info->getModeParam() == 0){
+					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+					$this->changeModeParam($request_info, $whitelist_info, 1);
+				}
 				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
 				$this->setOffersPress($request_info, $whitelist_info);
 			}
