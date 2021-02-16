@@ -56,7 +56,7 @@ class FindByPriceBotModule extends BotModule{
 	
 	private function getFindByPrice($whitelist_info){
 		$return = "сброшено";
-		$query = "select Price_lower_than from bind_whitelist_distr_flats where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";"
+		$query = "select Price_lower_than from bind_whitelist_distr_flats where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
 		$result = $this->main_bot->getRequestResult($query);
 		if($result){
 			$row_check = mysqli_num_rows($result);
