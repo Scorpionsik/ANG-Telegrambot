@@ -65,7 +65,7 @@ class FindByPriceBotModule extends BotModule{
 			$row_check = mysqli_num_rows($result);
 			if($row_check > 0){ 
 				$row = mysqli_fetch_row($result);
-				if($row[0] > 0) $return = "объекты, стоимостью " . $row[0] . " и ниже";
+				if($row[0] > 0) $return = "объекты, стоимостью <u>" . $row[0] . " и ниже</u>";
 			}
 			mysqli_free_result($result);
 		}
