@@ -58,14 +58,14 @@ class FindByPriceBotModule extends BotModule{
 	}
 	
 	private function getFindByPrice($whitelist_info){
-		$return = "сброшено";
+		$return = "все объекты";
 		$query = "select Price_lower_than from bind_whitelist_distr_flats where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
 		$result = $this->main_bot->getRequestResult($query);
 		if($result){
 			$row_check = mysqli_num_rows($result);
 			if($row_check > 0){ 
 				$row = mysqli_fetch_row($result);
-				if($row[0] > 0) $return = $row[0];
+				if($row[0] > 0) $return = "объекты, стоимостью " . $row[0] . " и ниже";
 			}
 			mysqli_free_result($result);
 		}
