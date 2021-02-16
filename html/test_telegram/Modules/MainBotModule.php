@@ -48,7 +48,7 @@ class MainBotModule extends BotModule{
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
 				$is_show_offers = false;
 				$offer_array = $this->getOffers("WHERE Internal_id='" . $message_text . "';");
-				if(count($offer_array > 0)){
+				if(count($offer_array) > 0){
 					$this->showOffer($offer_array[0], $request_info, $whitelist_info);
 				}
 				else $this->sendMessage($request_info->getIdTelegram(), "Объект <u>" . $message_text . "</u> не найден в базе телеграм-бота.");
