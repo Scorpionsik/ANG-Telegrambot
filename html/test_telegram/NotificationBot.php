@@ -27,7 +27,7 @@ class NotificationBot{
 		$return = array();
 		$query_part = "";
 		if(!is_null($single_user)) $query_part = " and Id_whitelist_user = ${single_user}";
-		$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers from telegram_users join white_list using (Id_whitelist_user) WHERE white_list.Is_banned != 1 and white_list.Is_locked != 1${query_part} and (white_list.Is_get_new_offers=1 or white_list.Is_get_edit_offers=1);";
+		$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers, telegram_users.IsExist from telegram_users join white_list using (Id_whitelist_user) WHERE white_list.Is_banned != 1 and white_list.Is_locked != 1${query_part} and (white_list.Is_get_new_offers=1 or white_list.Is_get_edit_offers=1);";
 		$result = $this->getRequestResult($query);
 		if($result){
 			$row_check = mysqli_num_rows($result);
@@ -35,7 +35,7 @@ class NotificationBot{
 				for($i = 0; $i < $row_check; $i++){
 					$row = mysqli_fetch_row($result);
 					$whitelist_info = new WhitelistInfo($row[0], null, null, null, null, $row[2], $row[3], $row[4], null);
-					$whitelist_user = new WhitelistUser($row[1], $whitelist_info);
+					$whitelist_user = new WhitelistUser($row[1], $whitelist_info, $row[5]);
 					$return[] = $whitelist_user;
 				}
 				
@@ -79,6 +79,15 @@ class NotificationBot{
 		}
 		//место под телефоны и инлайн клаву
 		$this->sendMessage($id_telegram, "Чтобы посмотреть контакты владельца объекта <b>". $offer->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
+	}
+	
+	public function sendEndMessage($offers_count, $whitelist_user){
+		$this->sendMessage($whitelist_user->getIdTelegram(), $this->functions->declOfNum($offers_count, array('объект','объекта','объектов')) . " пришло за последние несколько минут.");
+	}
+	
+	public function setIsExist($whitelist_user, $value){
+		$query = "update telegram_users set IsExist = ${value} where Id_telegram_user=" . $whitelist_user->getIdTelegram() . ";"
+		$this->getRequestResult($query);
 	}
 	
 	private function getOffers($where_query_part){
