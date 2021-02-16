@@ -11,8 +11,11 @@ foreach($whitelist_users_array as $whitelist_user){
 		foreach($offers_array as $offer){
 			$bot->showOffer($offer, $whitelist_user->getIdTelegram(), $whitelist_user->getWhitelistInfo());
 		}
+		$bot->sendEndMessage(count($offers_array), $whitelist_user);
+		if($whitelist_user->getIsExist() == 0) $bot->setIsExist($whitelist_user, 1);
 	}
 	catch(Exception $ex){
+		$bot->setIsExist($whitelist_user, 0);
 	}
 }
 
