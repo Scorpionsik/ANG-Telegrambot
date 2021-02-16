@@ -27,7 +27,7 @@ class FindByPriceBotModule extends BotModule{
 				$this->exitModule($request_info, $whitelist_info);
 			}
 			else if($message_text == "Сбросить цену"){
-				$this->changeFindByPrice(0, $whitelist_info);
+				$this->changeFindByPrice("0", $whitelist_info);
 				$this->exitModule($request_info, $whitelist_info);
 			}
 			else if($message_text == "Отмена") $this->exitModule($request_info, $whitelist_info);
