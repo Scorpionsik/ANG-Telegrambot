@@ -3,8 +3,8 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
 include "WhitelistInfo.php";
-include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
+include __DIR__ . "/Modules/MainBotModule.php";
 require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 
 class MainBot{
@@ -53,7 +53,7 @@ class MainBot{
 				switch($request_info->getModeValue()){
 					//изменение максимальной цены для агентов
 					case 1:
-						
+
 					break;
 					//стандартный режим работы бота
 					case 0:
@@ -65,6 +65,18 @@ class MainBot{
 			else $this->sendMessageForBanned($request_info->getIdTelegram());
 		}
 		if(!is_null($module)) $module->start($request_info, $whitelist_info);
+	}
+	
+	public function changeMode($request_info, $whitelist_info, $mode = 0, $mode_param = 0, $is_distribute = true){
+		$new_request_info = $request_info;
+		if($mode != $request_info->getModeValue() || $mode_param != $request_info->getModeParam()){
+			$query = "update telegram_users set Mode=${mode}, Mode_param=${mode_param} where Id_telegram_user=" . $request_info->getIdTelegram() . ";";
+			$this->getRequestResult($query);
+			
+			if($is_distribute) $new_request_info = new RequestInfo($request_info, $whitelist_info->getIdWhitelist(), $mode, $mode_param);
+		}
+		
+		if($is_distribute) $this->distribute($new_request_info, $whitelist_info);
 	}
 
 	//отправка сообщений в телеграм-чат
