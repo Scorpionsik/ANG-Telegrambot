@@ -50,7 +50,7 @@ class MainBot{
 				$whitelist_info = $this->getFullWhitelistInfo($request_info);
 			}
 			//проверяем, забанен ли пользователь
-			if(!is_null($whitelist_info) && !$whitelist_info->getIsBanned()){
+			if(!is_null($whitelist_info) && !$whitelist_info->getIsBanned() && !$whitelist_info->getIsLocked()){
 				switch($request_info->getModeValue()){
 					//изменение максимальной цены для агентов
 					case 1:
@@ -190,7 +190,7 @@ class MainBot{
 				$row_check = mysqli_num_rows($result);
 				if($row_check > 0){
 					$row = mysqli_fetch_row($result);
-					$return = new WhitelistInfo($id_whitelist, $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8]);
+					$return = new WhitelistInfo($id_whitelist, $row[1], $row[2], $row[3], $row[9], $row[4], $row[5], $row[6], $row[7], $row[8]);
 				}
 				mysqli_free_result($result);
 			}
