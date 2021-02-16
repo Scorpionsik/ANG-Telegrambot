@@ -33,6 +33,9 @@ class MainBotModule extends BotModule{
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", new DefaultBotKeyboard(true));
 			}
 		}
+		else if(preg_match('/\/keyboard/',$message_text)){
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+		}
 		else{
 			//переключить на модуль выбора максимальной/минимальной цены
 			if(preg_match('/Поиск по цене/', $message_text)){
