@@ -45,7 +45,7 @@ class NotofocationBot{
 	}
 	
 	public function getOffersForWhitelistUser($whitelist_user){
-		$query_part = ""
+		$query_part = "";
 		if($whitelist_user->getWhitelistInfo()->getIsGetNewOffers() == 1 || $whitelist_user->getWhitelistInfo()->getIsGetEditOffers() == 1){
 			$query_part = " and (";
 			if($whitelist_user->getWhitelistInfo()->getIsGetNewOffers() == 1){
