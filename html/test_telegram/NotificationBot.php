@@ -61,8 +61,7 @@ class NotofocationBot{
 		}
 		
 		$query = "where bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_user->getWhitelistInfo()->getIdWhitelist() . "${query_part};";
-		$offers_array = $this->getOffers($query);
-		return $offers_array;
+		return $this->getOffers($query);
 	}
 	
 	public function showOffer($offer, $id_telegram, $whitelist_info){
