@@ -5,9 +5,9 @@ include "NotificationBot.php";
 $bot = new NotificationBot($token_test);
 
 $whitelist_users_array = $bot->getWhitelistUsers(10);
-foreach($whitelist_user in $whitelist_users_array){
+foreach($whitelist_users_array as $whitelist_user){
 	$offers_array = $bot->getOffersForWhitelistUser($whitelist_user);
-	foreach($offer in $offers_array){
+	foreach($offers_array as $offer){
 		$bot->showOffer($offer, $whitelist_user->getIdTelegram(), $whitelist_user->getWhitelistInfo());
 	}
 }
