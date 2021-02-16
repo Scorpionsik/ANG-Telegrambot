@@ -13,7 +13,8 @@ abstract class BotModule{
 				try{
 					$this->main_bot->deleteMessage($request_info->getMessageData());
 				}
-				catch{}
+				catch(Exception $ex){
+				}
 				$this->forMessages($request_info, $whitelist_info);
 			}
 			else $this->forCallbacks($request_info, $whitelist_info);
