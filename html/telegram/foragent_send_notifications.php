@@ -2,9 +2,9 @@
 include "givemyprecious.php";
 include "NotificationBot.php";
 
-$bot = new NotificationBot($token_test);
+$bot = new NotificationBot($token);
 
-$whitelist_users_array = $bot->getWhitelistUsers(10);
+$whitelist_users_array = $bot->getWhitelistUsers();
 foreach($whitelist_users_array as $whitelist_user){
 	$offers_array = $bot->getOffersForWhitelistUser($whitelist_user);
 	try{
