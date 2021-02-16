@@ -52,7 +52,7 @@ class MainBot{
 			}
 			//проверяем, забанен ли пользователь
 			if(!is_null($whitelist_info) && !$whitelist_info->getIsBanned() && !$whitelist_info->getIsLocked()){
-				if($whitelist_info->getIdWhitelist() == 10){
+				if($whitelist_info->getIdWhitelist() == 11){
 					$module = new SomeBotModule($this);
 				}
 				else{

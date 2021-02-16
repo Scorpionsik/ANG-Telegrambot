@@ -6,6 +6,7 @@ include "WhitelistInfo.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/FindByPriceBotModule.php";
+include __DIR__ . "/Modules/SomeBotModule.php";
 require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 
 class MainBot{
@@ -51,16 +52,21 @@ class MainBot{
 			}
 			//проверяем, забанен ли пользователь
 			if(!is_null($whitelist_info) && !$whitelist_info->getIsBanned() && !$whitelist_info->getIsLocked()){
-				switch($request_info->getModeValue()){
-					//изменение максимальной цены для агентов
-					case 1:
-						$module = new FindByPriceBotModule($this);
-					break;
-					//стандартный режим работы бота
-					case 0:
-					default:
-						$module = new MainBotModule($this);
-					break;
+				if($whitelist_info->getIdWhitelist() == 11){
+					$module = new SomeBotModule($this);
+				}
+				else{
+					switch($request_info->getModeValue()){
+						//изменение максимальной цены для агентов
+						case 1:
+							$module = new FindByPriceBotModule($this);
+						break;
+						//стандартный режим работы бота
+						case 0:
+						default:
+							$module = new MainBotModule($this);
+						break;
+					}
 				}
 			}
 			else $this->sendMessageForBanned($request_info->getIdTelegram());
