@@ -7,7 +7,7 @@ require_once "WhitelistUser.php";
 
 class NotofocationBot{
 	private $bot;
-	private $db
+	private $db;
 	private $functions;
 	
 	public function __construct($bot_token){
