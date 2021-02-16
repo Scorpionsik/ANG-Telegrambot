@@ -87,7 +87,7 @@ class NotificationBot{
 	}
 	
 	public function sendEndMessage($offers_count, $whitelist_user){
-		$this->sendMessage($whitelist_user->getIdTelegram(), $this->functions->declOfNum($offers_count, array('объект','объекта','объектов')) . " пришло за последние несколько минут.");
+		$this->sendMessage($whitelist_user->getIdTelegram(), $this->functions->declOfNum($offers_count, array('объект пришел','объекта пришло','объектов пришло')) . " за последние несколько минут.");
 	}
 	
 	public function setIsExist($whitelist_user, $value){
