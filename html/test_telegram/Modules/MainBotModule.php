@@ -37,6 +37,7 @@ class MainBotModule extends BotModule{
 			//переключить на модуль выбора максимальной/минимальной цены
 			if(preg_match('/Поиск по цене/', $message_text)){
 				$is_show_offers = false;
+				$this->main_bot->changeMode($request_info, $whitelist_info, 1, 0);
 				//code here
 			}
 			//перелистнуть страницу
