@@ -10,7 +10,10 @@ abstract class BotModule{
 	public function start($request_info, $whitelist_info){
 		try{
 			if(is_null($request_info->getCallbackData())) {
-				//$this->main_bot->deleteMessage($request_info->getMessageData());
+				try{
+					$this->main_bot->deleteMessage($request_info->getMessageData());
+				}
+				catch{}
 				$this->forMessages($request_info, $whitelist_info);
 			}
 			else $this->forCallbacks($request_info, $whitelist_info);
