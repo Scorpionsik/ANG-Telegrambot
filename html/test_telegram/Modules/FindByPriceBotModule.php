@@ -1,9 +1,8 @@
 <?php
 $telegram_dir = explode('Modules',__DIR__)[0];
 require_once "BotModule.php";
-require_once $telegram_dir . "Keyboards/BotKeyboard.php"
-require_once $telegram_dir . "Keyboards/KeyboardButton.php"
-
+require_once $telegram_dir . "Keyboards/BotKeyboard.php";
+require_once $telegram_dir . "Keyboards/KeyboardButton.php";
 
 class FindByPriceBotModule extends BotModule{
 	private $lock = false;
