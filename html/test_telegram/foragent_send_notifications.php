@@ -8,6 +8,7 @@ $whitelist_users_array = $bot->getWhitelistUsers(10);
 foreach($whitelist_users_array as $whitelist_user){
 	$offers_array = $bot->getOffersForWhitelistUser($whitelist_user);
 	try{
+		$bot->sendStartMessage($whitelist_user);
 		foreach($offers_array as $offer){
 			$bot->showOffer($offer, $whitelist_user->getIdTelegram(), $whitelist_user->getWhitelistInfo());
 		}

@@ -81,6 +81,11 @@ class NotificationBot{
 		$this->sendMessage($id_telegram, "Чтобы посмотреть контакты владельца объекта <b>". $offer->getIdOffer() ."</b>, нажмите на кнопку 'Телефоны' ниже.", $inline_offer_keyboard, true);
 	}
 	
+	public function sendStartMessage($whitelist_user){
+		$separator = "➖➖➖➖";
+		$this->sendMessage($whitelist_user->getIdTelegram(), "${separator}<b>Есть новые обновления!</b>${separator}");
+	}
+	
 	public function sendEndMessage($offers_count, $whitelist_user){
 		$this->sendMessage($whitelist_user->getIdTelegram(), $this->functions->declOfNum($offers_count, array('объект','объекта','объектов')) . " пришло за последние несколько минут.");
 	}
