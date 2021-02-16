@@ -36,7 +36,7 @@ class SomeBotModule extends BotModule{
 	
 	protected function forMessages($request_info, $whitelist_info){
 		if(preg_match('/\/key(board)?/',$message_text)){
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $this->default_keyboard));
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $this->default_keyboard);
 		}
 		
 		$this->main_bot->sendMessage($request_info->getIdTelegram(), $this->randLoveArray(), $this->inline_keyboard, true);
