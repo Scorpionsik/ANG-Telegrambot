@@ -39,7 +39,6 @@ class FindByPriceBotModule extends BotModule{
 	}
 	
 	private function exitModule($request_info, $whitelist_info){
-		$this->main_bot->callAdmin("Exit");
 		$this->lock = true;
 		$this->resetToDefaultMode($request_info, $whitelist_info, true);
 	}
