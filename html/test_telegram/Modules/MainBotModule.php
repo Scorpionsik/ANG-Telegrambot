@@ -172,8 +172,9 @@ class MainBotModule extends BotModule{
 			$start_index = ($this->quantity_per_page * ($current_turn_page - 1));
 			$end_index = min($start_index + $this->quantity_per_page, $count_offers_array);
 			
+			$separator = "➖➖➖➖➖➖➖➖➖➖➖➖";
 			//начало страницы
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Начало страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "${separator}\n\nНачало страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
 			
 			//показываем объявления
 			for($i = $start_index; $i < $end_index; $i++){
