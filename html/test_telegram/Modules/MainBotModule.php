@@ -34,6 +34,7 @@ class MainBotModule extends BotModule{
 			}
 		}
 		else if(preg_match('/\/keyboard/',$message_text)){
+			$is_show_offers = false;
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 		}
 		else{
