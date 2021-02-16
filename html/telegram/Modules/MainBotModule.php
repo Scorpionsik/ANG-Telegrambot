@@ -174,7 +174,7 @@ class MainBotModule extends BotModule{
 			
 			$separator = "➖➖➖➖";
 			//начало страницы
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "${separator}<b>Начало страницы ${current_turn_page} из ${total_pages}</b>${separator}\n" . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "${separator}\n<b>Начало страницы ${current_turn_page} из ${total_pages}</b>\n${separator}\n" . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')));
 			
 			//показываем объявления
 			for($i = $start_index; $i < $end_index; $i++){

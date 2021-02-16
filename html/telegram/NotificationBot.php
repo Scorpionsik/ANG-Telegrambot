@@ -83,7 +83,7 @@ class NotificationBot{
 	
 	public function sendStartMessage($whitelist_user){
 		$separator = "➖➖➖➖";
-		$this->sendMessage($whitelist_user->getIdTelegram(), "${separator}<b>Есть новые обновления!</b>${separator}");
+		$this->sendMessage($whitelist_user->getIdTelegram(), "${separator}\n<b>Есть новые обновления!</b>\n${separator}");
 	}
 	
 	public function sendEndMessage($offers_count, $whitelist_user){
