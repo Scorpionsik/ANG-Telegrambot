@@ -86,7 +86,7 @@ class NotificationBot{
 	}
 	
 	public function setIsExist($whitelist_user, $value){
-		$query = "update telegram_users set IsExist = ${value} where Id_telegram_user=" . $whitelist_user->getIdTelegram() . ";"
+		$query = "update telegram_users set IsExist = ${value} where Id_telegram_user=" . $whitelist_user->getIdTelegram() . ";";
 		$this->getRequestResult($query);
 	}
 	
