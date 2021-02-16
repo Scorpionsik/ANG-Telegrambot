@@ -4,6 +4,7 @@ require_once $root_dir . "/vendor/autoload.php";
 require_once "Functions.php";
 require_once "WhitelistInfo.php";
 require_once "WhitelistUser.php";
+require_once __DIR__ . "/Keyboards/InlineOfferBotKeyboard.php";
 
 class NotificationBot{
 	private $bot;
