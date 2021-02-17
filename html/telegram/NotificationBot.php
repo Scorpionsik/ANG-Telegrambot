@@ -96,7 +96,7 @@ class NotificationBot{
 	}
 	
 	private function getOffers($where_query_part){
-		$result = $this->getRequestResult($this->functions->getSelectAndFromQueryPart() . $where_query_part);
+		$result = $this->getRequestResult($this->functions->getSelectAndFromQueryPart() . $where_query_part . " ORDER BY offers.Update_timestamp desc;");
 		$offers_array = $this->functions->getOffersFromDBResult($result);
 		mysqli_free_result($result);
 		return $offers_array;
