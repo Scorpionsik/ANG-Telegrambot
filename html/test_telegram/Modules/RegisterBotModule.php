@@ -23,7 +23,7 @@ class RegisterBotModule extends BotModule{
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
 		$this->default_keyboard = new BotKeyboard(1);
-		$button = new KeyboardButton("Использовать номер из телеграма");
+		$button = new KeyboardButton("📲 Использовать номер из телеграма");
 		$button->addData("request_contact", true);
 		$this->default_keyboard->addButton($button);
 	}
