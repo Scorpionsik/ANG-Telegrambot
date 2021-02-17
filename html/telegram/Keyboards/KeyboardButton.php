@@ -14,6 +14,7 @@ class KeyboardButton{
 			case "text":
 			case "url":
 			case "callback_data":
+			case "request_contact":
 			$valid_param = $param;
 			break;
 		}

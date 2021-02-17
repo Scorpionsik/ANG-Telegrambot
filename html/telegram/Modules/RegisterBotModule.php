@@ -1,10 +1,14 @@
 <?php
 $keyboard_dir = explode('Modules',__DIR__)[0] . 'Keyboards';
 require_once $keyboard_dir . "/DefaultBotKeyboard.php";
+require_once $keyboard_dir . "/BotKeyboard.php";
+require_once $keyboard_dir . "/KeyboardButton.php";
 require_once "BotModule.php";
 
 
 class RegisterBotModule extends BotModule{
+	private $default_keyboard;
+	
 	//сообщение ошибки по умолчанию
 	private $default_error_text = "Введён некорректный номер!";
 	//ищет вхождение номера телефона в сообщении
@@ -18,11 +22,19 @@ class RegisterBotModule extends BotModule{
 
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
+		$this->default_keyboard = new BotKeyboard(1);
+		$button = new KeyboardButton("📲 Использовать номер из телеграма");
+		$button->addData("request_contact", true);
+		$this->default_keyboard->addButton($button);
 	}
 
 	protected function forMessages($request_info, $whitelist_info = null){
 		//получаем ввод
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
+		
+		if(is_null($message_text) || $message_text == ""){
+			$message_text = $request_info->getMessageData()->getContact()->getPhoneNumber();
+		}
 		//если ввод валидный и мы получили телефон
 		if(preg_match($this->regex_check_phones, $message_text)){
 			//чистим введенный телефон
@@ -94,7 +106,7 @@ class RegisterBotModule extends BotModule{
 	private function sendErrorMessage($id_telegram, $error_text = null){
 		if(is_null($error_text)) $error_text = $this->default_error_text;
 		$this->main_bot->sendMessage($id_telegram, $error_text);
-		$this->main_bot->sendMessage($id_telegram, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!");
+		$this->main_bot->sendMessage($id_telegram, "Для подтверждения входа, введите свой рабочий номер телефона, пожалуйста!", $this->default_keyboard);
 	}
 	
 	//сообщение о успешном завершении регистрации
