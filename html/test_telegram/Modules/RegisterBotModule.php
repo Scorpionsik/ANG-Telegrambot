@@ -7,7 +7,7 @@ require_once "BotModule.php";
 
 
 class RegisterBotModule extends BotModule{
-	private default_keyboard;
+	private $default_keyboard;
 	
 	//сообщение ошибки по умолчанию
 	private $default_error_text = "Введён некорректный номер!";
