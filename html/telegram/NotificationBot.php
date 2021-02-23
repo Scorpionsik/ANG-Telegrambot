@@ -28,6 +28,7 @@ class NotificationBot{
 		$query_part = "";
 		if(!is_null($single_user)) $query_part = " and Id_whitelist_user = ${single_user}";
 		$query = "select telegram_users.Id_whitelist_user as 'Id', telegram_users.Id_telegram_user as 'Telegram', white_list.Is_accept_base_button, white_list.Is_get_new_offers, white_list.Is_get_edit_offers, telegram_users.IsExist from telegram_users join white_list using (Id_whitelist_user) WHERE white_list.Is_banned != 1 and white_list.Is_locked != 1${query_part} and (white_list.Is_get_new_offers=1 or white_list.Is_get_edit_offers=1);";
+		echo $query . "<br><br>";
 		$result = $this->getRequestResult($query);
 		if($result){
 			$row_check = mysqli_num_rows($result);
@@ -62,6 +63,7 @@ class NotificationBot{
 		}
 		
 		$query = "where bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_user->getWhitelistInfo()->getIdWhitelist() . "${query_part};";
+		echo $query . "<br><br>";
 		return $this->getOffers($query);
 	}
 	
@@ -97,6 +99,7 @@ class NotificationBot{
 	
 	private function getOffers($where_query_part){
 		$result = $this->getRequestResult($this->functions->getSelectAndFromQueryPart() . $where_query_part . " ORDER BY offers.Update_timestamp desc;");
+		//echo $result . "<br><br>";
 		$offers_array = $this->functions->getOffersFromDBResult($result);
 		mysqli_free_result($result);
 		return $offers_array;
