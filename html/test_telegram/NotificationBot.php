@@ -97,7 +97,7 @@ class NotificationBot{
 	
 	private function getOffers($where_query_part){
 		$query = $this->functions->getSelectAndFromQueryPart() . $where_query_part;
-		echo $query
+		echo $query;
 		$result = $this->getRequestResult($query);
 		$offers_array = $this->functions->getOffersFromDBResult($result);
 		mysqli_free_result($result);
