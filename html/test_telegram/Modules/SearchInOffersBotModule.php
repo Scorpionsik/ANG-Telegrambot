@@ -9,7 +9,7 @@ class SearchInOffersBotModule extends MainBotModule{
 	
 	protected function forMessages($request_info, $whitelist_info){
 		$this->main_bot->sendMessage($request_info->getIdTelegram(), "Hello");
-		$this->resetToDefaultMode($request_info, $whitelist_info);
+		//$this->resetToDefaultMode($request_info, $whitelist_info);
 	}
 	
 	protected function forCallbacks($request_info, $whitelist_info){
