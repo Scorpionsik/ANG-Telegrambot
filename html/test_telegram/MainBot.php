@@ -3,9 +3,11 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
 include "WhitelistInfo.php";
+require_once "WhitelistUser.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/FindByPriceBotModule.php";
+include __DIR__ . "/Modules/SearchInOffersBotModule.php";
 include __DIR__ . "/Modules/SomeBotModule.php";
 require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 
@@ -20,7 +22,12 @@ class MainBot{
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
-
+		
+		this->bot->command('send_news', function ($message) {
+			$this->deleteMessage($message);
+			$this->commandSendNews($message->getText());
+		});
+		
 		$this->bot->command('help', function ($message) {
 			$this->deleteMessage($message);
 			$this->commandHelp($message->getChat()->getId());
@@ -61,6 +68,9 @@ class MainBot{
 						case 1:
 							$module = new FindByPriceBotModule($this);
 						break;
+						//поиск в базе бота
+						case 2:
+							$module = new SearchInOffersBotModule($this);
 						//стандартный режим работы бота
 						case 0:
 						default:
@@ -232,6 +242,24 @@ class MainBot{
 		$this->bot->sendMessage($id_telegram, "Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.");
 		$this->bot->sendMessage($id_telegram, "Хорошего дня и отличного настроения, будьте здоровы!");
 		$this->sendAdminContact($id_telegram);
+	}
+	]
+	private function commandSendNews($news_text){
+		$query = "";
+		$result = $this->getRequestResult($query);
+		if($result)
+		{
+			$row_check = mysqli_num_rows($result);
+			if($row_check > 0){
+				$row = mysqli_fetch_row($result);
+			}
+			mysqli_free_result($result);
+		}
+	}
+	
+	private function setIsExist($whitelist_user, $value){
+		$query = "update telegram_users set IsExist = ${value} where Id_telegram_user=" . $whitelist_user->getIdTelegram() . ";";
+		$this->getRequestResult($query);
 	}
 
 	//закрывает подключение к базе данных
