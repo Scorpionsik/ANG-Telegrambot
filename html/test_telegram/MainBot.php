@@ -23,7 +23,7 @@ class MainBot{
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
 		
-		this->bot->command('send_news', function ($message) {
+		$this->bot->command('send_news', function ($message) {
 			$this->deleteMessage($message);
 			$this->commandSendNews($message->getText());
 		});
