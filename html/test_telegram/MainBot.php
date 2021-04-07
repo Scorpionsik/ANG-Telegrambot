@@ -243,7 +243,7 @@ class MainBot{
 		$this->bot->sendMessage($id_telegram, "Хорошего дня и отличного настроения, будьте здоровы!");
 		$this->sendAdminContact($id_telegram);
 	}
-	]
+	
 	private function commandSendNews($news_text){
 		$query = "";
 		$result = $this->getRequestResult($query);
