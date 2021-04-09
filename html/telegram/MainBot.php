@@ -27,13 +27,15 @@ class MainBot{
 		});
 
 		$this->bot->on(function ($Update) {
-			try{
-				$request_info = new RequestInfo($Update);
-				$request_info = $this->getFullRequestInfo($request_info);
-				$this->distribute($request_info);
-			}
-			catch(Exception $ex){
-				$this->sendException($ex, null, null);
+			if(!is_null($Update)){
+				try{
+					$request_info = new RequestInfo($Update);
+					$request_info = $this->getFullRequestInfo($request_info);
+					$this->distribute($request_info);
+				}
+				catch(Exception $ex){
+					$this->sendException($ex, null, null);
+				}
 			}
 		}, function ($Update){
 			return true;
