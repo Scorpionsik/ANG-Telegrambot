@@ -28,7 +28,8 @@ class MainBot{
 
 		$this->bot->on(function ($Update) {
 			try{
-				$request_info = $this->getFullRequestInfo(new RequestInfo($Update));
+				$request_info = new RequestInfo($Update);
+				$request_info = $this->getFullRequestInfo($request_info);
 				$this->distribute($request_info);
 			}
 			catch(Exception $ex){
