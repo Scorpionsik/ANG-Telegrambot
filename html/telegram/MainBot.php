@@ -27,8 +27,13 @@ class MainBot{
 		});
 
 		$this->bot->on(function ($Update) {
-			$request_info = $this->getFullRequestInfo(new RequestInfo($Update));
-			$this->distribute($request_info);
+			try{
+				$request_info = $this->getFullRequestInfo(new RequestInfo($Update));
+				$this->distribute($request_info);
+			}
+			catch(Exception $ex){
+				$this->sendException($ex, null, null);
+			}
 		}, function ($Update){
 			return true;
 		});
@@ -157,11 +162,13 @@ class MainBot{
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
 		$text = "<b><u>Ошибка</u></b>";
-		if(is_null($request_info->getIdWhitelist())){
-			$text = $text . "\n<b>Id_telegram: </b> " . $request_info->getIdTelegram();
-		}
-		else{
-			$text = $text . "\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername();
+		if(!is_null($request_info) && !is_null($whitelist_info)){
+			if(is_null($request_info->getIdWhitelist())){
+				$text = $text . "\n<b>Id_telegram: </b> " . $request_info->getIdTelegram();
+			}
+			else{
+				$text = $text . "\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername();
+			}
 		}
 		
 		$this->callAdmin($text);
