@@ -114,7 +114,7 @@ class RegisterBotModule extends BotModule{
 		$this->main_bot->sendMessage($id_telegram, "Здравствуйте, ${username}!");
 		$this->main_bot->sendMessage($id_telegram, "Ваша личность подтверждена! Вы подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
 		$this->main_bot->sendMessage($id_telegram, "Если в уведомлениях вам нужны <b>только новые объявления</b>, нажмите на кнопку ниже - <b>❕ Присылать только новые объекты в уведомлениях</b>.");
-		$this->main_bot->sendMessage($id_telegram, "Чтобы получить всю информацию по вашему району за последние 3 дня, нажмите кнопку ниже.", new DefaultBotKeyboard($is_get_edit_offer));
+		$this->main_bot->sendMessage($id_telegram, "Чтобы получить всю информацию по вашему району за последнюю неделю, нажмите кнопку ниже.", new DefaultBotKeyboard($is_get_edit_offer));
 	}
 }
 

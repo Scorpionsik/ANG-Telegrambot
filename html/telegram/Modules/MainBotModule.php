@@ -183,7 +183,7 @@ class MainBotModule extends BotModule{
 			//конец страницы
 			$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
 			
-			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последние 3 дня.";
+			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последнюю неделю.";
 			if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\n\n" . $end_page_text;
 			
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
