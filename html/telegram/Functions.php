@@ -119,7 +119,7 @@ class Functions{
 						//ориентир
 						if(!is_null($orient) && $orient != "") 
 						{
-							if(!is_null($street)) $offer_description = $offer_description . ", ";
+							if(!is_null($street) || $street == "") $offer_description = $offer_description . ", ";
 							$offer_description = $offer_description . "ориентир: ${orient}";
 						}
 					//---конец адрес---//
