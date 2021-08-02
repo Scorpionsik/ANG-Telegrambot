@@ -9,6 +9,7 @@ require_once "BotModule.php";
 
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
+	private $find_code_query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id, offers.BuildStatus, offers.IsNewBuild, offers.Old_price, offers.House_number, offers.User_entity_id FROM offers inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district ";
 	private $quantity_per_page = 10;
 	private $functions;
 	public function __construct($main_bot){
@@ -51,7 +52,7 @@ class MainBotModule extends BotModule{
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
 				$is_show_offers = false;
-				$offer_array = $this->getOffers("WHERE offers.Internal_id='" . $message_text . "';");
+				$offer_array = $this->getOffersWithoutBind("WHERE offers.Internal_id='" . $message_text . "';");
 				if(count($offer_array) > 0){
 					$this->showOffer($offer_array[0], $request_info, $whitelist_info);
 				}
@@ -196,6 +197,13 @@ class MainBotModule extends BotModule{
 	
 	private function getOffers($where_query_part){
 		$result = $this->main_bot->getRequestResult($this->functions->getSelectAndFromQueryPart() . $where_query_part);
+		$offers_array = $this->functions->getOffersFromDBResult($result);
+		mysqli_free_result($result);
+		return $offers_array;
+	}
+	
+	private function getOffersWithoutBind($where_query_part){
+		$result = $this->main_bot->getRequestResult($this->find_code_query . $where_query_part);
 		$offers_array = $this->functions->getOffersFromDBResult($result);
 		mysqli_free_result($result);
 		return $offers_array;
