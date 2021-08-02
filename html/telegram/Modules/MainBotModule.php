@@ -51,7 +51,7 @@ class MainBotModule extends BotModule{
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
 				$is_show_offers = false;
-				$offer_array = $this->getOffers("WHERE Internal_id='" . $message_text . "';");
+				$offer_array = $this->getOffers("WHERE offers.Internal_id='" . $message_text . "';");
 				if(count($offer_array) > 0){
 					$this->showOffer($offer_array[0], $request_info, $whitelist_info);
 				}
