@@ -110,13 +110,18 @@ class Functions{
 						if($district != "Все") $offer_description = $offer_description . ", ${district}";
 						
 						//улица
-						if(!is_null($street)) $offer_description = $offer_description . "\r\n🚏 ${street}";
-						
-						//номер дома
-						if(!is_null($house_num)) $offer_description = $offer_description . " ${house_num}";
-						
+						if(!is_null($street)) 
+						{
+							$offer_description = $offer_description . "\r\n🚏 ${street}";
+							//номер дома
+							if(!is_null($house_num)) $offer_description = $offer_description . " ${house_num}";
+						}
 						//ориентир
-						if(!is_null($orient) && $orient != "") $offer_description = $offer_description . ", ориентир: ${orient}";
+						if(!is_null($orient) && $orient != "") 
+						{
+							if(!is_null($street)) $offer_description = $offer_description . ", ";
+							$offer_description = $offer_description . "ориентир: ${orient}";
+						}
 					//---конец адрес---//
 					
 					//тип объекта
