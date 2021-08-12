@@ -3,11 +3,9 @@ $root_dir = explode('html',__DIR__)[0] . 'html';
 require_once $root_dir . "/vendor/autoload.php";
 include "RequestInfo.php";
 include "WhitelistInfo.php";
-require_once "WhitelistUser.php";
 include __DIR__ . "/Modules/RegisterBotModule.php";
 include __DIR__ . "/Modules/MainBotModule.php";
 include __DIR__ . "/Modules/FindByPriceBotModule.php";
-include __DIR__ . "/Modules/SearchInOffersBotModule.php";
 include __DIR__ . "/Modules/SomeBotModule.php";
 require_once __DIR__ . "/Keyboards/BotKeyboard.php";
 
@@ -22,20 +20,23 @@ class MainBot{
 		$this->db = new mysqli($host, $dblogin, $dbpassw, $database);
 
 		$this->bot = new \TelegramBot\Api\Client($bot_token);
-		
-		$this->bot->command('send_news', function ($message) {
-			$this->deleteMessage($message);
-			$this->commandSendNews($message->getText());
-		});
-		
+
 		$this->bot->command('help', function ($message) {
 			$this->deleteMessage($message);
 			$this->commandHelp($message->getChat()->getId());
 		});
 
 		$this->bot->on(function ($Update) {
-			$request_info = $this->getFullRequestInfo(new RequestInfo($Update));
-			$this->distribute($request_info);
+			if(!is_null($Update)){
+				try{
+					$request_info = new RequestInfo($Update);
+					$request_info = $this->getFullRequestInfo($request_info);
+					$this->distribute($request_info);
+				}
+				catch(Exception $ex){
+					$this->sendException($ex, null, null);
+				}
+			}
 		}, function ($Update){
 			return true;
 		});
@@ -68,9 +69,6 @@ class MainBot{
 						case 1:
 							$module = new FindByPriceBotModule($this);
 						break;
-						//поиск в базе бота
-						case 2:
-							$module = new SearchInOffersBotModule($this);
 						//стандартный режим работы бота
 						case 0:
 						default:
@@ -167,11 +165,13 @@ class MainBot{
 	//отправка ошибки админу
 	public function sendException($exception, $request_info, $whitelist_info){
 		$text = "<b><u>Ошибка</u></b>";
-		if(is_null($request_info->getIdWhitelist())){
-			$text = $text . "\n<b>Id_telegram: </b> " . $request_info->getIdTelegram();
-		}
-		else{
-			$text = $text . "\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername();
+		if(!is_null($request_info) && !is_null($whitelist_info)){
+			if(is_null($request_info->getIdWhitelist())){
+				$text = $text . "\n<b>Id_telegram: </b> " . $request_info->getIdTelegram();
+			}
+			else{
+				$text = $text . "\n<b>Id_whitelist:</b> " . $request_info->getIdWhitelist() . "\n<b>Username:</b> " . $whitelist_info->getUsername();
+			}
 		}
 		
 		$this->callAdmin($text);
@@ -242,24 +242,6 @@ class MainBot{
 		$this->bot->sendMessage($id_telegram, "Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.");
 		$this->bot->sendMessage($id_telegram, "Хорошего дня и отличного настроения, будьте здоровы!");
 		$this->sendAdminContact($id_telegram);
-	}
-	
-	private function commandSendNews($news_text){
-		$query = "";
-		$result = $this->getRequestResult($query);
-		if($result)
-		{
-			$row_check = mysqli_num_rows($result);
-			if($row_check > 0){
-				$row = mysqli_fetch_row($result);
-			}
-			mysqli_free_result($result);
-		}
-	}
-	
-	private function setIsExist($whitelist_user, $value){
-		$query = "update telegram_users set IsExist = ${value} where Id_telegram_user=" . $whitelist_user->getIdTelegram() . ";";
-		$this->getRequestResult($query);
 	}
 
 	//закрывает подключение к базе данных

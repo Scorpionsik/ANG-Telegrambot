@@ -9,6 +9,7 @@ require_once "BotModule.php";
 
 class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
+	private $find_code_query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id, offers.BuildStatus, offers.IsNewBuild, offers.Old_price, offers.House_number, offers.User_entity_id FROM offers inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district ";
 	private $quantity_per_page = 10;
 	private $functions;
 	public function __construct($main_bot){
@@ -43,10 +44,6 @@ class MainBotModule extends BotModule{
 				$is_show_offers = false;
 				$this->main_bot->changeMode($request_info, $whitelist_info, 1, 0);
 			}
-			else if (preg_match('/Поиск в базе\.\.\./', $message_text)){
-				$is_show_offers = false;
-				$this->main_bot->changeMode($request_info, $whitelist_info, 2, 0);
-			}
 			//перелистнуть страницу
 			else if(preg_match('/^\d+$/', $message_text)){
 				$current_turn_page=$message_text;
@@ -55,7 +52,7 @@ class MainBotModule extends BotModule{
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
 				$is_show_offers = false;
-				$offer_array = $this->getOffers("WHERE Internal_id='" . $message_text . "';");
+				$offer_array = $this->getOffersWithoutBind("WHERE offers.Internal_id='" . $message_text . "';");
 				if(count($offer_array) > 0){
 					$this->showOffer($offer_array[0], $request_info, $whitelist_info);
 				}
@@ -68,7 +65,7 @@ class MainBotModule extends BotModule{
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 					$this->changeModeParam($request_info, $whitelist_info, 1);
 				}
-				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info, $this->getDefaultOffers($whitelist_info));
+				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
 				$this->setOffersPress($request_info, $whitelist_info);
 			}
 	}
@@ -79,7 +76,7 @@ class MainBotModule extends BotModule{
 		//перелистнуть страницу
 		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
 			$this->turnThePage($whitelist_info, $request_info->getCallbackData());
-			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info, $this->getDefaultOffers($whitelist_info));
+			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
 			$this->setOffersPress($request_info, $whitelist_info);
 		}
 		//отобразить телефоны
@@ -157,8 +154,8 @@ class MainBotModule extends BotModule{
 	}
 	/* конец Обработка инлайн запросов*/
 	
-	protected function showOffersOnPage($current_turn_page, $request_info, $whitelist_info, $offers_array){
-		//$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
+	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info){
+		$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
 		$count_offers_array = count($offers_array);
 		
 		//есть информация для показа
@@ -187,7 +184,7 @@ class MainBotModule extends BotModule{
 			//конец страницы
 			$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
 			
-			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последние 3 дня.";
+			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последнюю неделю.";
 			if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\n\n" . $end_page_text;
 			
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
@@ -200,6 +197,13 @@ class MainBotModule extends BotModule{
 	
 	private function getOffers($where_query_part){
 		$result = $this->main_bot->getRequestResult($this->functions->getSelectAndFromQueryPart() . $where_query_part);
+		$offers_array = $this->functions->getOffersFromDBResult($result);
+		mysqli_free_result($result);
+		return $offers_array;
+	}
+	
+	private function getOffersWithoutBind($where_query_part){
+		$result = $this->main_bot->getRequestResult($this->find_code_query . $where_query_part);
 		$offers_array = $this->functions->getOffersFromDBResult($result);
 		mysqli_free_result($result);
 		return $offers_array;
@@ -243,11 +247,6 @@ class MainBotModule extends BotModule{
 			$query = "insert into agent_phone_press values (" . $whitelist_info->getIdWhitelist() . ", '" . $offer->getIdOffer() . "', " . $offer->getIdDatabase() .  "," . time() . ");";
 			$this->main_bot->getRequestResult($query);
 		}
-	}
-	
-	private function getDefaultOffers($whitelist_info){
-		$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
-		return $offers_array;
 	}
 }
 
