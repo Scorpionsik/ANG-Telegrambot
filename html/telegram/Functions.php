@@ -120,7 +120,7 @@ class Functions{
 						if(!is_null($orient) && $orient != "") 
 						{
 							//if(!is_null($street) || $street == "") $offer_description = $offer_description . ", ";
-							$offer_description = $offer_description . " ориентир: ${orient}";
+							$offer_description = $offer_description . "\r\n🚏 Ориентир: ${orient}";
 						}
 					//---конец адрес---//
 					
