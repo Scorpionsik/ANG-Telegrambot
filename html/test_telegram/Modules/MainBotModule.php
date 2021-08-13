@@ -133,15 +133,13 @@ class MainBotModule extends BotModule{
 								$inline_offer_keyboard = new InlineOfferBotKeyboard($offer, $whitelist_info, false);
 								
 								//проверка на эксклюзивы
-								if($is_exclusive == 1 && $agent_id > 0){
-								    $text_body = $text_body . "\n🌟 <b>Эксклюзив</b> 🌟\n";
-									//break;
+								if($is_exclusive == 1){
+								    if($agent_id > 0) $text_body = $text_body . "🌟 <b>Эксклюзив</b> 🌟\n";
+								    else{
+								        $text_body = "\nКонтакты скрыты.";
+								        break;
+								    }
 								}
-								else{
-								    $text_body = "\nКонтакты скрыты.";
-								    break;
-								}
-								
 								//пишем имя агента
 								if(!is_null($username) && $username != ""){
 									foreach(preg_split("/;/", $username) as $newname)
