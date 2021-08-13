@@ -85,7 +85,19 @@ class MainBotModule extends BotModule{
 			//проверка, изменялся ли уже текст в сообщении
 			if(!preg_match("/Контакты объекта/", $request_info->getMessageData()->getText())){
 				$text_title = "➖➖➖<b>${text_title}</b>➖➖➖";
-				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
+				$whose_phone_show = "User_entity_id";
+				$query = "SELECT flat_owners.User_entity_id, flat_owners.Agent_entity_id, offers.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) WHERE offers.Internal_id='". $request_info->getCallbackData() . "'";
+				$result = $this->main_bot->getRequestResult($query);
+				if($result){
+				    $row_check = mysqli_num_rows($result);
+				    if($row_check > 0){ 
+				        $row = mysqli_fetch_row($result);
+				        if($row[1] > 0 && $row[2] == 1) $whose_phone_show = "Agent_entity_id";
+				    }
+				}
+				
+				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (${whose_phone_show}) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
+				
 				$result = $this->main_bot->getRequestResult($query);
 				if($result){
 					$row_check = mysqli_num_rows($result);
@@ -117,8 +129,8 @@ class MainBotModule extends BotModule{
 								
 								//проверка на эксклюзивы
 								if($is_exclusive == 1){
-									$text_body = "\nКонтакты скрыты";
-									break;
+								    $text_body = $text_body . "\n🌟 <b>Эксклюзив</b> 🌟\n";
+									//break;
 								}
 								
 								//пишем имя агента
