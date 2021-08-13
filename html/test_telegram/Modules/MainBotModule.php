@@ -96,7 +96,8 @@ class MainBotModule extends BotModule{
 				    }
 				}
 				
-				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, flat_owners.IsExclusive FROM flat_owners LEFT JOIN offers USING (${whose_phone_show}) LEFT JOIN owner_phones USING (User_entity_id) LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
+				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, offers.IsExclusive, offers.Agent_entity_id FROM flat_owners LEFT JOIN offers ON flat_owners.User_entity_id = offers.${whose_phone_show} LEFT JOIN owner_phones ON offers.${whose_phone_show} = owner_phones.User_entity_id LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
+				
 				
 				$result = $this->main_bot->getRequestResult($query);
 				if($result){
@@ -121,6 +122,7 @@ class MainBotModule extends BotModule{
 								$house_num = $row[8];
 								$flat_type = $row[9];
 								$offer_type = $row[10];
+								$agent_id = $row[12];
 								
 								
 								//собираем клавиатуру
@@ -128,9 +130,13 @@ class MainBotModule extends BotModule{
 								$inline_offer_keyboard = new InlineOfferBotKeyboard($offer, $whitelist_info, false);
 								
 								//проверка на эксклюзивы
-								if($is_exclusive == 1){
+								if($is_exclusive == 1 && $agent_id > 0){
 								    $text_body = $text_body . "\n🌟 <b>Эксклюзив</b> 🌟\n";
 									//break;
+								}
+								else{
+								    $text_body = "\nКонтакты скрыты.";
+								    break;
 								}
 								
 								//пишем имя агента
