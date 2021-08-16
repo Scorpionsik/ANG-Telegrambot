@@ -129,7 +129,7 @@ class MainBotModule extends BotModule{
 								
 								
 								//собираем клавиатуру
-								$offer = new Offer("", $request_info->getCallbackData(), $id_database, $image_url, $this->functions->getSiteUrl($offer_type, $flat_type), $city, $street, $house_num, $id_user);
+								$offer = new Offer("", $request_info->getCallbackData(), $id_database, $image_url, $this->functions->getSiteUrl($offer_type, $flat_type), $city, $street, $house_num, $id_user, $entity_id);
 								$inline_offer_keyboard = new InlineOfferBotKeyboard($offer, $whitelist_info, false);
 								
 								//проверка на эксклюзивы
