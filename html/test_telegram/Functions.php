@@ -2,7 +2,7 @@
 require_once "Offer.php";
 
 class Functions{
-	private $select_and_from_query_part = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id, offers.BuildStatus, offers.IsNewBuild, offers.Old_price, offers.House_number, offers.User_entity_id FROM offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) AND (offers.Orient=(SELECT orients.Orient_name FROM orients WHERE orients.Id_orient=bind_whitelist_distr_flats.Id_orient) OR bind_whitelist_distr_flats.Id_orient=1) AND (offers.IsNewBuild=bind_whitelist_distr_flats.Id_build_status OR bind_whitelist_distr_flats.Id_build_status=2) AND ((offers.Price<=bind_whitelist_distr_flats.Price_lower_than OR bind_whitelist_distr_flats.Price_lower_than=0) AND (offers.Price>=bind_whitelist_distr_flats.Price_upper_than OR bind_whitelist_distr_flats.Price_upper_than=0)) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district ";
+	private $select_and_from_query_part = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id, offers.BuildStatus, offers.IsNewBuild, offers.Old_price, offers.House_number, offers.User_entity_id, offers.Entity_id FROM offers inner join bind_whitelist_distr_flats on offers.Id_type=bind_whitelist_distr_flats.Id_type AND offers.Id_locality=bind_whitelist_distr_flats.Id_locality AND (offers.Id_flat_type=bind_whitelist_distr_flats.Id_flat_type OR bind_whitelist_distr_flats.Id_flat_type=1) AND (offers.Id_district=bind_whitelist_distr_flats.Id_district OR bind_whitelist_distr_flats.Id_district=1) AND (offers.Room_counts=bind_whitelist_distr_flats.Room_counts OR bind_whitelist_distr_flats.Room_counts=0) AND (offers.Orient=(SELECT orients.Orient_name FROM orients WHERE orients.Id_orient=bind_whitelist_distr_flats.Id_orient) OR bind_whitelist_distr_flats.Id_orient=1) AND (offers.IsNewBuild=bind_whitelist_distr_flats.Id_build_status OR bind_whitelist_distr_flats.Id_build_status=2) AND ((offers.Price<=bind_whitelist_distr_flats.Price_lower_than OR bind_whitelist_distr_flats.Price_lower_than=0) AND (offers.Price>=bind_whitelist_distr_flats.Price_upper_than OR bind_whitelist_distr_flats.Price_upper_than=0)) inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district ";
 		/*
 		0	offers.Internal_id			string
 		1	types.Type_name				string
@@ -29,6 +29,7 @@ class Functions{
 		22	offers.Old_price			int
 		23 offers.House_number			string
 		24 offers.User_entity_id		int
+		25 offers.Entity_id	          	int
 		*/
 	public function getOffersFromDBResult($db_result){
 		$return_array = array();
@@ -39,6 +40,7 @@ class Functions{
 					$row = mysqli_fetch_row($db_result);
 					
 					$id_offer = $row[0];
+					$id_offer_entity = $row[25];
 					$id_database = $row[19];
 					$id_user = $row[24];
 					
@@ -151,7 +153,7 @@ class Functions{
 					$offer_description = $offer_description . "\n\n" . $description;
 					
 					//save
-					$return_array[] = new Offer($offer_description, $id_offer, $id_database, $image_url, $site_url, $city, $street, $house_num, $id_user);
+					$return_array[] = new Offer($offer_description, $id_offer, $id_database, $image_url, $site_url, $city, $street, $house_num, $id_user, $id_offer_entity);
 				}
 				
 			}

@@ -29,7 +29,7 @@ class InlineOfferBotKeyboard extends BotKeyboard {
 		if($is_show_phones){
 			$this->addRow();
 			$button = new KeyboardButton("☎️ Телефоны");
-			$button->addData("callback_data", $offer->getIdOffer());
+			$button->addData("callback_data","id" . $offer->getIdOfferEntity());
 			$this->addButton($button);
 		}
 	}

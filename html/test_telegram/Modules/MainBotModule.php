@@ -73,35 +73,35 @@ class MainBotModule extends BotModule{
 		
 	/* Обработка инлайн запросов*/
 	protected function forCallbacks($request_info, $whitelist_info){
-		//перелистнуть страницу
-		if(preg_match('/^\d+$/', $request_info->getCallbackData())){
-			$this->turnThePage($whitelist_info, $request_info->getCallbackData());
-			$this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
-			$this->setOffersPress($request_info, $whitelist_info);
-		}
-		//отобразить телефоны
-		else if(preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
-			$text_title = "Контакты объекта";
-			//проверка, изменялся ли уже текст в сообщении
-			if(!preg_match("/Контакты объекта/", $request_info->getMessageData()->getText())){
-				$text_title = "➖➖➖<b>${text_title}</b>➖➖➖";
-				
-				/* Вычисляем, чьи контакты отобразить */
-				$whose_phone_show = "User_entity_id";
-				$query = "SELECT flat_owners.User_entity_id, offers.Agent_entity_id, offers.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) WHERE offers.Internal_id='". $request_info->getCallbackData() . "'";
-				$result = $this->main_bot->getRequestResult($query);
-				if($result){
-				    $row_check = mysqli_num_rows($result);
-				    if($row_check > 0){ 
-				        $row = mysqli_fetch_row($result);
-				        if($row[1] > 0 && $row[2] == 1) $whose_phone_show = "Agent_entity_id";
-				    }
-				}
-				/* end Вычисляем, чьи контакты отобразить */
-				
-				$query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, offers.IsExclusive, offers.Agent_entity_id FROM flat_owners LEFT JOIN offers ON flat_owners.User_entity_id = offers.${whose_phone_show} LEFT JOIN owner_phones ON offers.${whose_phone_show} = owner_phones.User_entity_id LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Internal_id='" . $request_info->getCallbackData() . "';";
-				
-				
+	    //перелистнуть страницу
+	    if(preg_match('/^\d+$/', $request_info->getCallbackData())){
+	        $this->turnThePage($whitelist_info, $request_info->getCallbackData());
+	        $this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
+	        $this->setOffersPress($request_info, $whitelist_info);
+	    }
+	    //отобразить телефоны
+	    else if(preg_match('/^id\d+$/', $request_info->getCallbackData())){
+	        $entity_id = preg_replace('/^id/', "", $request_info->getCallbackData());
+	        $text_title = "Контакты объекта";
+	        //проверка, изменялся ли уже текст в сообщении
+	        if(!preg_match("/Контакты объекта/", $request_info->getMessageData()->getText())){
+	            $text_title = "➖➖➖<b>${text_title}</b>➖➖➖";
+	            
+	            /* Вычисляем, чьи контакты отобразить */
+	            $whose_phone_show = "User_entity_id";
+	            $query = "SELECT flat_owners.User_entity_id, offers.Agent_entity_id, offers.IsExclusive FROM flat_owners LEFT JOIN offers USING (User_entity_id) WHERE offers.Entity_id='". $entity_id . "'";
+	            $result = $this->main_bot->getRequestResult($query);
+	            if($result){
+	                $row_check = mysqli_num_rows($result);
+	                if($row_check > 0){
+	                    $row = mysqli_fetch_row($result);
+	                    if($row[1] > 0 && $row[2] == 1) $whose_phone_show = "Agent_entity_id";
+	                }
+	            }
+	            /* end Вычисляем, чьи контакты отобразить */
+	            
+	            $query = "SELECT flat_owners.User_entity_id, flat_owners.Username, flat_owners.Agency , owner_phones.Phonenumber, offers.Entity_id, offers.Image_url, localities.Locality_name, offers.Address, offers.House_number, flat_types.Typename, types.Type_name, offers.IsExclusive, offers.Agent_entity_id FROM flat_owners LEFT JOIN offers ON flat_owners.User_entity_id = offers.${whose_phone_show} LEFT JOIN owner_phones ON offers.${whose_phone_show} = owner_phones.User_entity_id LEFT JOIN localities USING (Id_locality) LEFT JOIN flat_types USING (Id_flat_type) LEFT JOIN types USING (Id_type) WHERE offers.Entity_id='" . $entity_id . "';";           
+	            
 				$result = $this->main_bot->getRequestResult($query);
 				if($result){
 					$row_check = mysqli_num_rows($result);
