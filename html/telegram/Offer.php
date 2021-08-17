@@ -3,6 +3,7 @@
 class Offer{
 	private $offer_description;
 	private $id_offer;
+	private $id_offer_entity;
 	private $id_database;
 	private $image_url;
 	private $site_url;
@@ -11,7 +12,7 @@ class Offer{
 	private $house_num;
 	private $id_user;
 	
-	public function __construct($offer_description, $id_offer, $id_database, $image_url, $site_url, $city, $street, $house_num, $id_user)
+	public function __construct($offer_description, $id_offer, $id_database, $image_url, $site_url, $city, $street, $house_num, $id_user, $id_offer_entity)
 	{
 		$this->offer_description = $offer_description;
 		$this->id_offer = $id_offer;
@@ -22,6 +23,7 @@ class Offer{
 		$this->street = $street;
 		$this->house_num = $house_num;
 		$this->id_user = $id_user;
+		$this->id_offer_entity = $id_offer_entity;
 	}
 	
 	public function getOfferDescription()
@@ -33,6 +35,12 @@ class Offer{
 	{
 		return $this->id_offer;
 	}
+	
+	public function getIdOfferEntity()
+	{
+	    return $this->id_offer_entity;
+	}
+	
 	
 	public function getIdDatabase()
 	{
