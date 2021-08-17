@@ -80,8 +80,20 @@ class MainBotModule extends BotModule{
 	        $this->setOffersPress($request_info, $whitelist_info);
 	    }
 	    //отобразить телефоны
-	    else if(preg_match('/^id\d+$/', $request_info->getCallbackData())){
-	        $entity_id = preg_replace('/^id/', "", $request_info->getCallbackData());
+	    else if(preg_match('/^id\d+$/', $request_info->getCallbackData()) || preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
+	        $entity_id = "";
+	        if(preg_match('/^\d+\/\d+/', $request_info->getCallbackData())){
+	            $query = "SELECT Entity_id from offers where Internal_id='". $request_info->getCallbackData() ."';";
+	            $result = $this->main_bot->getRequestResult($query);
+	            if($result){
+	                $row_check = mysqli_num_rows($result);
+	                if($row_check > 0){
+	                    $row = mysqli_fetch_row($result);
+	                    $entity_id = $row[0];
+	                }
+	            }
+	        }
+	        else $entity_id = preg_replace('/^id/', "", $request_info->getCallbackData());
 	        $text_title = "Контакты объекта";
 	        //проверка, изменялся ли уже текст в сообщении
 	        if(!preg_match("/Контакты объекта/", $request_info->getMessageData()->getText())){
