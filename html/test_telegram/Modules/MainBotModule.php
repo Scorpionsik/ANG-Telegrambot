@@ -58,6 +58,24 @@ class MainBotModule extends BotModule{
 				}
 				else $this->main_bot->sendMessage($request_info->getIdTelegram(), "Объект <u>" . $message_text . "</u> не найден в базе телеграм-бота.");
 			}
+			//поиск
+			else{
+			    $is_show_offers = false;
+			    $search_params = array();
+			    //по комнатам
+			    if(preg_match('/\d(-\d)?к/i', $message_text)){
+			        $matches = array();
+			        $values = array();
+			        preg_match('/(\d)(-(\d))?к/i', $message_text, $matches);
+			        $values << $matches[0];
+			        if(count($matches) > 1) $values[] = $matches[2];
+			        $str_result = "";
+			        foreach($values as $value){
+			            $str_result = $str_result . $value . " ";
+			        }
+			        $this->main_bot->callAdmin($str_result);
+			    }
+			}
 		}
 		//показ объектов
 		if($is_show_offers){
