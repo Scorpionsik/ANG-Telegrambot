@@ -67,13 +67,15 @@ class MainBotModule extends BotModule{
 			        $matches = array();
 			        $values = array();
 			        preg_match('/(\d)(-(\d))?к/i', $message_text, $matches);
+			        $this->main_bot->callAdmin(implode("|",$matches));
+			        /*
 			        $values[] = $matches[0];
 			        if(count($matches) > 1) $values[] = $matches[2];
 			        $str_result = "";
 			        foreach($values as $value){
 			            $str_result = $str_result . $value . " ";
 			        }
-			        $this->main_bot->callAdmin($str_result);
+			        $this->main_bot->callAdmin($str_result);*/
 			    }
 			}
 		}
