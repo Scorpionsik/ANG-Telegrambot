@@ -46,7 +46,7 @@ class MainBotModule extends BotModule{
 			
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
 		}
-		else if(preg_match('Отменить поиск', $message_text)){
+		else if(preg_match('/Отменить поиск/', $message_text)){
 		    $this->main_bot->changeModeParam($request_info, $whitelist_info, 0);
 		    $is_show_offers = true;
 		}
