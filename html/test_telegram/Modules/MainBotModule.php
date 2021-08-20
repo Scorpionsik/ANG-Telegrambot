@@ -54,7 +54,7 @@ class MainBotModule extends BotModule{
 			//переключить на модуль выбора максимальной/минимальной цены
 			if(preg_match('/Поиск по цене/', $message_text)){
 				$is_show_offers = false;
-				$this->main_bot->changeMode($request_info, $whitelist_info, 1, 0);
+				$this->main_bot->changeMode($request_info, $whitelist_info, 1);
 			}
 			//перелистнуть страницу
 			else if(preg_match('/^\d+$/', $message_text)){
@@ -92,7 +92,7 @@ class MainBotModule extends BotModule{
 			    
 			    //
 			    if(count($search_params) > 0){
-			        $this->main_bot->changeMode($request_info, $whitelist_info, 2, 0);
+			        $this->main_bot->changeMode($request_info, $whitelist_info, 2);
 			        /* todo запись в таблицу agent_searches */
 			        
 			    }
