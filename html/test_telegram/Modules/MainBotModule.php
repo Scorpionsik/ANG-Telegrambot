@@ -47,7 +47,7 @@ class MainBotModule extends BotModule{
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
 		}
 		else if(preg_match('Отменить поиск', $message_text)){
-		    $this->main_bot->changeMode($request_info, $whitelist_info, 0, 0);
+		    $this->main_bot->changeModeParam($request_info, $whitelist_info, 0);
 		    $is_show_offers = true;
 		}
 		else{
@@ -92,7 +92,7 @@ class MainBotModule extends BotModule{
 			    
 			    //
 			    if(count($search_params) > 0){
-			        $this->main_bot->changeMode($request_info, $whitelist_info, 2);
+			        $this->main_bot->changeModeParam($request_info, $whitelist_info, 2);
 			        /* todo запись в таблицу agent_searches */
 			        
 			    }
