@@ -3,6 +3,7 @@ $telegram_dir = explode('Modules',__DIR__)[0];
 require_once $telegram_dir . "Functions.php";
 require_once $telegram_dir . "Offer.php";
 require_once $telegram_dir . "Keyboards/DefaultBotKeyboard.php";
+require_once $telegram_dir . "Keyboards/MainSearchBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineOfferBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineCountPagesBotKeyboard.php";
 require_once "BotModule.php";
@@ -20,7 +21,9 @@ class MainBotModule extends BotModule{
 	/* Обработка вводимых сообщений*/
 	protected function forMessages($request_info, $whitelist_info){
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
+		$module_param = $request_info->getModeParam();
 		$is_show_offers = true;
+		if($module_param == 2) $is_show_offers = false;
 		$current_turn_page = $whitelist_info->getTurnPage();
 		if(preg_match('/уведомл/',$message_text)){
 			if(preg_match('/Присылать только/', $message_text)){
@@ -36,7 +39,16 @@ class MainBotModule extends BotModule{
 		}
 		else if(preg_match('/\/key(board)?/',$message_text)){
 			$is_show_offers = false;
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
+			$keyboard=null;
+			
+			if($module_param == 2) $keyboard = new MainSearchBotKeyboard();
+			else $keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
+			
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
+		}
+		else if(preg_match('Отменить поиск', $message_text)){
+		    $this->main_bot->changeMode($request_info, $whitelist_info, 0, 0);
+		    $is_show_offers = true;
 		}
 		else{
 			//переключить на модуль выбора максимальной/минимальной цены
@@ -67,16 +79,24 @@ class MainBotModule extends BotModule{
 			        $matches = array();
 			        $values = array();
 			        preg_match('/(\d)(-(\d))?к/i', $message_text, $matches);
-			        $this->main_bot->callAdmin(implode("|",$matches));
+			        //$this->main_bot->callAdmin(implode("|",$matches));
 			        
 			        $values[] = $matches[1];
 			        if(count($matches) > 2) $values[] = end($matches);
 			        $str_result = "";
-			        foreach($values as $value){
-			            $str_result = $str_result . $value . " ";
-			        }
+			        if(count($values) > 1) $str_result = $str_result . "offers.Room_counts BETWEEN " . $values[0] . " and " . $values[1];
+			        else $str_result = $str_result . "offers.Room_counts=" . $values[0];
+			        $search_params[] = $str_result;
 			        $this->main_bot->callAdmin($str_result);
 			    }
+			    
+			    //
+			    if(count($search_params) > 0){
+			        $this->main_bot->changeMode($request_info, $whitelist_info, 2, 0);
+			        /* todo запись в таблицу agent_searches */
+			        
+			    }
+
 			}
 		}
 		//показ объектов
@@ -87,6 +107,9 @@ class MainBotModule extends BotModule{
 				}
 				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
 				$this->setOffersPress($request_info, $whitelist_info);
+			}
+			else if(!$is_show_offers && $module_param == 2){
+			    /* todo показать объекты для поиска */ 
 			}
 	}
 	/* конец Обработка вводимых сообщений*/
