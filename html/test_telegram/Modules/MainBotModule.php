@@ -96,6 +96,7 @@ class MainBotModule extends BotModule{
 			        /* todo запись в таблицу agent_searches */
 			        $this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
 			    }
+			    else $is_show_offers = true;
 
 			}
 		}
