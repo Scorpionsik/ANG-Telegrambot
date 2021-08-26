@@ -87,14 +87,14 @@ class MainBotModule extends BotModule{
 			        if(count($values) > 1) $str_result = $str_result . "offers.Room_counts BETWEEN " . $values[0] . " and " . $values[1];
 			        else $str_result = $str_result . "offers.Room_counts=" . $values[0];
 			        $search_params[] = $str_result;
-			        $this->main_bot->callAdmin($str_result);
+			        //$this->main_bot->callAdmin($str_result);
 			    }
 			    
 			    //
 			    if(count($search_params) > 0){
-			        $this->main_bot->changeModeParam($request_info, $whitelist_info, 2);
+			        $this->changeModeParam($request_info, $whitelist_info, 2);
 			        /* todo запись в таблицу agent_searches */
-			        
+			        $this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
 			    }
 
 			}
