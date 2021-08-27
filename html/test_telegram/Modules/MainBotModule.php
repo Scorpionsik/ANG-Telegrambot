@@ -161,7 +161,7 @@ class MainBotModule extends BotModule{
 		
 	private function cancelSearch($request_info, $whitelist_info){
 	    $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
-	    $this->main_bot->changeModeParam($request_info, $whitelist_info, 0);
+	    $this->changeModeParam($request_info, $whitelist_info, 0);
 	    $is_show_offers = true;
 	}
 	
