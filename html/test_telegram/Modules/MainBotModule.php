@@ -88,7 +88,7 @@ class MainBotModule extends BotModule{
 			}
 			//поиск
 			else{
-			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text)){
+			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text) && !preg_match('/Сбросить цену/i', $message_text)){
 			    //$is_show_offers = false;
     			    $search_params = $this->makeSearchArray($message_text);
     			    
