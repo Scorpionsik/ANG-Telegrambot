@@ -116,8 +116,8 @@ class MainBotModule extends BotModule{
 			    }
 			    else 
 			    {
-			        //$is_show_offers = true;
-			        $this->cancelSearch($request_info, $whitelist_info);
+			        $is_show_offers = false;
+			        $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
 			    }
 			}
 		}
