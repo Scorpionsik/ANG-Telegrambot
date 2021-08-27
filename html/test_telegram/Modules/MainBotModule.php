@@ -52,6 +52,7 @@ class MainBotModule extends BotModule{
 		}
 		else if(preg_match('/Отменить поиск/', $message_text)){
 		    $is_show_offers = true;
+		    $this->main_bot->sendMessage($request_info->getIdTelegram(), "Поиск завершен.", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 		    $this->cancelSearch($request_info, $whitelist_info);
 		}
 		else{
@@ -178,7 +179,7 @@ class MainBotModule extends BotModule{
 	    if(preg_match('/^\d+$/', $request_info->getCallbackData())){
 	        $module_param = $request_info->getModeParam();
 	        if($module_param == 2){
-	            $this->main_bot->getRequestResult("update agent_searches set Turn_page=" . $current_turn_page . " where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
+	            $this->main_bot->getRequestResult("update agent_searches set Turn_page=" . $request_info->getCallbackData() . " where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
 	            $this->showSearchResult($request_info, $whitelist_info);
 	        }
 	        else{
