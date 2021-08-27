@@ -2,8 +2,6 @@
 $telegram_dir = explode('Modules',__DIR__)[0];
 require_once $telegram_dir . "Functions.php";
 require_once $telegram_dir . "Offer.php";
-require_once $telegram_dir . "Keyboards/BotKeyboard.php";
-require_once $telegram_dir . "Keyboards/KeyboardButton.php";
 require_once $telegram_dir . "Keyboards/DefaultBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/MainSearchBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineOfferBotKeyboard.php";
@@ -108,7 +106,7 @@ class MainBotModule extends BotModule{
 			    //
 			    if(count($search_params) > 0){
 			        $this->changeModeParam($request_info, $whitelist_info, 2);
-			        $module_param == 2;
+			        $module_param = 2;
 			        /* todo запись в таблицу agent_searches */
 			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
 			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
@@ -117,7 +115,7 @@ class MainBotModule extends BotModule{
 			    else 
 			    {
 			        $is_show_offers = true;
-			        if($module_param == 2) $this->cancelSearch($request_info, $whitelist_info);
+			        $this->cancelSearch($request_info, $whitelist_info);
 			    }
 			}
 		}
@@ -149,9 +147,7 @@ class MainBotModule extends BotModule{
     			            
     			            if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
     			                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
-    		                $search_keyboard = new BotKeyboard(1);
-    		                $search_keyboard->addButton(new KeyboardButton("Отменить поиск"), 0);
-    		                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, $search_keyboard);
+    		                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, new MainSearchBotKeyboard());
     			            
     			        }
     			        else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
