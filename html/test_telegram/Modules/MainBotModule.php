@@ -89,22 +89,7 @@ class MainBotModule extends BotModule{
 			//поиск
 			else{
 			    //$is_show_offers = false;
-			    $search_params = array();
-			    //по комнатам
-			    if(preg_match('/\d(-\d)?к/i', $message_text)){
-			        $matches = array();
-			        $values = array();
-			        preg_match('/(\d)(-(\d))?к/i', $message_text, $matches);
-			        //$this->main_bot->callAdmin(implode("|",$matches));
-			        
-			        $values[] = $matches[1];
-			        if(count($matches) > 2) $values[] = end($matches);
-			        $str_result = "";
-			        if(count($values) > 1) $str_result = $str_result . "offers.Room_counts BETWEEN " . $values[0] . " and " . $values[1];
-			        else $str_result = $str_result . "offers.Room_counts=" . $values[0];
-			        $search_params[] = $str_result;
-			        //$this->main_bot->callAdmin($str_result);
-			    }
+			    $search_params = $this->makeSearchArray($message_text);
 			    
 			    //
 			    if(count($search_params) > 0){
@@ -140,6 +125,27 @@ class MainBotModule extends BotModule{
 			}
 	}
 	/* конец Обработка вводимых сообщений*/
+	
+	private function makeSearchArray($message_text){
+	    $search_params = array();
+	    //по комнатам
+	    if(preg_match('/\d(-\d)?к/i', $message_text)){
+	        $matches = array();
+	        $values = array();
+	        preg_match('/(\d)(-(\d))?к/i', $message_text, $matches);
+	        //$this->main_bot->callAdmin(implode("|",$matches));
+	        
+	        $values[] = $matches[1];
+	        if(count($matches) > 2) $values[] = end($matches);
+	        $str_result = "";
+	        if(count($values) > 1) $str_result = $str_result . "offers.Room_counts BETWEEN " . $values[0] . " and " . $values[1];
+	        else $str_result = $str_result . "offers.Room_counts=" . $values[0];
+	        $search_params[] = $str_result;
+	        //$this->main_bot->callAdmin($str_result);
+	    }
+	    
+	    return $search_params;
+	}
 	
 	private function showSearchResult($request_info, $whitelist_info){
         /* todo показать объекты для поиска */
