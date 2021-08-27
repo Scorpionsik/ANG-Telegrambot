@@ -88,24 +88,24 @@ class MainBotModule extends BotModule{
 			}
 			//поиск
 			else{
+			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text)){
 			    //$is_show_offers = false;
-			    $search_params = $this->makeSearchArray($message_text);
-			    
-			    //
-			    if(count($search_params) > 0){
-			        $this->changeModeParam($request_info, $whitelist_info, 2);
-			        $module_param = 2;
-			        /* todo запись в таблицу agent_searches */
-			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
-			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
-			        //$this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
-			    }
-			    else 
-			    {
-			        if($message_text != "Отмена" || !preg_match('/Получить всё/', $message_text)){
+    			    $search_params = $this->makeSearchArray($message_text);
+    			    
+    			    //
+    			    if(count($search_params) > 0){
+    			        $this->changeModeParam($request_info, $whitelist_info, 2);
+    			        $module_param = 2;
+    			        /* todo запись в таблицу agent_searches */
+    			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
+    			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
+    			        //$this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
+    			    }
+    			    else 
+    			    {
 			             $is_show_offers = false;
 			             $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
-			        }
+    			    }
 			    }
 			}
 		}
