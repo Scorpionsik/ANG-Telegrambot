@@ -112,7 +112,7 @@ class MainBotModule extends BotModule{
 			        /* todo запись в таблицу agent_searches */
 			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
 			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
-			        $this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
+			        //$this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
 			    }
 			    else 
 			    {
@@ -122,6 +122,7 @@ class MainBotModule extends BotModule{
 			}
 		}
 		//показ объектов
+		
 		if($is_show_offers){
 				if($request_info->getModeParam() == 0){
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
@@ -132,30 +133,33 @@ class MainBotModule extends BotModule{
 				$this->setOffersPress($request_info, $whitelist_info);
 			}
 			//показ поиска
-			else if(!$is_show_offers && $module_param == 2){
+			else {		
+			    if($module_param == 2){
 			    /* todo показать объекты для поиска */
-			    $query = "SELECT * from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
-			    $result = $this->main_bot->getRequestResult($query);
-			    if($result){
-			        $row_check = mysqli_num_rows($result);
-			        if($row_check > 0){
-			            $row = mysqli_fetch_row($result);
-			            $search_query = $row[1];
-			            $search_input = $row[2];
-			            $search_turn_page = $row[3];
-			            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
-			            
-			            if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
-			                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
-		                $search_keyboard = new BotKeyboard(1);
-		                $search_keyboard->addButton(new KeyboardButton("Отменить поиск"), 0);
-		                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, $search_keyboard);
-			            
-			        }
-			        else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
-			    }
-			    
+    			    $query = "SELECT * from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+    			    $result = $this->main_bot->getRequestResult($query);
+    			    if($result){
+    			        $row_check = mysqli_num_rows($result);
+    			        if($row_check > 0){
+    			            $row = mysqli_fetch_row($result);
+    			            $search_query = $row[1];
+    			            $search_input = $row[2];
+    			            $search_turn_page = $row[3];
+    			            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
+    			            
+    			            if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
+    			                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
+    		                $search_keyboard = new BotKeyboard(1);
+    		                $search_keyboard->addButton(new KeyboardButton("Отменить поиск"), 0);
+    		                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, $search_keyboard);
+    			            
+    			        }
+    			        else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
+    			    }
+    			    
+    			}
 			}
+			$this->main_bot->sendMessage($request_info->getIdTelegram(), $module_param);
 	}
 	/* конец Обработка вводимых сообщений*/
 	
