@@ -2,6 +2,8 @@
 $telegram_dir = explode('Modules',__DIR__)[0];
 require_once $telegram_dir . "Functions.php";
 require_once $telegram_dir . "Offer.php";
+require_once $telegram_dir . "Keyboards/BotKeyboard.php";
+require_once $telegram_dir . "Keyboards/KeyboardButton.php";
 require_once $telegram_dir . "Keyboards/DefaultBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/MainSearchBotKeyboard.php";
 require_once $telegram_dir . "Keyboards/InlineOfferBotKeyboard.php";
@@ -12,6 +14,10 @@ class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
 	private $find_code_query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id, offers.BuildStatus, offers.IsNewBuild, offers.Old_price, offers.House_number, offers.User_entity_id FROM offers inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district ";
 	private $quantity_per_page = 10;
+	private $search_status_message = "Режим поиска: ";
+	private $empty_offers_error_message = "Информации по вашему району на данный момент нет, попробуйте позже!";
+	private $empty_search_offers_error_message = "Информации по заданным параметрам нет.";
+	private $empty_search_db_error_message = "Ошибка состояния, попробуйте отменить поиск и начать его заново.";
 	private $functions;
 	public function __construct($main_bot){
 		parent::__construct($main_bot);
@@ -47,19 +53,27 @@ class MainBotModule extends BotModule{
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
 		}
 		else if(preg_match('/Отменить поиск/', $message_text)){
-		    $this->main_bot->changeModeParam($request_info, $whitelist_info, 0);
-		    $is_show_offers = true;
+		    $this->cancelSearch($request_info, $whitelist_info);
 		}
 		else{
 			//переключить на модуль выбора максимальной/минимальной цены
 			if(preg_match('/Поиск по цене/', $message_text)){
 				$is_show_offers = false;
+				$this->cancelSearch($request_info, $whitelist_info);
 				$this->main_bot->changeMode($request_info, $whitelist_info, 1);
 			}
 			//перелистнуть страницу
 			else if(preg_match('/^\d+$/', $message_text)){
-				$current_turn_page=$message_text;
-				$this->turnThePage($whitelist_info, $message_text);
+			    $current_turn_page=$message_text;
+			    /* Перелистнуть в режиме поиска */
+			    if($module_param == 2){
+			        $this->main_bot->getRequestResult("update agent_searches set Turn_page=" . $current_turn_page . " where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
+			    }
+			    /* Перелистнуть в обычном режиме */
+			    else{
+			 	   
+				   $this->turnThePage($whitelist_info, $message_text);
+			    }
 			}
 			//найти в базе данных по коду
 			else if(preg_match('/^\d+\/\d+$/', $message_text)){
@@ -94,10 +108,14 @@ class MainBotModule extends BotModule{
 			    if(count($search_params) > 0){
 			        $this->changeModeParam($request_info, $whitelist_info, 2);
 			        /* todo запись в таблицу agent_searches */
+			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
+			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
 			        $this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
 			    }
-			    else $is_show_offers = true;
-
+			    else 
+			    {
+			        $this->cancelSearch($request_info, $whitelist_info);
+			    }
 			}
 		}
 		//показ объектов
@@ -106,21 +124,54 @@ class MainBotModule extends BotModule{
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 					$this->changeModeParam($request_info, $whitelist_info, 1);
 				}
-				$this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info);
+				if($this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info, $this->makeOffersForMain($whitelist_info)) == 0)
+				    $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_offers_error_message);
 				$this->setOffersPress($request_info, $whitelist_info);
 			}
+			//показ поиска
 			else if(!$is_show_offers && $module_param == 2){
-			    /* todo показать объекты для поиска */ 
+			    /* todo показать объекты для поиска */
+			    $query = "SELECT * from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+			    $result = $this->main_bot->getRequestResult($query);
+			    if($result){
+			        $row_check = mysqli_num_rows($result);
+			        if($row_check > 0){
+			            $search_query = $row[1];
+			            $search_input = $row[2];
+			            $search_turn_page = $row[3];
+			            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
+			            $row = mysqli_fetch_row($result);
+			            if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
+			                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
+		                $search_keyboard = new BotKeyboard(1);
+		                $search_keyboard->addButton(new KeyboardButton("Отменить поиск"), 0);
+		                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, $search_keyboard);
+			            
+			        }
+			        else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
+			    }
+			    
 			}
 	}
 	/* конец Обработка вводимых сообщений*/
+	
+	private function makeOffersForMain($whitelist_info){
+	    return $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
+	}
 		
+	private function cancelSearch($request_info, $whitelist_info){
+	    $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
+	    $this->main_bot->changeModeParam($request_info, $whitelist_info, 0);
+	    $is_show_offers = true;
+	}
+	
 	/* Обработка инлайн запросов*/
 	protected function forCallbacks($request_info, $whitelist_info){
 	    //перелистнуть страницу
 	    if(preg_match('/^\d+$/', $request_info->getCallbackData())){
 	        $this->turnThePage($whitelist_info, $request_info->getCallbackData());
-	        $this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info);
+	        if($this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info, $this->makeOffersForMain($whitelist_info)) == 0)
+	            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_offers_error_message);
 	        $this->setOffersPress($request_info, $whitelist_info);
 	    }
 	    //отобразить телефоны
@@ -229,8 +280,8 @@ class MainBotModule extends BotModule{
 	}
 	/* конец Обработка инлайн запросов*/
 	
-	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info){
-		$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
+	private function showOffersOnPage($current_turn_page, $request_info, $whitelist_info, $offers_array){
+		//$offers_array = $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
 		$count_offers_array = count($offers_array);
 		
 		//есть информация для показа
@@ -265,9 +316,11 @@ class MainBotModule extends BotModule{
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
 		}
 		//информации нет
+		/*
 			else{
 				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Информации по вашему району на данный момент нет, попробуйте позже!");
-			}
+			}*/
+		return $count_offers_array;
 	}
 	
 	private function getOffers($where_query_part){
