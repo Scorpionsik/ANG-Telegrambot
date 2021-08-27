@@ -27,7 +27,7 @@ class MainBotModule extends BotModule{
 		$message_text = $this->main_bot->getMessageText($request_info->getMessageData());
 		$module_param = $request_info->getModeParam();
 		$is_show_offers = true;
-		if($module_param == 2) $is_show_offers = false;
+		//if($module_param == 2) $is_show_offers = false;
 		$current_turn_page = $whitelist_info->getTurnPage();
 		if(preg_match('/уведомл/',$message_text)){
 			if(preg_match('/Присылать только/', $message_text)){
@@ -51,7 +51,7 @@ class MainBotModule extends BotModule{
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
 		}
 		else if(preg_match('/Отменить поиск/', $message_text)){
-		    $is_show_offers = true;
+		    //$is_show_offers = true;
 		    $this->main_bot->sendMessage($request_info->getIdTelegram(), "Поиск завершен.", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 		    $this->cancelSearch($request_info, $whitelist_info);
 		}
@@ -86,7 +86,7 @@ class MainBotModule extends BotModule{
 			}
 			//поиск
 			else{
-			    $is_show_offers = false;
+			    //$is_show_offers = false;
 			    $search_params = array();
 			    //по комнатам
 			    if(preg_match('/\d(-\d)?к/i', $message_text)){
@@ -115,7 +115,7 @@ class MainBotModule extends BotModule{
 			    }
 			    else 
 			    {
-			        $is_show_offers = true;
+			        //$is_show_offers = true;
 			        $this->cancelSearch($request_info, $whitelist_info);
 			    }
 			}
@@ -123,6 +123,10 @@ class MainBotModule extends BotModule{
 		//показ объектов
 		
 		if($is_show_offers){
+		    if($module_param == 2){
+		        $this->showSearchResult($request_info, $whitelist_info);
+		    }
+		    else{
 				if($request_info->getModeParam() == 0){
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 					$this->changeModeParam($request_info, $whitelist_info, 1);
@@ -130,14 +134,8 @@ class MainBotModule extends BotModule{
 				if($this->showOffersOnPage($current_turn_page, $request_info, $whitelist_info, $this->makeOffersForMain($whitelist_info)) == 0)
 				    $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_offers_error_message);
 				$this->setOffersPress($request_info, $whitelist_info);
+		      }
 			}
-			//показ поиска
-			else {		
-			    if($module_param == 2){
-			        $this->showSearchResult($request_info, $whitelist_info);
-			    }
-			}
-			//$this->main_bot->sendMessage($request_info->getIdTelegram(), $module_param);
 	}
 	/* конец Обработка вводимых сообщений*/
 	
