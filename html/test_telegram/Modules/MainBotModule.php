@@ -108,6 +108,7 @@ class MainBotModule extends BotModule{
 			    //
 			    if(count($search_params) > 0){
 			        $this->changeModeParam($request_info, $whitelist_info, 2);
+			        $module_param == 2;
 			        /* todo запись в таблицу agent_searches */
 			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
 			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
@@ -138,11 +139,12 @@ class MainBotModule extends BotModule{
 			    if($result){
 			        $row_check = mysqli_num_rows($result);
 			        if($row_check > 0){
+			            $row = mysqli_fetch_row($result);
 			            $search_query = $row[1];
 			            $search_input = $row[2];
 			            $search_turn_page = $row[3];
 			            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
-			            $row = mysqli_fetch_row($result);
+			            
 			            if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
 			                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
 		                $search_keyboard = new BotKeyboard(1);
