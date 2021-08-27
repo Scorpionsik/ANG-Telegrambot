@@ -55,6 +55,7 @@ class MainBotModule extends BotModule{
 		    $this->main_bot->sendMessage($request_info->getIdTelegram(), "Поиск завершен.", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 		    $this->cancelSearch($request_info, $whitelist_info);
 		    $module_param = 0;
+		    $is_show_offers = false;
 		}
 		else{
 			//переключить на модуль выбора максимальной/минимальной цены
