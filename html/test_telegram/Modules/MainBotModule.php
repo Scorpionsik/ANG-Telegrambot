@@ -53,13 +53,14 @@ class MainBotModule extends BotModule{
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
 		}
 		else if(preg_match('/Отменить поиск/', $message_text)){
+		    $is_show_offers = true;
 		    $this->cancelSearch($request_info, $whitelist_info);
 		}
 		else{
 			//переключить на модуль выбора максимальной/минимальной цены
 			if(preg_match('/Поиск по цене/', $message_text)){
 				$is_show_offers = false;
-				$this->cancelSearch($request_info, $whitelist_info);
+				if($module_param == 2) $this->cancelSearch($request_info, $whitelist_info);
 				$this->main_bot->changeMode($request_info, $whitelist_info, 1);
 			}
 			//перелистнуть страницу
@@ -114,7 +115,8 @@ class MainBotModule extends BotModule{
 			    }
 			    else 
 			    {
-			        $this->cancelSearch($request_info, $whitelist_info);
+			        $is_show_offers = true;
+			        if($module_param == 2) $this->cancelSearch($request_info, $whitelist_info);
 			    }
 			}
 		}
@@ -162,7 +164,6 @@ class MainBotModule extends BotModule{
 	private function cancelSearch($request_info, $whitelist_info){
 	    $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
 	    $this->changeModeParam($request_info, $whitelist_info, 0);
-	    $is_show_offers = true;
 	}
 	
 	/* Обработка инлайн запросов*/
