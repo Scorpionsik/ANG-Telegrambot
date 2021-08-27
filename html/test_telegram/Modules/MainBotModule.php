@@ -102,8 +102,10 @@ class MainBotModule extends BotModule{
 			    }
 			    else 
 			    {
-			        $is_show_offers = false;
-			        $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
+			        if($message_text != "Отмена" || !preg_match('/Получить всё/', $message_text)){
+			             $is_show_offers = false;
+			             $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
+			        }
 			    }
 			}
 		}
