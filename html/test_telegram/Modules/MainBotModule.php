@@ -133,31 +133,35 @@ class MainBotModule extends BotModule{
 			//показ поиска
 			else {		
 			    if($module_param == 2){
-			    /* todo показать объекты для поиска */
-    			    $query = "SELECT * from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
-    			    $result = $this->main_bot->getRequestResult($query);
-    			    if($result){
-    			        $row_check = mysqli_num_rows($result);
-    			        if($row_check > 0){
-    			            $row = mysqli_fetch_row($result);
-    			            $search_query = $row[1];
-    			            $search_input = $row[2];
-    			            $search_turn_page = $row[3];
-    			            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
-    			            
-    			            if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
-    			                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
-    		                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, new MainSearchBotKeyboard());
-    			            
-    			        }
-    			        else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
-    			    }
-    			    
-    			}
+			        $this->showSearchResult($request_info, $whitelist_info);
+			    }
 			}
-			$this->main_bot->sendMessage($request_info->getIdTelegram(), $module_param);
+			//$this->main_bot->sendMessage($request_info->getIdTelegram(), $module_param);
 	}
 	/* конец Обработка вводимых сообщений*/
+	
+	private function showSearchResult($request_info, $whitelist_info){
+        /* todo показать объекты для поиска */
+        $query = "SELECT * from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
+        $result = $this->main_bot->getRequestResult($query);
+        if($result){
+            $row_check = mysqli_num_rows($result);
+            if($row_check > 0){
+                $row = mysqli_fetch_row($result);
+                $search_query = $row[1];
+                $search_input = $row[2];
+                $search_turn_page = $row[3];
+                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
+                
+                if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . ";")) == 0)
+                    $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
+                    $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, new MainSearchBotKeyboard());
+                    
+            }
+            else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
+        }
+        
+    }
 	
 	private function makeOffersForMain($whitelist_info){
 	    return $this->getOffers("WHERE bind_whitelist_distr_flats.Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . " ORDER BY offers.Update_timestamp desc;");
@@ -172,10 +176,17 @@ class MainBotModule extends BotModule{
 	protected function forCallbacks($request_info, $whitelist_info){
 	    //перелистнуть страницу
 	    if(preg_match('/^\d+$/', $request_info->getCallbackData())){
-	        $this->turnThePage($whitelist_info, $request_info->getCallbackData());
-	        if($this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info, $this->makeOffersForMain($whitelist_info)) == 0)
-	            $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_offers_error_message);
-	        $this->setOffersPress($request_info, $whitelist_info);
+	        $module_param = $request_info->getModeParam();
+	        if($module_param == 2){
+	            $this->main_bot->getRequestResult("update agent_searches set Turn_page=" . $current_turn_page . " where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
+	            $this->showSearchResult($request_info, $whitelist_info);
+	        }
+	        else{
+	            $this->turnThePage($whitelist_info, $request_info->getCallbackData());
+	            if($this->showOffersOnPage($request_info->getCallbackData(), $request_info, $whitelist_info, $this->makeOffersForMain($whitelist_info)) == 0)
+	                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_offers_error_message);
+	                $this->setOffersPress($request_info, $whitelist_info);
+	        }
 	    }
 	    //отобразить телефоны
 	    else if(preg_match('/^id\d+$/', $request_info->getCallbackData()) || preg_match('/^\d+\/\d+$/', $request_info->getCallbackData())){
