@@ -152,14 +152,8 @@ class MainBotModule extends BotModule{
 	    //по конкретной цене
 	    $pattern = '/(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?/';
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
-	        $operator = "=";
-	        $index = 1;
-	        if($matches[1] == '>' || $matches[1] == '<') {
-	            $operator = $matches[1] . $operator;
-	            $index++;
-	        }
-	        $this->main_bot->sendMessage($id_telegram, implode(" AND ", $matches));
-	        $search_params[] = "offers.Price${operator}" . $matches[$index];
+	        //$this->main_bot->sendMessage($id_telegram, implode(" AND ", $matches));
+	        $search_params[] = "offers.Price". $matches[1] ."=" . $matches[2];
 	        $is_set_price = true;
 	    }
 	    
