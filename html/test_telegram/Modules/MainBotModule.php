@@ -65,7 +65,7 @@ class MainBotModule extends BotModule{
 				$this->main_bot->changeMode($request_info, $whitelist_info, 1);
 			}
 			//перелистнуть страницу
-			else if(preg_match('/^\d+$/', $message_text)){
+			else if(preg_match('/^\d{1,3}$/', $message_text)){
 			    $current_turn_page=$message_text;
 			    /* Перелистнуть в режиме поиска */
 			    if($module_param == 2){
@@ -158,7 +158,7 @@ class MainBotModule extends BotModule{
 	            $operator = $matches[1] . $operator;
 	            $index++;
 	        }
-	        $search_params[] = $str_result . "offers.Price ${operator} " . $matches[$index];
+	        $search_params[] = "offers.Price ${operator} " . $matches[$index];
 	        $is_set_price = true;
 	    }
 	    
