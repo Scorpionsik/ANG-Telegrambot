@@ -136,14 +136,16 @@ class MainBotModule extends BotModule{
 	    //по комнатам
 	    $pattern = '/(\d)(?:-(\d))?к/i';
 	    if(preg_match($pattern, $message_text, $matches)){
+	        $str_result = "";
 	        if(count($matches) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[1] . " and " . $matches[2];
 	        else "offers.Room_counts=" . $matches[1];
+	        $search_params[] = $str_result;
 	    }
 	    
 	    //по ценовой вилке
 	    $pattern = '(\d{4,})\-(\d{4,})(?:[ ]*\$)?';
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $str_result = $str_result . "offers.Price BETWEEN " . $matches[1] . " and " . $matches[2];
+	        $search_params[] = "offers.Price BETWEEN " . $matches[1] . " and " . $matches[2];
 	        $is_set_price = true;
 	    }
 	    
@@ -156,7 +158,7 @@ class MainBotModule extends BotModule{
 	            $operator = $matches[1] . $operator;
 	            $index++;
 	        }
-	        $str_result = $str_result . "offers.Price ${operator} " . $matches[$index];
+	        $search_params[] = $str_result . "offers.Price ${operator} " . $matches[$index];
 	        $is_set_price = true;
 	    }
 	    
