@@ -90,7 +90,7 @@ class MainBotModule extends BotModule{
 			else{
 			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text) && !preg_match('/Сбросить цену/i', $message_text)){
 			    //$is_show_offers = false;
-			        $search_params = $this->makeSearchArray($request_info->getIdTelegram(), $message_text);
+			        $search_params = $this->makeSearchArray($message_text);
     			    
     			    //
     			    if(count($search_params) > 0){
@@ -99,7 +99,10 @@ class MainBotModule extends BotModule{
     			        $module_param = 2;
     			        /* todo запись в таблицу agent_searches */
     			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
-    			        $this->main_bot->getRequestResult("insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);");
+    			        $query = "insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);";
+    			        $this->main_bot->callAdmin($query);
+    			        $this->main_bot->getRequestResult($query);
+    			        
     			        //$this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
     			    }
     			    else 
@@ -129,7 +132,7 @@ class MainBotModule extends BotModule{
 	}
 	/* конец Обработка вводимых сообщений*/
 	
-	private function makeSearchArray($id_telegram, $message_text){
+	private function makeSearchArray($message_text){
 	    $search_params = array();
 	    $matches = array();
 	    $is_set_price = false;
