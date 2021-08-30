@@ -132,6 +132,7 @@ class MainBotModule extends BotModule{
 	}
 	/* конец Обработка вводимых сообщений*/
 	
+	//$this->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
 	    $search_params = array();
 	    $matches = array();
@@ -146,6 +147,12 @@ class MainBotModule extends BotModule{
 	        $search_params[] = $str_result;
 	    }
 	    
+	    //по району
+	    $pattern = '/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/i';
+	    if(preg_match($pattern, $message_text, $matches)){
+	        $this->callAdmin(implode(" AND ", $matches));
+	    }
+	    
 	    //по ценовой вилке
 	    $pattern = '/(\d{4,})\-(\d{4,})(?:[ ]*\$)?/';
 	    if(preg_match($pattern, $message_text, $matches)){
@@ -156,7 +163,6 @@ class MainBotModule extends BotModule{
 	    //по конкретной цене
 	    $pattern = '/(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?/';
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
-	        //$this->main_bot->sendMessage($id_telegram, implode(" AND ", $matches));
 	        $search_params[] = "offers.Price". $matches[1] ."=" . $matches[2];
 	        $is_set_price = true;
 	    }
