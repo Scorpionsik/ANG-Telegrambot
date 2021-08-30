@@ -145,6 +145,7 @@ class MainBotModule extends BotModule{
 	        if(count($matches) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[1] . " and " . $matches[2];
 	        else $str_result = "offers.Room_counts=" . $matches[1];
 	        $search_params[] = $str_result;
+	        
 	    }
 	    
 	    //по району
