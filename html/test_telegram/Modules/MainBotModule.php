@@ -90,7 +90,7 @@ class MainBotModule extends BotModule{
 			else{
 			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text) && !preg_match('/Сбросить цену/i', $message_text)){
 			    //$is_show_offers = false;
-			        $search_params = $this->makeSearchArray($message_text);
+			        $search_params = $this->makeSearchArray($request_info->getMessageData()->getText());
     			    
     			    //
     			    if(count($search_params) > 0){
@@ -151,10 +151,10 @@ class MainBotModule extends BotModule{
 	    //по району
 	    $pattern = '/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/';
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $this->main_bot->callAdmin(count($matches));
-	        $search_params[] = implode(" ; ", $matches);
+	        //$this->main_bot->callAdmin(count($matches));
+	        //$search_params[] = implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
-	        //$this->main_bot->callAdmin(utf8_encode(implode(" ; ", $matches)));
+	        $this->main_bot->callAdmin(implode(" ; ", $matches));
 	    }
 	    
 	    //по ценовой вилке
