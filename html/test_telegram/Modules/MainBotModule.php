@@ -133,7 +133,7 @@ class MainBotModule extends BotModule{
 	/* конец Обработка вводимых сообщений*/
 	
 	// $this->main_bot->callAdmin(implode(" AND ", $matches));
-	private function makeSearchArray($id_telegram, $message_text){
+	private function makeSearchArray($message_text){
 	    $search_params = array();
 	    $matches = array();
 	    $is_set_price = false;
