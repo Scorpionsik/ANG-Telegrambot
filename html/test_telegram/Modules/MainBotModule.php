@@ -90,7 +90,7 @@ class MainBotModule extends BotModule{
 			else{
 			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text) && !preg_match('/Сбросить цену/i', $message_text)){
 			    //$is_show_offers = false;
-    			    $search_params = $this->makeSearchArray($message_text);
+			        $search_params = $this->makeSearchArray($request_info->getIdTelegram(), $message_text);
     			    
     			    //
     			    if(count($search_params) > 0){
@@ -128,7 +128,7 @@ class MainBotModule extends BotModule{
 	}
 	/* конец Обработка вводимых сообщений*/
 	
-	private function makeSearchArray($message_text){
+	private function makeSearchArray($id_telegram, $message_text){
 	    $search_params = array();
 	    $matches = array();
 	    $is_set_price = false;
@@ -158,7 +158,8 @@ class MainBotModule extends BotModule{
 	            $operator = $matches[1] . $operator;
 	            $index++;
 	        }
-	        $search_params[] = "offers.Price ${operator} " . $matches[$index];
+	        $this->main_bot->sendMessage($id_telegram, implode(" AND ", $matches));
+	        $search_params[] = "offers.Price${operator}" . $matches[$index];
 	        $is_set_price = true;
 	    }
 	    
