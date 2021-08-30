@@ -132,7 +132,7 @@ class MainBotModule extends BotModule{
 	}
 	/* конец Обработка вводимых сообщений*/
 	
-	//$this->callAdmin(implode(" AND ", $matches));
+	// $this->main_bot->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
 	    $search_params = array();
 	    $matches = array();
@@ -150,7 +150,7 @@ class MainBotModule extends BotModule{
 	    //по району
 	    $pattern = '/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/i';
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $this->callAdmin(implode(" AND ", $matches));
+	        $this->main_bot->callAdmin(implode(" AND ", $matches));
 	    }
 	    
 	    //по ценовой вилке
