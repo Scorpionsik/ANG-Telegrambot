@@ -94,6 +94,7 @@ class MainBotModule extends BotModule{
     			    
     			    //
     			    if(count($search_params) > 0){
+    			        $this->main_bot->callAdmin(implode(" AND ", $search_params));
     			        $this->changeModeParam($request_info, $whitelist_info, 2);
     			        $module_param = 2;
     			        /* todo запись в таблицу agent_searches */
