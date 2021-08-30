@@ -143,14 +143,14 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по ценовой вилке
-	    $pattern = '(\d{4,})\-(\d{4,})(?:[ ]*\$)?';
+	    $pattern = '/(\d{4,})\-(\d{4,})(?:[ ]*\$)?/';
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $search_params[] = "offers.Price BETWEEN " . $matches[1] . " and " . $matches[2];
 	        $is_set_price = true;
 	    }
 	    
 	    //по конкретной цене
-	    $pattern = '(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?';
+	    $pattern = '/(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?/';
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
 	        $operator = "=";
 	        $index = 1;
