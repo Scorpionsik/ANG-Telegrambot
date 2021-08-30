@@ -130,20 +130,34 @@ class MainBotModule extends BotModule{
 	
 	private function makeSearchArray($message_text){
 	    $search_params = array();
+	    $matches = array();
+	    $is_set_price = false;
+	    
 	    //по комнатам
-	    if(preg_match('/\d(-\d)?к/i', $message_text)){
-	        $matches = array();
-	        $values = array();
-	        preg_match('/(\d)(-(\d))?к/i', $message_text, $matches);
-	        //$this->main_bot->callAdmin(implode("|",$matches));
-	        
-	        $values[] = $matches[1];
-	        if(count($matches) > 2) $values[] = end($matches);
-	        $str_result = "";
-	        if(count($values) > 1) $str_result = $str_result . "offers.Room_counts BETWEEN " . $values[0] . " and " . $values[1];
-	        else $str_result = $str_result . "offers.Room_counts=" . $values[0];
-	        $search_params[] = $str_result;
-	        //$this->main_bot->callAdmin($str_result);
+	    $pattern = '/(\d)(?:-(\d))?к/i';
+	    if(preg_match($pattern, $message_text, $matches)){
+	        if(count($matches) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[1] . " and " . $matches[2];
+	        else "offers.Room_counts=" . $matches[1];
+	    }
+	    
+	    //по ценовой вилке
+	    $pattern = '(\d{4,})\-(\d{4,})(?:[ ]*\$)?';
+	    if(preg_match($pattern, $message_text, $matches)){
+	        $str_result = $str_result . "offers.Price BETWEEN " . $matches[1] . " and " . $matches[2];
+	        $is_set_price = true;
+	    }
+	    
+	    //по конкретной цене
+	    $pattern = '(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?';
+	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
+	        $operator = "=";
+	        $index = 1;
+	        if($matches[1] == '>' || $matches[1] == '<') {
+	            $operator = $matches[1] . $operator;
+	            $index++;
+	        }
+	        $str_result = $str_result . "offers.Price ${operator} " . $matches[$index];
+	        $is_set_price = true;
 	    }
 	    
 	    return $search_params;
