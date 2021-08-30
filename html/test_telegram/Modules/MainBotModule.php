@@ -151,8 +151,8 @@ class MainBotModule extends BotModule{
 	    $pattern = '/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/';
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $this->main_bot->callAdmin(count($matches));
-	        $this->main_bot->callAdmin($matches[0]);
-	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        //$this->main_bot->callAdmin($matches[0]);
+	        $this->main_bot->callAdmin(utf8_encode(implode(" ; ", $matches)));
 	    }
 	    
 	    //по ценовой вилке
