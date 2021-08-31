@@ -154,7 +154,7 @@ class MainBotModule extends BotModule{
 	    $pattern = "/([А-Яа-я]{3,}(?: [А-Яа-я]{3,})?)(?=\,)?/";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $this->main_bot->callAdmin(count($matches));
-	        $search_params[] = "districts.District_name like (\"" . $matches[0] . "%\")"; //implode(" ; ", $matches);
+	        $search_params[] = "districts.District_name like (\"" . $matches[1] . "%\")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	    }
