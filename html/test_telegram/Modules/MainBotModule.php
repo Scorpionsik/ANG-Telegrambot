@@ -153,10 +153,13 @@ class MainBotModule extends BotModule{
 	    //по району
 	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $this->main_bot->callAdmin(count($matches));
-	        $search_params[] = "districts.District_name like (\"" . $matches[1] . "%\")"; //implode(" ; ", $matches);
+	        $district_params = array();
+	        $count = count($matches);
+	        $step = 1;
+	        while($step < $count) $district_params[] = "districts.District_name like (\"" . $matches[$step++] . "%\")"; //implode(" ; ", $matches);
+	        $search_params[] = implode(" OR ", $district_params); //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
-	        $this->main_bot->callAdmin(implode(" ; ", $matches));
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	    }
 	    
 	    //по ценовой вилке
