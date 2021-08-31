@@ -153,7 +153,7 @@ class MainBotModule extends BotModule{
 	    //по району
 	    $pattern = "/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        //$this->main_bot->callAdmin(count($matches));
+	        $this->main_bot->callAdmin(count($matches));
 	        $search_params[] = $matches[0]; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
