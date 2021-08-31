@@ -100,7 +100,7 @@ class MainBotModule extends BotModule{
     			        /* todo запись в таблицу agent_searches */
     			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
     			        $query = "insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $request_info->getMessageData()->getText() ."', 1);";
-    			        $this->main_bot->callAdmin($query);
+    			        //$this->main_bot->callAdmin($query);
     			        $this->main_bot->getRequestResult($query);
     			        
     			        //$this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
@@ -135,7 +135,7 @@ class MainBotModule extends BotModule{
 	// $this->main_bot->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
 	    
-	    $this->main_bot->callAdmin($message_text);
+	    //$this->main_bot->callAdmin($message_text);
 	    $search_params = array();
 	    $matches = array();
 	    $is_set_price = false;
@@ -156,7 +156,7 @@ class MainBotModule extends BotModule{
 	        $this->main_bot->callAdmin(count($matches));
 	        $search_params[] = "districts.District_name like (\"" . $matches[1] . "%\")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
-	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $this->main_bot->callAdmin(implode(" ; ", $matches));
 	    }
 	    
 	    //по ценовой вилке
