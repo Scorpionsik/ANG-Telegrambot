@@ -95,7 +95,7 @@ class MainBot{
 	}
 
 	//отправка сообщений в телеграм-чат
-	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false){
+	public function sendMessage($id_telegram, $message_text, $bot_keyboard = null, $is_inline = false, $format = 'HTML'){
 		$keyboard = null;
 		if(!is_null($bot_keyboard)){
 			if($is_inline){
@@ -109,7 +109,7 @@ class MainBot{
 	}
 	
 	public function sendPhoto($id_telegram, $photo_link, $description){
-		$this->bot->sendPhoto($id_telegram, $photo_link, $description, null, null, false, "HTML");
+	    $this->bot->sendPhoto($id_telegram, $photo_link, $description, null, null, false, $format);
 	}
 	
 	public function editMessage($id_telegram, $message_data, $new_message_text, $bot_keyboard = null, $is_inline = true){
