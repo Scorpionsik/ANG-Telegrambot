@@ -100,7 +100,7 @@ class MainBotModule extends BotModule{
     			        /* todo запись в таблицу agent_searches */
     			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
     			        $query = "insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $request_info->getMessageData()->getText() ."', 1);";
-    			        //$this->main_bot->callAdmin($query);
+    			        $this->main_bot->callAdmin($query);
     			        $this->main_bot->getRequestResult($query);
     			        
     			        //$this->main_bot->sendMessage($request_info->getIdTelegram(), implode(" AND ", $search_params));
