@@ -151,8 +151,8 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по району
-	    $pattern = "(*UTF8)/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";
-	    if(preg_match('/(\pL{3,}(?: \pL{3,})?)(?=\,)?/i', $message_text, $matches)){
+	    $pattern = "(*UTF8)/(\pL{3,}(?: \pL{3,})?)(?=\,)?/";
+	    if(preg_match($pattern, $message_text, $matches)){
 	        $this->main_bot->callAdmin(count($matches));
 	        $search_params[] = "districts.District_name like (\"" . $matches[1] . "%\")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
