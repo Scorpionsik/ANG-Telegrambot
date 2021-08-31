@@ -196,7 +196,7 @@ class MainBotModule extends BotModule{
             if($row_check > 0){
                 $row = mysqli_fetch_row($result);
                 $search_query = $row[1];
-                $search_input = $row[2];
+                $search_input = htmlentities($row[2]);
                 $search_turn_page = $row[3];
                 $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, new MainSearchBotKeyboard());
                 
