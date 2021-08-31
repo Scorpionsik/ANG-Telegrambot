@@ -156,9 +156,14 @@ class MainBotModule extends BotModule{
 	        $district_params = array();
 	        $count = count($matches);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
-	        //$this->main_bot->callAdmin($count);
+	        $this->main_bot->callAdmin($count);
 	        $step = 0;
-	        while($step < $count - 1) $district_params[] = "districts.District_name like (\"" . $matches[$step++][1] . "%\")"; //implode(" ; ", $matches);
+	        while($step < $count - 1) 
+	        {
+	            $district_params[] = "districts.District_name like (\"" . $matches[$step][1] . "%\")"; 
+	            $this->main_bot->callAdmin($matches[$step][1]);//implode(" ; ", $matches);
+	            $step++;
+	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
 	        $search_params[] = implode(" OR ", $district_params); //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
