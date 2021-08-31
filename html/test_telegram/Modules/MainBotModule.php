@@ -155,7 +155,7 @@ class MainBotModule extends BotModule{
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $district_params = array();
 	        $count = count($matches);
-	        $this->main_bot->callAdmin(implode(" ; ", $matches));
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        //$this->main_bot->callAdmin($count);
 	        $step = 0;
 	        while($step < $count - 1) $district_params[] = "districts.District_name like (\"" . $matches[$step++][1] . "%\")"; //implode(" ; ", $matches);
