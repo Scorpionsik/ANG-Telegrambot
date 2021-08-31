@@ -99,7 +99,7 @@ class MainBotModule extends BotModule{
     			        $module_param = 2;
     			        /* todo запись в таблицу agent_searches */
     			        $this->main_bot->getRequestResult("delete from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";");
-    			        $query = "insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $message_text ."', 1);";
+    			        $query = "insert into agent_searches values (" . $whitelist_info->getIdWhitelist() . ", '". implode(" AND ", $search_params) ."', '". $request_info->getMessageData()->getText() ."', 1);";
     			        $this->main_bot->callAdmin($query);
     			        $this->main_bot->getRequestResult($query);
     			        
@@ -154,9 +154,9 @@ class MainBotModule extends BotModule{
 	    $pattern = "/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        //$this->main_bot->callAdmin(count($matches));
-	        //$search_params[] = implode(" ; ", $matches);
+	        $search_params[] = implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
-	        $this->main_bot->callAdmin(implode(" ; ", $matches));
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	    }
 	    
 	    //по ценовой вилке
