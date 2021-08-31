@@ -134,12 +134,14 @@ class MainBotModule extends BotModule{
 	
 	// $this->main_bot->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
+	    
+	    $this->main_bot->callAdmin($message_text);
 	    $search_params = array();
 	    $matches = array();
 	    $is_set_price = false;
 	    
 	    //по комнатам
-	    $pattern = '/(\d)(?:-(\d))?к/';
+	    $pattern = "/(\d)(?:-(\d))?к/";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $str_result = "";
 	        if(count($matches) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[1] . " and " . $matches[2];
@@ -149,7 +151,7 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по району
-	    $pattern = '/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/';
+	    $pattern = "/[А-Яа-я]{3,}(?: [А-Яа-я]{3,})?(?=\,)?/";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        //$this->main_bot->callAdmin(count($matches));
 	        //$search_params[] = implode(" ; ", $matches);
@@ -158,14 +160,14 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по ценовой вилке
-	    $pattern = '/(\d{4,})\-(\d{4,})(?:[ ]*\$)?/';
+	    $pattern = "/(\d{4,})\-(\d{4,})(?:[ ]*\$)?/";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $search_params[] = "offers.Price BETWEEN " . $matches[1] . " and " . $matches[2];
 	        $is_set_price = true;
 	    }
 	    
 	    //по конкретной цене
-	    $pattern = '/(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?/';
+	    $pattern = "/(?:([<>])?[ ]*)(\d{4,})(?:[ ]*\$)?/";
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
 	        $search_params[] = "offers.Price". $matches[1] ."=" . $matches[2];
 	        $is_set_price = true;
