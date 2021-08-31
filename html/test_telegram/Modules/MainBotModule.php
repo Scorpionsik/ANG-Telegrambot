@@ -152,7 +152,7 @@ class MainBotModule extends BotModule{
 	    
 	    //по району
 	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";
-	    if(preg_match_all($pattern, $message_text, $matches)){
+	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $district_params = array();
 	        $count = count($matches);
 	        $this->main_bot->callAdmin(implode(" ; ", $matches));
