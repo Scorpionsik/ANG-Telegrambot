@@ -156,6 +156,18 @@ class MainBotModule extends BotModule{
 	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
+	    //вторичка/новострой
+	    $pattern = "/(?<=^| )(в(?:торичка)?)(?=$| )|(?<=^| )(н(?:овострой)?)(?=$| )/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $index = count($matches) - 2;
+	        $search_params[] = "offers.IsNewBuild=${index}";
+	        $message_text = preg_replace($pattern, "", $message_text);
+	    }
+	    
+	    //новострой
+	    
+	    
 	    //по комнатам
 	    $pattern = "/(\d)(?:-(\d))?[Кк]/u";
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
