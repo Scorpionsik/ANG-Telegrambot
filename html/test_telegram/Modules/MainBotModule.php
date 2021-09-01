@@ -172,7 +172,7 @@ class MainBotModule extends BotModule{
 	        while($step < $count) 
 	        {
 	            $district_params[] = "districts.District_name like (\"" . $matches[$step][1] . "%\")"; 
-	            $this->main_bot->callAdmin($matches[$step][1]);//implode(" ; ", $matches);
+	            //$this->main_bot->callAdmin($matches[$step][1]);//implode(" ; ", $matches);
 	            $step++;
 	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
