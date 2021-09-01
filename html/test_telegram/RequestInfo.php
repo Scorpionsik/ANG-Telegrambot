@@ -6,11 +6,13 @@ class RequestInfo{
 	private $callback_data;
 	private $mode_value;
 	private $mode_param;
+	private $last_message_date;
 
-	public function __construct($update, $id_whitelist = null, $mode_value = 0, $mode_param = 0){
+	public function __construct($update, $id_whitelist = null, $mode_value = 0, $mode_param = 0, $last_message_date = 0){
 		if(is_a($update, '\TelegramBot\Api\Types\Message')){
 			$this->id_telegram = $update->getChat()->getId();
 			$this->message_data = $update;
+			$this->last_message_date = $this->message_data.getDate();
 		}
 		else if(is_a($update, '\TelegramBot\Api\Types\Update')){
 			$this->message_data = $update->getMessage();
@@ -19,6 +21,7 @@ class RequestInfo{
 				if(!is_null($callback)){
 					$this->callback_data = $callback->getData();
 					$this->message_data = $callback->getMessage();
+					$this->last_message_date = $this->message_data.getDate();
 				}
 			}
 			$this->id_telegram = $this->message_data->getChat()->getId();
@@ -28,6 +31,7 @@ class RequestInfo{
 			$this->message_data = $update->getMessageData();
 			$this->callback_data = $update->getCallbackData();
 		}
+		$this->last_message_date = $last_message_date;
 		$this->id_whitelist = $id_whitelist;
 		$this->mode_value = $mode_value;
 		$this->mode_param = $mode_param;
@@ -55,6 +59,10 @@ class RequestInfo{
 	
 	public function getModeParam(){
 		return $this->mode_param;
+	}
+	
+	public function getLastMessageDate(){
+	    return $this->last_message_date;
 	}
 }
 ?>

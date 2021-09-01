@@ -30,8 +30,13 @@ class MainBot{
 			if(!is_null($Update)){
 				try{
 					$request_info = new RequestInfo($Update);
+					$current_message_time = $request_info->getLastMessageDate();
 					$request_info = $this->getFullRequestInfo($request_info);
-					$this->distribute($request_info);
+					
+					if($current_message_time - $request_info->getLastMessageDate() > 1){
+					    $this->getRequestResult("update telegram_users set Last_message_date=${current_message_time} where Id_telegram_user=" . $request_info->getIdTelegram() . ";");
+    					$this->distribute($request_info);
+					}
 				}
 				catch(Exception $ex){
 					$this->sendException($ex, null, null);
@@ -223,13 +228,13 @@ class MainBot{
 		{
 			$row_check = mysqli_num_rows($result);
 			if($row_check == 0){
-				$query = "INSERT INTO telegram_users (Id_telegram_user) VALUES (". $request_info->getIdTelegram() .");";
+			    $query = "INSERT INTO telegram_users (Id_telegram_user, Last_message_date) VALUES (". $request_info->getIdTelegram() .", ". $request_info->getLastMessageDate() .");";
 				$this->getRequestResult($query);
 			}
 			else{
 				$row = mysqli_fetch_row($result);
 				if($row){
-					$return = new RequestInfo($request_info, $row[1], $row[4], $row[5]);
+				    $return = new RequestInfo($request_info, $row[1], $row[4], $row[5], $row[6]);
 				}
 			}
 			mysqli_free_result($result);
