@@ -33,7 +33,7 @@ class MainBot{
 					$current_message_time = $request_info->getLastMessageDate();
 					$request_info = $this->getFullRequestInfo($request_info);
 					
-					if($current_message_time - $request_info->getLastMessageDate() > 1){
+					if($request_info->getLastMessageDate() - $current_message_time > 1){
 					    $this->getRequestResult("update telegram_users set Last_message_date=${current_message_time} where Id_telegram_user=" . $request_info->getIdTelegram() . ";");
     					$this->distribute($request_info);
 					}
