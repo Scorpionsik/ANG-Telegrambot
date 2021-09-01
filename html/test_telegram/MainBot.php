@@ -32,7 +32,7 @@ class MainBot{
 					$request_info = new RequestInfo($Update);
 					$current_message_time = $request_info->getLastMessageDate();
 					$request_info = $this->getFullRequestInfo($request_info);
-					$time_currency = $request_info->getLastMessageDate() - $current_message_time;
+					$time_currency = $current_message_time - $request_info->getLastMessageDate();
 					$this->callAdmin($time_currency . " : " . $request_info->getLastMessageDate() . " - ${current_message_time}");
 					if($time_currency > 1){
 					    $this->getRequestResult("update telegram_users set Last_message_date=${current_message_time} where Id_telegram_user=" . $request_info->getIdTelegram() . ";");
