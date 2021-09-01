@@ -134,7 +134,7 @@ class MainBotModule extends BotModule{
 	
 	// $this->main_bot->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
-	    
+	    $message_text = str_replace("<", "", $message_text);
 	    //$this->main_bot->callAdmin($message_text);
 	    $search_params = array();
 	    $matches = array();
@@ -189,10 +189,12 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по конкретной цене
-	    $pattern = "/(?:([<>])?[ ]*)(\d{4,}|\d+т)(?:[ ]*\$)?/";
+	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+т)(?:[ ]*\$)?/";
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
-	        $this->main_bot->callAdmin(implode(" ; ", $matches));
-	        $search_params[] = "offers.Price". $matches[1] ."=" . str_replace("т","000", $matches[2]);
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $operator = "<";
+	        if($matches[1] != "") $operator = $matches[1];
+	        $search_params[] = "offers.Price". $operator ."=" . str_replace("т","000", $matches[2]);
 	        $is_set_price = true;
 	    }
 	    
@@ -210,11 +212,11 @@ class MainBotModule extends BotModule{
                 $search_query = $row[1];
                 $search_input = htmlentities($row[2]);
                 $search_turn_page = $row[3];
-                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, new MainSearchBotKeyboard(), false, "MarkdownV2");
+                $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, new MainSearchBotKeyboard());
                 
                 if($this->showOffersOnPage($search_turn_page, $request_info, $whitelist_info, $this->getOffersWithoutBind("WHERE " . $search_query . " ORDER BY offers.Update_timestamp desc;")) == 0)
                     $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_offers_error_message);
-                    $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input, null, false, "MarkdownV2");
+                    $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->search_status_message . $search_input);
                     
             }
             else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
