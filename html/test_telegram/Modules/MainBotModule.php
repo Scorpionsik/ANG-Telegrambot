@@ -144,17 +144,17 @@ class MainBotModule extends BotModule{
 	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )|(?<=^| )(а(?:ренда)?)(?=$| )/u";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $this->main_bot->callAdmin(implode(" ; ", $matches));
-	        $this->main_bot->callAdmin($matches[1][0]);
-	        switch($matches[1][0]){
+	        switch($matches[1]){
 	            case 'п':
-	            case 'П':
-	                $search_params[] = "types.Type_name='продажа'";
+	            case 'продажа':
+	                $search_params[] = "types.Type_name=\"продажа\"";
 	                break;
 	            case 'а':
-	            case 'А':
-	                $search_params[] = "types.Type_name='аренда'";
+	            case 'аренда':
+	                $search_params[] = "types.Type_name=\"аренда\"";
 	                break;
 	        }
+	        $message_text = preg_replace("/". $matches[1] ."/", "", $message_text, 1);
 	    }
 	    
 	    //по комнатам
