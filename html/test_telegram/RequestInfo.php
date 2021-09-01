@@ -12,7 +12,7 @@ class RequestInfo{
 		if(is_a($update, '\TelegramBot\Api\Types\Message')){
 			$this->id_telegram = $update->getChat()->getId();
 			$this->message_data = $update;
-			$this->last_message_date = $this->message_data.getDate();
+			$this->last_message_date = $this->message_data->getDate();
 		}
 		else if(is_a($update, '\TelegramBot\Api\Types\Update')){
 			$this->message_data = $update->getMessage();
@@ -23,15 +23,16 @@ class RequestInfo{
 					$this->message_data = $callback->getMessage();
 				}
 			}
-			$this->last_message_date = $this->message_data.getDate();
+			$this->last_message_date = $this->message_data->getDate();
 			$this->id_telegram = $this->message_data->getChat()->getId();
 		}
 		else if(is_a($update, 'RequestInfo')){
 			$this->id_telegram = $update->getIdTelegram();
 			$this->message_data = $update->getMessageData();
 			$this->callback_data = $update->getCallbackData();
+			$this->last_message_date = $update->getLastMessageDate();
 		}
-		$this->last_message_date = $last_message_date;
+		if($last_message_date > 0)$this->last_message_date = $last_message_date;
 		$this->id_whitelist = $id_whitelist;
 		$this->mode_value = $mode_value;
 		$this->mode_param = $mode_param;
