@@ -90,7 +90,7 @@ class MainBotModule extends BotModule{
 			else{
 			    if(!preg_match('/Получить всё/i', $message_text) && !preg_match('/Отмена/i', $message_text) && !preg_match('/Сбросить цену/i', $message_text)){
 			    //$is_show_offers = false;
-			        $search_params = $this->makeSearchArray($request_info->getMessageData()->getText());
+			        $search_params = $this->makeSearchArray($message_text);
     			    
     			    //
     			    if(count($search_params) > 0){
