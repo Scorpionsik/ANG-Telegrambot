@@ -229,7 +229,7 @@ class MainBot{
 		{
 			$row_check = mysqli_num_rows($result);
 			if($row_check == 0){
-			    $query = "INSERT INTO telegram_users (Id_telegram_user, Last_message_date) VALUES (". $request_info->getIdTelegram() .", ". $request_info->getLastMessageDate() .");";
+			    $query = "INSERT INTO telegram_users (Id_telegram_user) VALUES (". $request_info->getIdTelegram() .");";
 				$this->getRequestResult($query);
 			}
 			else{
