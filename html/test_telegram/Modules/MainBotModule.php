@@ -145,7 +145,7 @@ class MainBotModule extends BotModule{
 	    if(preg_match($pattern, $message_text, $matches)){
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $search_params[] = "types.Type_name like(\"". $matches[1] . "%\")";
-	        $message_text = preg_replace("/". $matches[1] ."/", "", $message_text, 1);
+	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
 	    //аренда
@@ -153,7 +153,7 @@ class MainBotModule extends BotModule{
 	    if(preg_match($pattern, $message_text, $matches)){
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $search_params[] = "types.Type_name like(\"". $matches[1] . "%\")";
-	        $message_text = preg_replace("/". $matches[1] ."/", "", $message_text, 1);
+	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
 	    //по комнатам
