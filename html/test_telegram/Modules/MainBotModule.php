@@ -142,12 +142,19 @@ class MainBotModule extends BotModule{
 	    
 	    //по комнатам
 	    $pattern = "/(\d)(?:-(\d))?к/";
-	    if(preg_match($pattern, $message_text, $matches)){
-	        $str_result = "";
-	        if(count($matches) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[1] . " and " . $matches[2];
-	        else $str_result = "offers.Room_counts=" . $matches[1];
-	        $search_params[] = $str_result;
+	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
+	        $room_params = array();
+	        $count = count($matches);
+	        $step=0;
+	        while($step < $count - 1){
+	            $str_result = "";
+	            if(count($matches[$step]) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[$step][1] . " and " . $matches[$step][2];
+	            else $str_result = "offers.Room_counts=" . $matches[$step][1];
+	            $room_params[] = $str_result;
+	            $step++;
+	        }
 	        
+	        $search_params[] = "(". implode(" OR ", $room_params) .")";
 	    }
 	    
 	    //по району
@@ -157,7 +164,7 @@ class MainBotModule extends BotModule{
 	        $district_params = array();
 	        $count = count($matches);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
-	        $this->main_bot->callAdmin($count);
+	        //$this->main_bot->callAdmin($count);
 	        $step = 0;
 	        while($step < $count) 
 	        {
