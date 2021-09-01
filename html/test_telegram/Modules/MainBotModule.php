@@ -143,6 +143,7 @@ class MainBotModule extends BotModule{
 	    //продажа-аренда
 	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )|(?<=^| )(а(?:ренда)?)(?=$| )/u";
 	    if(preg_match($pattern, $message_text, $matches)){
+	        $this->callAdmin(implode(" ; ", $matches));
 	        switch($matches[1][0]){
 	            case 'п':
 	            case 'П':
