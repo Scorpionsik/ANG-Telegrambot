@@ -141,7 +141,7 @@ class MainBotModule extends BotModule{
 	    $is_set_price = false;
 	    
 	    //по комнатам
-	    $pattern = "/(\d)(?:-(\d))?к/";
+	    $pattern = "/(\d)(?:-(\d))?[Кк]/u";
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $room_params = array();
 	        $count = count($matches);
@@ -191,7 +191,7 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по конкретной цене
-	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+[Тт])(?:[ ]*\$)?/";
+	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+[Тт])(?:[ ]*\$)?/u";
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $operator = "<";
