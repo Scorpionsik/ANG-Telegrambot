@@ -13,6 +13,7 @@ foreach($whitelist_users_array as $whitelist_user){
 		$bot->sendStartMessage($whitelist_user);
 			foreach($offers_array as $offer){
 				$bot->showOffer($offer, $whitelist_user->getIdTelegram(), $whitelist_user->getWhitelistInfo());
+				usleep(300000);
 			}
 			
 			$bot->sendEndMessage($count_array, $whitelist_user);
