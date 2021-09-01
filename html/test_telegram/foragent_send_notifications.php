@@ -13,12 +13,6 @@ foreach($whitelist_users_array as $whitelist_user){
 		$bot->sendStartMessage($whitelist_user);
 			foreach($offers_array as $offer){
 				$bot->showOffer($offer, $whitelist_user->getIdTelegram(), $whitelist_user->getWhitelistInfo());
-				/*
-				 * Телеграмм АПИ проверяет, спамит ли бот сообщениями, и временно банит его, если заметит за этим
-				 * поскольку на одно объявления приходится по 2-3 сообщения за раз, если приходит много новых/обновленных объявлений, бот перестает работать на некоторое время
-				 * данная строчка фиксит эту проблему, делая интервал в 150мс между объявлениями
-				 */
-				usleep(150000);
 			}
 			
 			$bot->sendEndMessage($count_array, $whitelist_user);
