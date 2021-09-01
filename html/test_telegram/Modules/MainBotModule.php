@@ -145,11 +145,15 @@ class MainBotModule extends BotModule{
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $room_params = array();
 	        $count = count($matches);
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $this->main_bot->callAdmin("Найдено: " . $count);
 	        $step=0;
 	        while($step < $count - 1){
 	            $str_result = "";
+	            
 	            if(count($matches[$step]) > 2) $str_result = $str_result . "offers.Room_counts BETWEEN " . $matches[$step][1] . " and " . $matches[$step][2];
 	            else $str_result = "offers.Room_counts=" . $matches[$step][1];
+	            $this->main_bot->callAdmin("${step}: " . count($matches[$step]) . " - " . $str_result);
 	            $room_params[] = $str_result;
 	            $step++;
 	        }
