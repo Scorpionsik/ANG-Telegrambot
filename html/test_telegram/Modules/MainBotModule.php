@@ -166,7 +166,7 @@ class MainBotModule extends BotModule{
 	            $step++;
 	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
-	        $search_params[] = implode(" OR ", $district_params); //implode(" ; ", $matches);
+	        $search_params[] = "(". implode(" OR ", $district_params) .")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	    }
