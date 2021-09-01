@@ -231,6 +231,7 @@ class MainBot{
 			if($row_check == 0){
 			    $query = "INSERT INTO telegram_users (Id_telegram_user) VALUES (". $request_info->getIdTelegram() .");";
 				$this->getRequestResult($query);
+				$return = new RequestInfo($request_info, null, 0, 0, 0);
 			}
 			else{
 				$row = mysqli_fetch_row($result);
