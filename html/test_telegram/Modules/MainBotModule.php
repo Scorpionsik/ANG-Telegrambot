@@ -182,9 +182,11 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по ценовой вилке
-	    $pattern = "/(\d{4,}|\d+т)\-(\d{4,}|\d+т)(?:[ ]*\$)?/i";
+	    $pattern = "/(\d{2,}т?)\-(\d{4,}|\d+т)(?:[ ]*\$)?/i";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $search_params[] = "offers.Price BETWEEN " . str_replace("т","000", $matches[1]) . " and " . str_replace("т","000", $matches[2]);
+	        $first_value = str_replace("т","000", $matches[1]);
+	        if(strlen($first_value) < 4) $first_value = $first_value . "000";
+	        $search_params[] = "offers.Price BETWEEN " . $first_value . " and " . str_replace("т","000", $matches[2]);
 	        $is_set_price = true;
 	    }
 	    
