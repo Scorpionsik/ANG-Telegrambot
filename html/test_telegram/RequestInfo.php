@@ -8,7 +8,7 @@ class RequestInfo{
 	private $mode_param;
 	private $last_message_date;
 
-	public function __construct($update, $id_whitelist = null, $mode_value = 0, $mode_param = 0, $last_message_date = 0){
+	public function __construct($update, $id_whitelist = null, $mode_value = 0, $mode_param = 0, $last_message_date = -1){
 		if(is_a($update, '\TelegramBot\Api\Types\Message')){
 			$this->id_telegram = $update->getChat()->getId();
 			$this->message_data = $update;
@@ -32,7 +32,7 @@ class RequestInfo{
 			$this->callback_data = $update->getCallbackData();
 			$this->last_message_date = $update->getLastMessageDate();
 		}
-		if($last_message_date > 0)$this->last_message_date = $last_message_date;
+		if($last_message_date > -1)$this->last_message_date = $last_message_date;
 		$this->id_whitelist = $id_whitelist;
 		$this->mode_value = $mode_value;
 		$this->mode_param = $mode_param;
