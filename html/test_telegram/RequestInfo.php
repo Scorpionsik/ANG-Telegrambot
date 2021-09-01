@@ -30,9 +30,9 @@ class RequestInfo{
 			$this->id_telegram = $update->getIdTelegram();
 			$this->message_data = $update->getMessageData();
 			$this->callback_data = $update->getCallbackData();
-			$this->last_message_date = $update->getLastMessageDate();
+			//$this->last_message_date = $update->getLastMessageDate();
 		}
-		if($last_message_date > -1)$this->last_message_date = $last_message_date;
+		if($last_message_date > -1) $this->last_message_date = $last_message_date;
 		$this->id_whitelist = $id_whitelist;
 		$this->mode_value = $mode_value;
 		$this->mode_param = $mode_param;
