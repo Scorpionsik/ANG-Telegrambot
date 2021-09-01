@@ -176,13 +176,14 @@ class MainBotModule extends BotModule{
 	    ];
 	    
 	    foreach ($flat_types_values as $value){
-	        $pattern = "/(?<=^| )(${value})(?=$| )/u";
+	        $pattern = "/(?<=^| )(${value})(?=$| )/";
+	        $this->main_bot->callAdmin($pattern);
 	        if(preg_match($pattern, $message_text, $matches)){
 	            $flat_types_params[] = "flat_types.Typename like (\"". $matches[1] ."%\")";
 	            $message_text = preg_replace($pattern, "", $message_text, 1);
 	        }
 	    }
-	    
+	    $this->main_bot->callAdmin(implode(" OR ", $matches));
 	    if(count($flat_types_params) > 0) $search_params[] = "(". implode(" OR ", $matches) . ")";
 	    
 	    //по комнатам
