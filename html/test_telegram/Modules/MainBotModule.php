@@ -383,7 +383,7 @@ class MainBotModule extends BotModule{
 			//показываем объявления
 			for($i = $start_index; $i < $end_index; $i++){
 				$this->showOffer($offers_array[$i], $request_info, $whitelist_info);
-				usleep(100000);
+				usleep(150000);
 			}
 			//конец страницы
 			$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
