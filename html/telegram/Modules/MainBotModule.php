@@ -140,6 +140,51 @@ class MainBotModule extends BotModule{
 	    $matches = array();
 	    $is_set_price = false;
 	    
+	    //продажа/аренда
+	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )|(?<=^| )(а(?:ренда)?)(?=$| )/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $index = count($matches) - 1;
+	        $search_params[] = "types.Type_name like(\"". $matches[$index] . "%\")";
+	        $message_text = preg_replace($pattern, "", $message_text);
+	    }
+	    
+	    //вторичка/новострой
+	    $pattern = "/(?<=^| )(в(?:торичка)?)(?=$| )|(?<=^| )(н(?:овострой)?)(?=$| )/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $index = count($matches) - 2;
+	        $search_params[] = "offers.IsNewBuild=${index}";
+	        $message_text = preg_replace($pattern, "", $message_text);
+	    }
+	    
+	    //по типу недвижимости
+	    $flat_types_params = array();
+	    $flat_types_values = [
+	        "кварт(?:ира)?",
+	        "гост(?:инка)?",
+	        "дом",
+	        "подс(?:еление)?",
+	        "кафе",
+	        "маг(?:азин)?",
+	        "офис",
+	        "помещ(?:ение)?",
+	        "склад",
+	        "уч(?:асток)?",
+	        "полдом(?:а)?",
+	        "малог(?:абаритка)?"
+	    ];
+	    
+	    foreach ($flat_types_values as $value){
+	        $pattern = "/(?<=^| )(${value})(?=$| )/";
+	        if(preg_match($pattern, $message_text, $matches)){
+	            $flat_types_params[] = "flat_types.Typename like (\"". $matches[1] ."%\")";
+	            $message_text = preg_replace($pattern, "", $message_text, 1);
+	        }
+	    }
+	    //$this->main_bot->callAdmin(implode(" OR ", $flat_types_params));
+	    if(count($flat_types_params) > 0) $search_params[] = "(". implode(" OR ", $flat_types_params) . ")";
+	    
 	    //по комнатам
 	    $pattern = "/(\d)(?:-(\d))?[Кк]/u";
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
