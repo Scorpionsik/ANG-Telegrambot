@@ -182,7 +182,7 @@ class MainBotModule extends BotModule{
 	            $message_text = preg_replace($pattern, "", $message_text, 1);
 	        }
 	    }
-	    $this->main_bot->callAdmin(implode(" OR ", $matches));
+	    $this->main_bot->callAdmin(implode(" OR ", $flat_types_params));
 	    if(count($flat_types_params) > 0) $search_params[] = "(". implode(" OR ", $matches) . ")";
 	    
 	    //по комнатам
