@@ -144,16 +144,7 @@ class MainBotModule extends BotModule{
 	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )|(?<=^| )(а(?:ренда)?)(?=$| )/u";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $this->main_bot->callAdmin(implode(" ; ", $matches));
-	        switch($matches[1]){
-	            case 'п':
-	            case 'продажа':
-	                $search_params[] = "types.Type_name=\"продажа\"";
-	                break;
-	            case 'а':
-	            case 'аренда':
-	                $search_params[] = "types.Type_name=\"аренда\"";
-	                break;
-	        }
+	        $search_params[] = "types.Type_name like(\"". $matches[1] . "%\")";
 	        $message_text = preg_replace("/". $matches[1] ."/", "", $message_text, 1);
 	    }
 	    
