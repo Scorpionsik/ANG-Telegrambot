@@ -182,7 +182,7 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по ценовой вилке
-	    $pattern = "/(\d{2,}т?)\-(\d{4,}|\d+т)(?:[ ]*\$)?/i";
+	    $pattern = "/(\d+т?)\-(\d{4,}|\d+т)(?:[ ]*\$)?/i";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $first_value = str_replace("т","000", $matches[1]);
 	        if(strlen($first_value) < 4) $first_value = $first_value . "000";
