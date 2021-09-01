@@ -158,8 +158,32 @@ class MainBotModule extends BotModule{
 	        $message_text = preg_replace($pattern, "", $message_text);
 	    }
 	    
-	    //новострой
+	    //по типу недвижимости
+	    $flat_types_params = array();
+	    $flat_types_values = [
+	        "кварт(?:ира)?",
+	        "гост(?:инка)?",
+	        "дом",
+	        "подс(?:еление)?",
+	        "кафе",
+	        "маг(?:азин)?",
+	        "офис",
+	        "помещ(?:ение)?",
+	        "склад",
+	        "уч(?:асток)?",
+	        "полдом(?:а)?",
+	        "малог(?:абаритка)?"
+	    ];
 	    
+	    foreach ($flat_types_values as $value){
+	        $pattern = "/(?<=^| )(${value})(?=$| )/u";
+	        if(preg_match($pattern, $message_text, $matches)){
+	            $flat_types_params[] = "flat_types.Typename like (\"". $matches[1] ."%\")";
+	            $message_text = preg_replace($pattern, "", $message_text, 1);
+	        }
+	    }
+	    
+	    if(count($flat_types_params) > 0) $search_params[] = "(". implode(" OR ", $matches) . ")";
 	    
 	    //по комнатам
 	    $pattern = "/(\d)(?:-(\d))?[Кк]/u";
