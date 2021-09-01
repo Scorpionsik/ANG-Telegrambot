@@ -140,13 +140,19 @@ class MainBotModule extends BotModule{
 	    $matches = array();
 	    $is_set_price = false;
 	    
-	    //продажа-аренда
-	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )|(?<=^| )(а(?:ренда)?)(?=$| )/u";
+	    //продажа
+	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )/u";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $this->main_bot->callAdmin(implode(" ; ", $matches));
-	        $index = 1;
-	        if($matches[1] == null || $matches[1] == "") $index = 2;
-	        $search_params[] = "types.Type_name like(\"". $matches[$index] . "%\")";
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $search_params[] = "types.Type_name like(\"". $matches[1] . "%\")";
+	        $message_text = preg_replace("/". $matches[1] ."/", "", $message_text, 1);
+	    }
+	    
+	    //аренда
+	    $pattern = "/(?<=^| )(а(?:ренда)?)(?=$| )/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $search_params[] = "types.Type_name like(\"". $matches[1] . "%\")";
 	        $message_text = preg_replace("/". $matches[1] ."/", "", $message_text, 1);
 	    }
 	    
