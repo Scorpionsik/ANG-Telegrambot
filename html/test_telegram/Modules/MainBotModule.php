@@ -140,6 +140,21 @@ class MainBotModule extends BotModule{
 	    $matches = array();
 	    $is_set_price = false;
 	    
+	    //продажа-аренда
+	    $pattern = "/(?<=^| )(п(?:родажа)?)(?=$| )|(?<=^| )(а(?:ренда)?)(?=$| )/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        switch($matches[1][0]){
+	            case 'п':
+	            case 'П':
+	                $search_params[] = "types.Type_name='продажа'";
+	                break;
+	            case 'а':
+	            case 'А':
+	                $search_params[] = "types.Type_name='аренда'";
+	                break;
+	        }
+	    }
+	    
 	    //по комнатам
 	    $pattern = "/(\d)(?:-(\d))?[Кк]/u";
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
