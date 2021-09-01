@@ -16,6 +16,7 @@ class RequestInfo{
 		}
 		else if(is_a($update, '\TelegramBot\Api\Types\Update')){
 			$this->message_data = $update->getMessage();
+			$this->last_message_date = $this->message_data.getDate();
 			if(is_null($this->message_data)){
 				$callback = $update->getCallbackQuery();
 				if(!is_null($callback)){
