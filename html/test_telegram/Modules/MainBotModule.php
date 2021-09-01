@@ -151,7 +151,8 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по району
-	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";
+	    /* /u - модификатор шаблона, который включает дополнительную функциональность PCRE, которая не совместима с Perl: шаблон и целевая строка обрабатываются как UTF-8 строки. */
+	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";  
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $district_params = array();
 	        $count = count($matches);
