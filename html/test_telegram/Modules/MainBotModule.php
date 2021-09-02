@@ -123,7 +123,7 @@ class MainBotModule extends BotModule{
 		        $this->showSearchResult($request_info, $whitelist_info);
 		    }
 		    else{
-				if($request_info->getModeParam() == 0){
+				if($request_info->getModeParam() < 1){
 					$this->main_bot->sendMessage($request_info->getIdTelegram(), "Добро пожаловать, " . $whitelist_info->getUsername() . "!", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
 					$this->changeModeParam($request_info, $whitelist_info, 1);
 				}
