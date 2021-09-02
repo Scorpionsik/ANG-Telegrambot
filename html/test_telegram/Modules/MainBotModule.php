@@ -203,6 +203,7 @@ class MainBotModule extends BotModule{
 	        }
 	        
 	        $search_params[] = "(". implode(" OR ", $room_params) .")";
+	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
 	    //по району
