@@ -134,7 +134,7 @@ class MainBotModule extends BotModule{
 	
 	// $this->main_bot->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
-	    $message_text = str_replace("<", "", $message_text);
+	    $message_text = mb_strtolower(str_replace("<", "", $message_text));
 	    //$this->main_bot->callAdmin($message_text);
 	    $search_params = array();
 	    $matches = array();
@@ -203,20 +203,42 @@ class MainBotModule extends BotModule{
 	        }
 	        
 	        $search_params[] = "(". implode(" OR ", $room_params) .")";
+	        $message_text = preg_replace($pattern, "", $message_text, 1);
+	    }
+	    
+	    //по ценовой вилке
+	    $pattern = "/(\d+(?: *[Тт](?:[Ыы][Сс])?)?)\-(\d{4,}|\d+(?: *[Тт](?:[Ыы][Сс])?))/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        $first_value = preg_replace("/ *[Тт]([Ыы][Сс])?/u","000", $matches[1]);
+	        if(strlen($first_value) < 4) $first_value = $first_value . "000";
+	        $search_params[] = "offers.Price BETWEEN " . $first_value . " and " . preg_replace("/ *[Тт]([Ыы][Сс])?/u","000", $matches[2]);
+	        $is_set_price = true;
+	        $message_text = preg_replace($pattern, "", $message_text, 1);
+	    }
+	    
+	    //по конкретной цене
+	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+(?: *[Тт](?:[Ыы][Сс])?))(?:[ ]*\$)?/u";
+	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $operator = "<";
+	        if($matches[1] != "") $operator = $matches[1];
+	        $search_params[] = "offers.Price". $operator ."=" . preg_replace("/ *[Тт]([Ыы][Сс])?/u","000", $matches[2]);
+	        $is_set_price = true;
+	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
 	    //по району
 	    /* /u - модификатор шаблона, который включает дополнительную функциональность PCRE, которая не совместима с Perl: шаблон и целевая строка обрабатываются как UTF-8 строки. */
-	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";  
+	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $district_params = array();
 	        $count = count($matches);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        //$this->main_bot->callAdmin($count);
 	        $step = 0;
-	        while($step < $count) 
+	        while($step < $count)
 	        {
-	            $district_params[] = "districts.District_name like (\"" . $matches[$step][1] . "%\")"; 
+	            $district_params[] = "districts.District_name like (\"" . $matches[$step][1] . "%\")";
 	            //$this->main_bot->callAdmin($matches[$step][1]);//implode(" ; ", $matches);
 	            $step++;
 	        }
@@ -224,25 +246,6 @@ class MainBotModule extends BotModule{
 	        $search_params[] = "(". implode(" OR ", $district_params) .")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
-	    }
-	    
-	    //по ценовой вилке
-	    $pattern = "/(\d+[Тт]?)\-(\d{4,}|\d+[Тт])(?:[ ]*\$)?/u";
-	    if(preg_match($pattern, $message_text, $matches)){
-	        $first_value = str_replace("т","000", $matches[1]);
-	        if(strlen($first_value) < 4) $first_value = $first_value . "000";
-	        $search_params[] = "offers.Price BETWEEN " . $first_value . " and " . str_replace("т","000", $matches[2]);
-	        $is_set_price = true;
-	    }
-	    
-	    //по конкретной цене
-	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+[Тт])(?:[ ]*\$)?/u";
-	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
-	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
-	        $operator = "<";
-	        if($matches[1] != "") $operator = $matches[1];
-	        $search_params[] = "offers.Price". $operator ."=" . str_replace("т","000", $matches[2]);
-	        $is_set_price = true;
 	    }
 	    
 	    return $search_params;
