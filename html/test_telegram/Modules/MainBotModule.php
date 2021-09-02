@@ -135,7 +135,7 @@ class MainBotModule extends BotModule{
 	// $this->main_bot->callAdmin(implode(" AND ", $matches));
 	private function makeSearchArray($message_text){
 	    $message_text = mb_strtolower(str_replace("<", "", $message_text));
-	    $this->main_bot->callAdmin($message_text);
+	    //$this->main_bot->callAdmin($message_text);
 	    $search_params = array();
 	    $matches = array();
 	    $is_set_price = false;
