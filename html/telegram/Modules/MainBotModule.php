@@ -161,7 +161,7 @@ class MainBotModule extends BotModule{
 	    //по типу недвижимости
 	    $flat_types_params = array();
 	    $flat_types_values = [
-	        "кварт(?:ира)?",
+	        "кв(?:артира)?",
 	        "гост(?:инка)?",
 	        "дом",
 	        "подс(?:еление)?",
@@ -186,7 +186,7 @@ class MainBotModule extends BotModule{
 	    if(count($flat_types_params) > 0) $search_params[] = "(". implode(" OR ", $flat_types_params) . ")";
 	    
 	    //по комнатам
-	    $pattern = "/(\d)(?:-(\d))?[Кк]/u";
+	    $pattern = "/(\d)(?:-(\d))? *[Кк](?:[Оо][Мм])?/u";
 	    if(preg_match_all($pattern, $message_text, $matches, PREG_SET_ORDER)){
 	        $room_params = array();
 	        $count = count($matches);
