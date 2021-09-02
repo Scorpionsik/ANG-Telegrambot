@@ -222,7 +222,7 @@ class MainBotModule extends BotModule{
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $operator = "<";
 	        if($matches[1] != "") $operator = $matches[1];
-	        $search_params[] = "offers.Price". $operator ."=" . str_replace("т","000", $matches[2]);
+	        $search_params[] = "offers.Price". $operator ."=" . preg_replace("/[Тт]([Ыы][Сс])?/u","000", $matches[2]);
 	        $is_set_price = true;
 	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
