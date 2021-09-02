@@ -207,7 +207,7 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по ценовой вилке
-	    $pattern = "/(\d+(?: *[Тт](?:[Ыы][Сс])?)?)\-(\d{4,}|\d+(?:[Тт](?: *[Ыы][Сс])?))/u";
+	    $pattern = "/(\d+(?: *[Тт](?:[Ыы][Сс])?)?)\-(\d{4,}|\d+(?: *[Тт](?:[Ыы][Сс])?))/u";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $first_value = preg_replace("/[Тт]([Ыы][Сс])?/u","000", $matches[1]);
 	        if(strlen($first_value) < 4) $first_value = $first_value . "000";
@@ -217,7 +217,7 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по конкретной цене
-	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+(?:[Тт](?: *[Ыы][Сс])?))(?:[ ]*\$)?/u";
+	    $pattern = "/(?:([>])?[ ]*)(\d{4,}|\d+(?: *[Тт](?:[Ыы][Сс])?))(?:[ ]*\$)?/u";
 	    if(!$is_set_price && preg_match($pattern, $message_text, $matches)){
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $operator = "<";
