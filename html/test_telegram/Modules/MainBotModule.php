@@ -209,9 +209,9 @@ class MainBotModule extends BotModule{
 	    //по ценовой вилке
 	    $pattern = "/(\d+(?: *[Тт](?:[Ыы][Сс])?)?)\-(\d{4,}|\d+(?: *[Тт](?:[Ыы][Сс])?))/u";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $first_value = preg_replace("/[Тт]([Ыы][Сс])?/u","000", $matches[1]);
+	        $first_value = preg_replace("/ *[Тт]([Ыы][Сс])?/u","000", $matches[1]);
 	        if(strlen($first_value) < 4) $first_value = $first_value . "000";
-	        $search_params[] = "offers.Price BETWEEN " . $first_value . " and " . preg_replace("/[Тт]([Ыы][Сс])?/u","000", $matches[2]);
+	        $search_params[] = "offers.Price BETWEEN " . $first_value . " and " . preg_replace("/ *[Тт]([Ыы][Сс])?/u","000", $matches[2]);
 	        $is_set_price = true;
 	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
@@ -222,7 +222,7 @@ class MainBotModule extends BotModule{
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $operator = "<";
 	        if($matches[1] != "") $operator = $matches[1];
-	        $search_params[] = "offers.Price". $operator ."=" . preg_replace("/[Тт]([Ыы][Сс])?/u","000", $matches[2]);
+	        $search_params[] = "offers.Price". $operator ."=" . preg_replace("/ *[Тт]([Ыы][Сс])?/u","000", $matches[2]);
 	        $is_set_price = true;
 	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
