@@ -29,7 +29,7 @@ abstract class BotModule{
 	}
 	
 	protected function resetToDefaultMode($request_info, $whitelist_info, $is_distribute = false){
-		$this->main_bot->changeMode($request_info, $whitelist_info, 0, 0, $is_distribute);
+		$this->main_bot->changeMode($request_info, $whitelist_info, 0, -1, $is_distribute);
 	}
 	
 	abstract protected function forMessages($request_info, $whitelist_info);
