@@ -1,5 +1,5 @@
 <?php
-$telegram_dir = explode('Modules',__DIR__)[0];
+$telegram_dir = explode('Keyboards',__DIR__)[0];
 require_once $telegram_dir . "Functions.php";
 require_once "BotKeyboard.php";
 require_once "KeyboardButton.php";
