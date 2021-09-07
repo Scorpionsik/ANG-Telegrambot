@@ -30,7 +30,10 @@ class MainBotModule extends BotModule{
 		//if($module_param == 2) $is_show_offers = false;
 		$current_turn_page = $whitelist_info->getTurnPage();
 		if($module_param != -1){
-    		if(preg_match('/уведомл/',$message_text)){
+		    if(preg_match('/^\//', $message_text)){
+		        //обработка комманд
+		    }
+    		else if(preg_match('/уведомл/',$message_text)){
     			if(preg_match('/Присылать только/', $message_text)){
     				$is_show_offers = false;
     				$this->switchIsGetEditOffers($whitelist_info, 0);
@@ -51,7 +54,7 @@ class MainBotModule extends BotModule{
     			
     			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
     		}
-    		else if(preg_match('/Отменить поиск/', $message_text) || preg_match('/^\//', $message_text)){
+    		else if(preg_match('/Отменить поиск/', $message_text)){
     		    //$is_show_offers = true;
     		    $this->main_bot->sendMessage($request_info->getIdTelegram(), "Поиск завершен.", new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers()));
     		    $this->cancelSearch($request_info, $whitelist_info);
