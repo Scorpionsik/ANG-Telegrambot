@@ -32,6 +32,15 @@ class MainBotModule extends BotModule{
 		if($module_param != -1){
 		    if(preg_match('/^\//', $message_text)){
 		        //обработка комманд
+		        if(preg_match('/\/key(board)?/',$message_text)){
+		            $is_show_offers = false;
+		            $keyboard=null;
+		            
+		            if($module_param == 2) $keyboard = new MainSearchBotKeyboard();
+		            else $keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
+		            
+		            $this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
+		        }
 		    }
     		else if(preg_match('/уведомл/',$message_text)){
     			if(preg_match('/Присылать только/', $message_text)){
@@ -44,15 +53,6 @@ class MainBotModule extends BotModule{
     				$this->switchIsGetEditOffers($whitelist_info, 1);
     				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", new DefaultBotKeyboard(true));
     			}
-    		}
-    		else if(preg_match('/\/key(board)?/',$message_text)){
-    			$is_show_offers = false;
-    			$keyboard=null;
-    			
-    			if($module_param == 2) $keyboard = new MainSearchBotKeyboard();
-    			else $keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
-    			
-    			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
     		}
     		else if(preg_match('/Отменить поиск/', $message_text)){
     		    //$is_show_offers = true;
