@@ -276,6 +276,7 @@ class MainBotModule extends BotModule{
                     
             }
             else $this->main_bot->sendMessage($request_info->getIdTelegram(), $this->empty_search_db_error_message);
+            mysqli_free_result($result);
         }
         
     }
@@ -317,6 +318,7 @@ class MainBotModule extends BotModule{
 	                    $row = mysqli_fetch_row($result);
 	                    $entity_id = $row[0];
 	                }
+	                mysqli_free_result($result);
 	            }
 	        }
 	        else $entity_id = preg_replace('/^id/', "", $request_info->getCallbackData());
@@ -335,6 +337,7 @@ class MainBotModule extends BotModule{
 	                    $row = mysqli_fetch_row($result);
 	                    if($row[1] > 0 && $row[2] == 1) $whose_phone_show = "Agent_entity_id";
 	                }
+	                mysqli_free_result($result);
 	            }
 	            /* end Вычисляем, чьи контакты отобразить */
 	            
