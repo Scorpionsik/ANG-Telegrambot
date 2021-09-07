@@ -1,5 +1,7 @@
 <?php
 $keyboard_dir = explode('Modules',__DIR__)[0] . 'Keyboards';
+$telegram_dir = explode('Modules',__DIR__)[0];
+require_once $telegram_dir . "Functions.php";
 require_once $keyboard_dir . "/DefaultBotKeyboard.php";
 require_once $keyboard_dir . "/BotKeyboard.php";
 require_once $keyboard_dir . "/KeyboardButton.php";
@@ -114,7 +116,7 @@ class RegisterBotModule extends BotModule{
 		$this->main_bot->sendMessage($id_telegram, "Здравствуйте, ${username}!");
 		$this->main_bot->sendMessage($id_telegram, "Ваша личность подтверждена! Вы подписаны на обновления по вашему району, они будут приходить вам в течении дня автоматически!");
 		$this->main_bot->sendMessage($id_telegram, "Если в уведомлениях вам нужны <b>только новые объявления</b>, нажмите на кнопку ниже - <b>❕ Присылать только новые объекты в уведомлениях</b>.");
-		$this->main_bot->sendMessage($id_telegram, "Чтобы получить всю информацию по вашему району за последнюю неделю, нажмите кнопку ниже.", new DefaultBotKeyboard($is_get_edit_offer));
+		$this->main_bot->sendMessage($id_telegram, "Чтобы получить всю информацию по вашему району за ". Functions::$for_how_long .", нажмите кнопку ниже.", new DefaultBotKeyboard($is_get_edit_offer));
 	}
 }
 

@@ -30,7 +30,19 @@ class MainBotModule extends BotModule{
 		//if($module_param == 2) $is_show_offers = false;
 		$current_turn_page = $whitelist_info->getTurnPage();
 		if($module_param != -1){
-    		if(preg_match('/уведомл/',$message_text)){
+		    if(preg_match('/^\//', $message_text)){
+		        //обработка комманд
+		        if(preg_match('/\/key(board)?/',$message_text)){
+		            $is_show_offers = false;
+		            $keyboard=null;
+		            
+		            if($module_param == 2) $keyboard = new MainSearchBotKeyboard();
+		            else $keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
+		            
+		            $this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
+		        }
+		    }
+    		else if(preg_match('/уведомл/',$message_text)){
     			if(preg_match('/Присылать только/', $message_text)){
     				$is_show_offers = false;
     				$this->switchIsGetEditOffers($whitelist_info, 0);
@@ -41,15 +53,6 @@ class MainBotModule extends BotModule{
     				$this->switchIsGetEditOffers($whitelist_info, 1);
     				$this->main_bot->sendMessage($request_info->getIdTelegram(), "Теперь в уведомлениях будут приходить <b>и новые, и обновленные объекты</b>. Если вы снова хотите получать только новые объекты, нажмите на \"Присылать только новые объекты в уведомлениях\".", new DefaultBotKeyboard(true));
     			}
-    		}
-    		else if(preg_match('/\/key(board)?/',$message_text)){
-    			$is_show_offers = false;
-    			$keyboard=null;
-    			
-    			if($module_param == 2) $keyboard = new MainSearchBotKeyboard();
-    			else $keyboard = new DefaultBotKeyboard($whitelist_info->getIsGetEditOffers());
-    			
-    			$this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
     		}
     		else if(preg_match('/Отменить поиск/', $message_text)){
     		    //$is_show_offers = true;
@@ -444,7 +447,7 @@ class MainBotModule extends BotModule{
 			//конец страницы
 			$inline_count_pages_keyboard = new InlineCountPagesBotKeyboard($current_turn_page, $total_pages);
 			
-			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за последнюю неделю.";
+			$end_page_text = "Всего " . $this->functions->declOfNum($count_offers_array, array('объект','объекта','объектов')) . " за ". Functions::$for_how_long .".";
 			if($total_pages > 1) $end_page_text = "Конец страницы ${current_turn_page} из ${total_pages}, " . $this->functions->declOfNum($end_index - $start_index, array('объект','объекта','объектов')) . "\n\n" . $end_page_text;
 			
 			$this->main_bot->sendMessage($request_info->getIdTelegram(), $end_page_text, $inline_count_pages_keyboard, true);
