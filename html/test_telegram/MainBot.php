@@ -33,7 +33,7 @@ class MainBot{
 					$current_message_time = $request_info->getLastMessageDate();
 					$request_info = $this->getFullRequestInfo($request_info);
 					$time_currency = $current_message_time - $request_info->getLastMessageDate();
-					$this->callAdmin($time_currency . " : " . $request_info->getLastMessageDate() . " - ${current_message_time}");
+					//$this->callAdmin($time_currency . " : " . $request_info->getLastMessageDate() . " - ${current_message_time}");
 					/*
 					 * Именно эти проверки нужны для того, чтобы можно было редактировать уже присланные сообщения
 					 * Иначе почти все инлайн запросы типа показа телефонов переставали работать
