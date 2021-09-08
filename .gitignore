@@ -4,7 +4,8 @@ composer.lock
 find_root_dir.php
 givemyprecious.php
 vendor
-connection.php
+connection*.php
 hello_there.jpg
 .project
 .settings/
+-*
