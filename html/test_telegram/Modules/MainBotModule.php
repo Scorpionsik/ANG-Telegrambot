@@ -233,6 +233,28 @@ class MainBotModule extends BotModule{
 	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
+	    //по ориентиру
+	    $pattern = "/\([^)]+\)/u";
+	    if(preg_match($pattern, $message_text, $matches)){
+	        $orients = preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $message_text, $matches[0], PREG_SET_ORDER);
+	        $orient_params = array();
+	        $count = count($orients);
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        //$this->main_bot->callAdmin($count);
+	        $step = 0;
+	        while($step < $count)
+	        {
+	            $orient_params[] = "offers.Orient like (\"" . $orients[$step][1] . "%\")";
+	            //$this->main_bot->callAdmin($matches[$step][1]);//implode(" ; ", $matches);
+	            $step++;
+	        }
+	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
+	        $search_params[] = "(". implode(" OR ", $orient_params) .")"; //implode(" ; ", $matches);
+	        //$this->main_bot->callAdmin($matches[0]);
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $message_text = preg_replace($pattern, "", $message_text);
+	    }
+	    
 	    //по району
 	    /* /u - модификатор шаблона, который включает дополнительную функциональность PCRE, которая не совместима с Perl: шаблон и целевая строка обрабатываются как UTF-8 строки. */
 	    $pattern = "/(\pL{3,}(?: \pL{3,})?)(?=\,)?/u";
@@ -252,6 +274,7 @@ class MainBotModule extends BotModule{
 	        $search_params[] = "(". implode(" OR ", $district_params) .")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
+	        $message_text = preg_replace($pattern, "", $message_text);
 	    }
 	    
 	    return $search_params;
