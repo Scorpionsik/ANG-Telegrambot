@@ -243,8 +243,9 @@ class MainBotModule extends BotModule{
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $this->main_bot->callAdmin($count);
 	        foreach ($orients as $o){
+	            $this->main_bot->callAdmin("Start with - " .  $o);
 	            foreach ($o as $value) {
-	                $this->main_bot->callAdmin($value);
+	                $this->main_bot->callAdmin("Contains" . $value);
 	            }
 	        }
 
