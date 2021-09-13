@@ -167,7 +167,7 @@ class MainBotModule extends BotModule{
 	    //по типу недвижимости
 	    $flat_types_params = array();
 	    $flat_types_values = [
-	        "кв(?:артира)?",
+	        "кв(?:(?:артира)|(?:арт))?",
 	        "гост(?:инка)?",
 	        "дом",
 	        "подс(?:еление)?",
