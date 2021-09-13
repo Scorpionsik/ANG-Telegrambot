@@ -45,6 +45,7 @@ class MainBotModule extends BotModule{
 		        //news
 		        else if(preg_match('/\/news (.+)/',$message_text, $find_group)){
 		            if($this->main_bot->checkIsIdAdmin($request_info) && !is_null($find_group) && count($find_group) > 0){
+		                $is_show_offers = false;
     		            $news_message = explode("=", $find_group[1]);
     		            $query = "SELECT Id_telegram_user FROM telegram_users WHERE Id_whitelist_user IS NOT NULL;";
     		            $result = $this->main_bot->getRequestResult($query);
