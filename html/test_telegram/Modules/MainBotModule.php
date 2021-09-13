@@ -43,7 +43,7 @@ class MainBotModule extends BotModule{
 		            $this->main_bot->sendMessage($request_info->getIdTelegram(), "Возвращаю клавиатуру", $keyboard);
 		        }
 		        //news
-		        else if(preg_match('/\/news (.+)/',$message_text, $find_group)){
+		        else if(preg_match('/\/news (.+)/',$request_info->getMessageData()->getText(), $find_group)){
 		            if($this->main_bot->checkIsIdAdmin($request_info) && !is_null($find_group) && count($find_group) > 0){
 		                $is_show_offers = false;
     		            $news_message = explode("=", $find_group[1]);
