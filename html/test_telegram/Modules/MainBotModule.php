@@ -319,7 +319,7 @@ class MainBotModule extends BotModule{
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $message_text = preg_replace($pattern, "", $message_text);
 	    }
-	    $search_params[] = "(". implode(" OR ", $address) .")";
+	    if(count($address) > 0)$search_params[] = "(". implode(" OR ", $address) .")";
 	    return $search_params;
 	}
 	
