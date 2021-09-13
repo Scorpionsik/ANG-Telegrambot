@@ -237,17 +237,20 @@ class MainBotModule extends BotModule{
 	    $pattern = "/(\([^)]+\))/u";
 	    if(preg_match($pattern, $message_text, $matches)){
 	        $this->main_bot->callAdmin($matches[1]);
-	        $orients = preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $message_text, $matches[1], PREG_SET_ORDER);
+	        $orients = array();
 	        $orient_params = array();
+	        preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $matches[1], $orients, PREG_SET_ORDER);
+	        
 	        $count = count($orients);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
-	        $this->main_bot->callAdmin($count);
+	        //$this->main_bot->callAdmin($count);
+	        /*
 	        foreach ($orients as $o){
 	            $this->main_bot->callAdmin("Start with - " .  $o);
 	            foreach ($o as $value) {
 	                $this->main_bot->callAdmin("Contains" . $value);
 	            }
-	        }
+	        }*/
 
 	        $step = 0;
 	        while($step < $count)
