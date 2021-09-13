@@ -233,6 +233,7 @@ class MainBotModule extends BotModule{
 	        $message_text = preg_replace($pattern, "", $message_text, 1);
 	    }
 	    
+	    $address = array();
 	    //по ориентиру
 	    $pattern = "/(\([^)]+\))/u";
 	    if(preg_match($pattern, $message_text, $matches)){
@@ -260,7 +261,7 @@ class MainBotModule extends BotModule{
 	            $step++;
 	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
-	        $search_params[] = "(". implode(" OR ", $orient_params) .")"; //implode(" ; ", $matches);
+	        $address[] = "(". implode(" OR ", $orient_params) .")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $message_text = preg_replace($pattern, "", $message_text);
@@ -282,12 +283,12 @@ class MainBotModule extends BotModule{
 	            $step++;
 	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
-	        $search_params[] = "(". implode(" OR ", $district_params) .")"; //implode(" ; ", $matches);
+	        $address[] = "(". implode(" OR ", $district_params) .")"; //implode(" ; ", $matches);
 	        //$this->main_bot->callAdmin($matches[0]);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $message_text = preg_replace($pattern, "", $message_text);
 	    }
-	    
+	    $search_params[] = "(". implode(" OR ", $address) .")";
 	    return $search_params;
 	}
 	
