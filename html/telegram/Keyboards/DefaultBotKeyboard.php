@@ -15,7 +15,7 @@ class DefaultBotKeyboard extends BotKeyboard{
 		else $button = new KeyboardButton("❕ Присылать только новые объекты в уведомлениях");
 		$this->addButton($button, 1);
 		
-		$button = new KeyboardButton("🔎 Поиск по цене");
+		$button = new KeyboardButton("🔎 Фильтр по цене");
 		$this->addButton($button, 1);
 	}
 }

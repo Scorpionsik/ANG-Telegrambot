@@ -94,7 +94,7 @@ class MainBotModule extends BotModule{
     		}
     		else{
     			//переключить на модуль выбора максимальной/минимальной цены
-    			if(preg_match('/Поиск по цене/', $message_text)){
+    			if(preg_match('/Фильтр по цене/', $message_text)){
     				$is_show_offers = false;
     				if($module_param == 2) $this->cancelSearch($request_info, $whitelist_info);
     				$this->main_bot->changeMode($request_info, $whitelist_info, 1);
