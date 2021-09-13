@@ -57,7 +57,7 @@ class MainBotModule extends BotModule{
     		                        $row = mysqli_fetch_row($result);
     		                        try{
     		                            foreach ($news_message as $text){
-    		                                $this->main_bot->sendMessage($row[0], str_replace("\\n", "\r\n", $text));
+    		                                $this->main_bot->sendMessage($row[0], str_replace("/\/\n", "\r\n", $text));
     		                            }
     		                        }
     		                        catch(Exception $e){
