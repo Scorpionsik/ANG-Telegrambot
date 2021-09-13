@@ -250,7 +250,7 @@ class MainBot{
 
 	//выводит сообщение о помощи
 	private function commandHelp($id_telegram){
-	    $this->bot->sendMessage($id_telegram, "<a href='https://telegra.ph/Gajd-po-poisku-v-telegram-bote---Bot-dlya-agentov-09-13'>Гайд по поиску в телеграм-боте</a>");
+	    $this->bot->sendMessage($id_telegram, "https://telegra.ph/Gajd-po-poisku-v-telegram-bote---Bot-dlya-agentov-09-13");
 		$this->bot->sendMessage($id_telegram, "Если у вас возникли вопросы или ошибки при работе с ботом, напишите мне и подробно изложите суть вопроса или проблемы.");
 		$this->bot->sendMessage($id_telegram, "Хорошего дня и отличного настроения, будьте здоровы!");
 		$this->sendAdminContact($id_telegram);
