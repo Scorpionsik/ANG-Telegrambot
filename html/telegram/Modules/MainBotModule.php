@@ -45,28 +45,31 @@ class MainBotModule extends BotModule{
 		        //news
 		        else if(preg_match('/\/news (.+)/', htmlspecialchars_decode($message_text), $find_group)){
 		            if($this->main_bot->checkIsIdAdmin($request_info) && !is_null($find_group) && count($find_group) > 0){
-		                $this->main_bot->callAdmin("Рассылка новости...\n\n". $find_group[1] ."");
+		                
 		                $is_show_offers = false;
     		            $news_message = explode("=", $find_group[1]);
     		            $query = "SELECT Id_telegram_user FROM telegram_users WHERE Id_whitelist_user IS NOT NULL;";
     		            $result = $this->main_bot->getRequestResult($query);
     		            if($result){
+    		                $this->main_bot->callAdmin("Рассылка новости...\n\n". str_replace("=", "\r\n", $find_group[1]) ."");
     		                $row_check = mysqli_num_rows($result);
+    		                $get_message = 0;
     		                if($row_check > 0){
     		                    for($i = 0; $i < $row_check; $i++){
     		                        $row = mysqli_fetch_row($result);
     		                        try{
     		                            foreach ($news_message as $text){
-    		                                $this->main_bot->sendMessage($row[0], $text);
+    		                                $this->main_bot->sendMessage($row[0], str_replace("\\\\n", "\r\n", $text));
     		                            }
+    		                            $get_message++;
     		                        }
     		                        catch(Exception $e){
     		                        }
     		                    }
     		                }
     		                mysqli_free_result($result);
+    		                $this->main_bot->callAdmin("Рассылка завершена! ${get_message} из ${row_check} получили.");
     		            }
-    		            $this->main_bot->callAdmin("Рассылка завершена!");
 		            }
 		        }
 		    }
