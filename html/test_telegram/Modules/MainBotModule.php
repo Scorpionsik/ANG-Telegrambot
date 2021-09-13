@@ -239,14 +239,14 @@ class MainBotModule extends BotModule{
 	        $orients = preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $message_text, $matches[0], PREG_SET_ORDER);
 	        $orient_params = array();
 	        $count = count($orients);
-	        $this->main_bot->callAdmin(implode(" ; ", $matches));
+	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        
-	        //$this->main_bot->callAdmin($count);
+	        $this->main_bot->callAdmin($count);
 	        $step = 0;
 	        while($step < $count)
 	        {
-	            $orient_params[] = "offers.Orient like (\"" . $orients[$step][1] . "%\")";
-	            $this->main_bot->callAdmin($orients[$step][1]);//implode(" ; ", $matches);
+	            $orient_params[] = "offers.Orient like (\"" . $orients[$step][0] . "%\")";
+	            $this->main_bot->callAdmin($orients[$step][0]);//implode(" ; ", $matches);
 	            $step++;
 	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
