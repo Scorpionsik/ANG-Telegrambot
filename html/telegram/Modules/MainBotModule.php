@@ -268,7 +268,7 @@ class MainBotModule extends BotModule{
 	    //по ориентиру
 	    $pattern = "/(\([^)]+\))/u";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $this->main_bot->callAdmin($matches[1]);
+	        //$this->main_bot->callAdmin($matches[1]);
 	        $orients = array();
 	        $orient_params = array();
 	        preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $matches[1], $orients, PREG_SET_ORDER);
@@ -319,7 +319,7 @@ class MainBotModule extends BotModule{
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
 	        $message_text = preg_replace($pattern, "", $message_text);
 	    }
-	    $search_params[] = "(". implode(" OR ", $address) .")";
+	    if(count($address) > 0)$search_params[] = "(". implode(" OR ", $address) .")";
 	    return $search_params;
 	}
 	
