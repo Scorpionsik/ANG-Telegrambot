@@ -241,8 +241,13 @@ class MainBotModule extends BotModule{
 	        $orient_params = array();
 	        $count = count($orients);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
-	        
 	        $this->main_bot->callAdmin($count);
+	        foreach ($orients as $o){
+	            foreach ($o as $value) {
+	                $this->main_bot->callAdmin($value);
+	            }
+	        }
+
 	        $step = 0;
 	        while($step < $count)
 	        {
