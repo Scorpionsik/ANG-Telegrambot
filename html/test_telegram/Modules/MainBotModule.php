@@ -12,7 +12,7 @@ class MainBotModule extends BotModule{
 	//максимальное количество объявлений на 1 странице
 	private $find_code_query = "select offers.Internal_id, types.Type_name, flat_types.Typename, localities.Locality_name, districts.District_name, offers.Address, offers.Description, offers.Room_counts, offers.Floor, offers.Floors_total, offers.Area, offers.Lot_area, offers.Living_space, offers.Kitchen_space, offers.Price, offers.Image_url, offers.IsNew, offers.IsEdit, offers.Orient, offers.Entity_id, offers.BuildStatus, offers.IsNewBuild, offers.Old_price, offers.House_number, offers.User_entity_id FROM offers inner join types on offers.Id_type=types.Id_type inner join flat_types on offers.Id_flat_type=flat_types.Id_flat_type INNER JOIN localities ON offers.Id_locality=localities.Id_locality inner join districts on offers.Id_district=districts.Id_district ";
 	private $quantity_per_page = 10;
-	private $search_status_message = "Режим поиска: ";
+	private $search_status_message = "Шаблон поиска: ";
 	private $empty_offers_error_message = "Информации по вашему району на данный момент нет, попробуйте позже!";
 	private $empty_search_offers_error_message = "Информации по заданным параметрам нет.";
 	private $empty_search_db_error_message = "Ошибка состояния, попробуйте отменить поиск и начать его заново.";
@@ -293,6 +293,7 @@ class MainBotModule extends BotModule{
 	
 	private function showSearchResult($request_info, $whitelist_info){
         /* todo показать объекты для поиска */
+	    
         $query = "SELECT * from agent_searches where Id_whitelist_user=" . $whitelist_info->getIdWhitelist() . ";";
         $result = $this->main_bot->getRequestResult($query);
         if($result){
