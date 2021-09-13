@@ -234,9 +234,10 @@ class MainBotModule extends BotModule{
 	    }
 	    
 	    //по ориентиру
-	    $pattern = "/\([^)]+\)/u";
+	    $pattern = "/(\([^)]+\))/u";
 	    if(preg_match($pattern, $message_text, $matches)){
-	        $orients = preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $message_text, $matches[0], PREG_SET_ORDER);
+	        $this->main_bot->callAdmin($matches[1]);
+	        $orients = preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $message_text, $matches[1], PREG_SET_ORDER);
 	        $orient_params = array();
 	        $count = count($orients);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
@@ -245,8 +246,8 @@ class MainBotModule extends BotModule{
 	        $step = 0;
 	        while($step < $count)
 	        {
-	            $orient_params[] = "offers.Orient like (\"" . $orients[$step][0] . "%\")";
-	            $this->main_bot->callAdmin($orients[$step][0]);//implode(" ; ", $matches);
+	            $orient_params[] = "offers.Orient like (\"" . $orients[$step][1] . "%\")";
+	            $this->main_bot->callAdmin($orients[$step][1]);//implode(" ; ", $matches);
 	            $step++;
 	        }
 	        //$this->main_bot->callAdmin(implode(" ; ", $district_params));
