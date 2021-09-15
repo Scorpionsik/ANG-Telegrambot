@@ -271,7 +271,7 @@ class MainBotModule extends BotModule{
 	        //$this->main_bot->callAdmin($matches[1]);
 	        $orients = array();
 	        $orient_params = array();
-	        preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/", $matches[1], $orients, PREG_SET_ORDER);
+	        preg_match_all("/([\d\pL][-\d\pL ]{2,})(?=\,)?/u", $matches[1], $orients, PREG_SET_ORDER);
 	        
 	        $count = count($orients);
 	        //$this->main_bot->callAdmin(implode(" ; ", $matches));
