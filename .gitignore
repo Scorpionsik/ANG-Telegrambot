@@ -8,4 +8,5 @@ connection*.php
 hello_there.jpg
 .project
 .settings/
+html/test_telegram/
 _*
