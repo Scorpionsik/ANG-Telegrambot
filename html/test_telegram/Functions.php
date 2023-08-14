@@ -169,7 +169,7 @@ class Functions{
 
 	public function declOfNum($num, $titles) {
 		$cases = array(2, 0, 1, 1, 1, 2);
-		return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
+		return $num . " " . $titles[($num % 100 > 4 && $num % 100 < 21) ? 2 : $cases[min($num % 10, 5)]];
 	}
 
 	public function getSiteUrl($offer_type, $flat_type)
